@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.cataskapi.model.ActivityMaster;
+import com.ats.cataskapi.model.CustomerDetailMaster;
 import com.ats.cataskapi.model.CustomerGroupMaster;
 import com.ats.cataskapi.model.CustomerHeaderMaster;
 import com.ats.cataskapi.model.EmployeeMaster;
@@ -19,6 +20,7 @@ import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
 import com.ats.cataskapi.model.TaskPeriodicityMaster;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
+import com.ats.cataskapi.repositories.CustomerDetailMasterRepo;
 import com.ats.cataskapi.repositories.CustomerGroupMasterRepo;
 import com.ats.cataskapi.repositories.CustomerHeaderMasterRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
@@ -26,11 +28,10 @@ import com.ats.cataskapi.repositories.ServiceMasterRepo;
 import com.ats.cataskapi.repositories.TaskPeriodicityMasterRepo;
 
 @RestController
-public class MasterApiController {
-
-	@Autowired ServiceMasterRepo srvMstrRepo;
+public class MasterApiController {	
 	
 	/******************ServiceMaster*******************/
+	@Autowired ServiceMasterRepo srvMstrRepo;
 	@RequestMapping(value = { "/saveService" }, method = RequestMethod.POST)
 	public @ResponseBody ServiceMaster saveInstitute(@RequestBody ServiceMaster service) {
 
@@ -70,12 +71,12 @@ public class MasterApiController {
 	}
 	
 	@RequestMapping(value = { "/deleteService" }, method = RequestMethod.POST)
-	public @ResponseBody Info deleteService(@RequestParam int serviceId) {
+	public @ResponseBody Info deleteService(@RequestParam int serviceId, @RequestParam int userId) {
 
 		Info info = new Info();
 		try
 		{
-			int res = srvMstrRepo.deleteService(serviceId);
+			int res = srvMstrRepo.deleteService(serviceId, userId);
 
 			if (res > 0) {
 				info.setError(false);
@@ -136,12 +137,13 @@ public class MasterApiController {
 	}
 	
 	@RequestMapping(value = { "/deleteActivity" }, method = RequestMethod.POST)
-	public @ResponseBody Info deleteActivity(@RequestParam int activityId) {
-
+	public @ResponseBody Info deleteActivity(@RequestParam int activityId, @RequestParam int userId) {
+		
 		Info info = new Info();
 		try
 		{
-			int res = actvtMstrRepo.deleteActivity(activityId);
+			
+			int res = actvtMstrRepo.deleteActivity(activityId, userId);
 
 			if (res > 0) {
 				info.setError(false);
@@ -150,7 +152,6 @@ public class MasterApiController {
 			} else {
 				info.setError(true);
 				info.setMsg("failed");
-
 			}
 		} catch (Exception e) {
 
@@ -162,7 +163,7 @@ public class MasterApiController {
 		return info;
 	}
 	
-	/**********************TaskbPeriodicity Master**********************/
+	/**********************Task Periodicity Master**********************/
 	@Autowired TaskPeriodicityMasterRepo taskPeriodRepo;
 	
 	@RequestMapping(value = {"/getAllTaskPriodicityInfo"}, method = RequestMethod.GET)
@@ -199,12 +200,12 @@ public class MasterApiController {
 	}
 	
 	@RequestMapping(value = { "/deleteTaskPeriodicity" }, method = RequestMethod.POST)
-	public @ResponseBody Info deleteTaskPeriodicity(@RequestParam int periodicityId) {
+	public @ResponseBody Info deleteTaskPeriodicity(@RequestParam int periodicityId, @RequestParam int userId) {
 
 		Info info = new Info();
 		try
 		{
-			int res = taskPeriodRepo.deleteTaskPeriodicity(periodicityId);
+			int res = taskPeriodRepo.deleteTaskPeriodicity(periodicityId, userId);
 
 			if (res > 0) {
 				info.setError(false);
@@ -271,12 +272,12 @@ public class MasterApiController {
 	}
 	
 	@RequestMapping(value = { "/deleteEmployee" }, method = RequestMethod.POST)
-	public @ResponseBody Info deleteEmployee(@RequestParam int empId) {
+	public @ResponseBody Info deleteEmployee(@RequestParam int empId, @RequestParam int userId) {
 
 		Info info = new Info();
 		try
 		{
-			int res = empRepo.deleteEmployee(empId);
+			int res = empRepo.deleteEmployee(empId, userId);
 
 			if (res > 0) {
 				info.setError(false);
@@ -343,12 +344,12 @@ public class MasterApiController {
 	}
 	
 	@RequestMapping(value = { "/deleteCustomerGroup" }, method = RequestMethod.POST)
-	public @ResponseBody Info deleteCustomerGroup(@RequestParam int custGrpId) {
+	public @ResponseBody Info deleteCustomerGroup(@RequestParam int custGrpId, @RequestParam int userId) {
 
 		Info info = new Info();
 		try
 		{
-			int res = cstmrGrpRepo.deleteCustGroup(custGrpId);
+			int res = cstmrGrpRepo.deleteCustGroup(custGrpId, userId);
 
 			if (res > 0) {
 				info.setError(false);
@@ -415,12 +416,12 @@ public class MasterApiController {
 	}
 	
 	@RequestMapping(value = { "/deleteCustomerHeader" }, method = RequestMethod.POST)
-	public @ResponseBody Info deleteCustomerHeader(@RequestParam int custHeadId) {
+	public @ResponseBody Info deleteCustomerHeader(@RequestParam int custHeadId,@RequestParam int userId ) {
 
 		Info info = new Info();
 		try
 		{
-			int res = custHeadRepo.deleteCustHeader(custHeadId);
+			int res = custHeadRepo.deleteCustHeader(custHeadId, userId);
 
 			if (res > 0) {
 				info.setError(false);
@@ -441,5 +442,77 @@ public class MasterApiController {
 		return info;
 	}
 	
+	/*****************************Customer Detail Master****************************/
 	
+@Autowired CustomerDetailMasterRepo custDetailRepo;
+	
+	@RequestMapping(value = {"/getAllCustomerDetail"}, method = RequestMethod.GET)
+	public @ResponseBody List<CustomerDetailMaster> getAllCustomerDetail(){
+		
+		List<CustomerDetailMaster> custDetailList = new ArrayList<CustomerDetailMaster>();
+		try {
+			custDetailList = custDetailRepo.findAllByDelStatus(1);
+		}catch (Exception e) {
+			System.err.println("Exce in getAllCustomerDetail  " + e.getMessage());
+		}
+		
+		return custDetailList;
+		
+	}
+	
+	@RequestMapping(value = {"/saveNewCustomerDetail"}, method = RequestMethod.POST)
+	public @ResponseBody CustomerDetailMaster saveNewCustomerDetail(@RequestBody CustomerDetailMaster custDetail) {
+		CustomerDetailMaster custDtl = null;
+		try {
+			custDtl = custDetailRepo.saveAndFlush(custDetail);
+			
+		}catch (Exception e) {
+			System.err.println("Exce in saveNewCustomerDetail  " + e.getMessage());
+		}
+		
+		return custDtl;
+		
+	}
+	
+	@RequestMapping(value = {"/getCustomerDetailById"}, method = RequestMethod.POST)
+	public @ResponseBody CustomerDetailMaster getCustomerDetailById(@RequestParam int custDetailId) {
+		CustomerDetailMaster custDetail = null;
+		try {
+			custDetail = custDetailRepo.findBycustDetailIdAndDelStatus(custDetailId, 1);
+			
+		}catch (Exception e) {
+			System.err.println("Exce in getCustomerDetailById  " + e.getMessage());
+		}
+		
+		return custDetail;
+		
+	}
+	
+	
+	@RequestMapping(value = { "/deleteCustomerDetail" }, method = RequestMethod.POST)
+	public @ResponseBody Info deleteCustomerDetail(@RequestParam int custDetailId, @RequestParam int userId ) {
+
+		Info info = new Info();
+		try
+		{
+			int res = custDetailRepo.deleteCustDetail(custDetailId, userId);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in deleteCustomerDetail  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+		return info;
+	}
 }

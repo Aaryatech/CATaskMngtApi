@@ -19,8 +19,8 @@ public interface ActivityMasterRepo extends JpaRepository<ActivityMaster, Intege
 
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE m_activities SET del_status=0 WHERE acti_id=:activityId",nativeQuery=true)
-	int deleteActivity(@Param("activityId") int activityId);
+	@Query(value="UPDATE m_activities SET del_status=0, update_username=:userId WHERE acti_id=:activityId",nativeQuery=true)
+	int deleteActivity(@Param("activityId") int activityId, @Param("userId") int userId);
 	
 	//UPDATE m_activities SET del_status=0 WHERE acti_id IN (:actvgtList) 
 	

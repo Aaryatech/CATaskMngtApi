@@ -19,8 +19,8 @@ public interface CustomerGroupMasterRepo extends JpaRepository<CustomerGroupMast
 	
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE  m_cust_group SET del_status=0 WHERE cust_group_id=:custGrpId",nativeQuery=true)
-	int deleteCustGroup(@Param("custGrpId") int custGrpId);
+	@Query(value="UPDATE  m_cust_group SET del_status=0, update_username=:userId WHERE cust_group_id=:custGrpId",nativeQuery=true)
+	int deleteCustGroup(@Param("custGrpId") int custGrpId, @Param("userId") int userId);
 	
 	//UPDATE m_cust_group SET del_status=0 WHERE cust_group_id IN (:custGrpId) 
 	

@@ -19,8 +19,8 @@ public interface CustomerHeaderMasterRepo extends JpaRepository<CustomerHeaderMa
 	
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE  m_cust_header SET del_status=0 WHERE cust_id=:custHeadId",nativeQuery=true)
-	int deleteCustHeader(@Param("custHeadId") int custHeadId);
+	@Query(value="UPDATE  m_cust_header SET del_status=0, update_username=:userId WHERE cust_id=:custHeadId",nativeQuery=true)
+	int deleteCustHeader(@Param("custHeadId") int custHeadId, @Param("userId") int userId);
 	
 	//UPDATE m_cust_header SET del_status=0 WHERE cust_id IN (:custHeadId) 
 }

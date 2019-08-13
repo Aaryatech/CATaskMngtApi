@@ -19,8 +19,8 @@ public interface ServiceMasterRepo extends JpaRepository<ServiceMaster, Integer>
 
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE m_services SET del_status=0 WHERE serv_id=:serviceId",nativeQuery=true)
-	int deleteService(@Param("serviceId") int serviceId);
+	@Query(value="UPDATE m_services SET del_status=0, update_username=:userId  WHERE serv_id=:serviceId",nativeQuery=true)
+	int deleteService(@Param("serviceId") int serviceId, @Param("userId") int userId);
 	
 	//UPDATE m_services SET del_status=0 WHERE serv_id IN (:servIdList) 
 

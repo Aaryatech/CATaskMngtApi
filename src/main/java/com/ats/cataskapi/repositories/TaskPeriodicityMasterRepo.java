@@ -20,8 +20,8 @@ public interface TaskPeriodicityMasterRepo extends JpaRepository<TaskPeriodicity
 	
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE m_task_periodicity SET del_status=0 WHERE taskp_id=:periodicityId",nativeQuery=true)
-	int deleteTaskPeriodicity(@Param("periodicityId") int periodicityId);
+	@Query(value="UPDATE m_task_periodicity SET del_status=0, update_username=:userId WHERE taskp_id=:periodicityId",nativeQuery=true)
+	int deleteTaskPeriodicity(@Param("periodicityId") int periodicityId, @Param("userId") int userId);
 	
 	//UPDATE m_task_periodicity SET del_status=0 WHERE acti_id IN (:actvgtList) 
 	
