@@ -24,5 +24,10 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 	
 	//UPDATE m_emp SET del_status=0 WHERE emp_id IN (:emp_id) 
 	
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE m_emp SET emp_role_id=:roleId WHERE emp_id IN (:userIdList) ", nativeQuery = true)
+	int updateRoleId(@Param("roleId") int roleId, @Param("userIdList") List<String> userIdList);
+
 
 }

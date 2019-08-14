@@ -20,6 +20,10 @@ public class Info {
 	public String toString() {
 		return "Info [isError=" + isError + ", msg=" + msg + "]";
 	}
+	public void setMessage(String string) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	
