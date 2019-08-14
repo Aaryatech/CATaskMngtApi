@@ -10,7 +10,7 @@ public class ActivityPeriodDetails {
 	private int actiId;
 	private String actiName;
 	private int periodicityId;
-	private String periodicityname;
+	private String periodicityName;
 	public int getActiId() {
 		return actiId;
 	}
@@ -29,17 +29,17 @@ public class ActivityPeriodDetails {
 	public void setPeriodicityId(int periodicityId) {
 		this.periodicityId = periodicityId;
 	}
-	public String getPeriodicityname() {
-		return periodicityname;
+	public String getPeriodicityName() {
+		return periodicityName;
 	}
-	public void setPeriodicityname(String periodicityname) {
-		this.periodicityname = periodicityname;
+	public void setPeriodicityName(String periodicityName) {
+		this.periodicityName = periodicityName;
 	}
 	@Override
 	public String toString() {
 		return "ActivityPeriodDetails [actiId=" + actiId + ", actiName=" + actiName + ", periodicityId=" + periodicityId
-				+ ", periodicityname=" + periodicityname + "]";
+				+ ", periodicityName=" + periodicityName + "]";
 	}
-	
+		
 
 }

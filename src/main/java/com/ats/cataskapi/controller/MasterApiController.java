@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.cataskapi.model.ActivityMaster;
+import com.ats.cataskapi.model.ActivityPeriodDetails;
 import com.ats.cataskapi.model.CustomerDetailMaster;
 import com.ats.cataskapi.model.CustomerGroupMaster;
 import com.ats.cataskapi.model.CustomerHeaderMaster;
@@ -21,6 +22,7 @@ import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
 import com.ats.cataskapi.model.TaskPeriodicityMaster;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
+import com.ats.cataskapi.repositories.ActivityPeriodDetailsRepo;
 import com.ats.cataskapi.repositories.CustomerDetailMasterRepo;
 import com.ats.cataskapi.repositories.CustomerGroupMasterRepo;
 import com.ats.cataskapi.repositories.CustomerHeaderMasterRepo;
@@ -176,11 +178,12 @@ public class MasterApiController {
 		return info;
 	}
 	
+	@Autowired ActivityPeriodDetailsRepo actDtlRepo;
 	@RequestMapping(value = {"/getActivityDetails"}, method=RequestMethod.POST)
-	public @ResponseBody List<ActivityMaster>  getActivityDetails(@RequestParam int serviceId){
-		List<ActivityMaster> activityDetailList = new ArrayList<ActivityMaster>();
+	public @ResponseBody List<ActivityPeriodDetails>  getActivityDetails(@RequestParam int serviceId){
+		List<ActivityPeriodDetails> activityDetailList = new ArrayList<ActivityPeriodDetails>();
 		try {
-			activityDetailList = actvtMstrRepo.getAllActivityDetailsList(serviceId);
+			activityDetailList = actDtlRepo.getAllActivityDetailsList(serviceId);
 				System.err.println("Srvd list:"+activityDetailList.toString());
 			
 		}catch (Exception e) {
