@@ -16,7 +16,8 @@ public interface CustomerDetailMasterRepo extends JpaRepository<CustomerDetailMa
 	List<CustomerDetailMaster>	findAllByDelStatus(int del);
 	
 	CustomerDetailMaster findBycustDetailIdAndDelStatus(int custDetailId, int del);
-	
+	List<CustomerDetailMaster> findByCustIdAndDelStatus(int custId, int delStatus);
+
 
 	@Transactional
 	@Modifying
