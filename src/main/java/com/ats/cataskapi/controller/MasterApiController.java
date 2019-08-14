@@ -15,6 +15,7 @@ import com.ats.cataskapi.model.ActivityMaster;
 import com.ats.cataskapi.model.CustomerDetailMaster;
 import com.ats.cataskapi.model.CustomerGroupMaster;
 import com.ats.cataskapi.model.CustomerHeaderMaster;
+import com.ats.cataskapi.model.DevPeriodicityMaster;
 import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
@@ -23,6 +24,7 @@ import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.CustomerDetailMasterRepo;
 import com.ats.cataskapi.repositories.CustomerGroupMasterRepo;
 import com.ats.cataskapi.repositories.CustomerHeaderMasterRepo;
+import com.ats.cataskapi.repositories.DevPeriodicityMasterRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
 import com.ats.cataskapi.repositories.TaskPeriodicityMasterRepo;
@@ -136,6 +138,17 @@ public class MasterApiController {
 		return actvt;
 	}
 	
+	@RequestMapping(value = {"/getAllActivitesByServiceId"}, method = RequestMethod.POST)
+	public @ResponseBody List<ActivityMaster>  getAllActivitesByServiceId(@RequestParam int serviceId){
+		List<ActivityMaster> activitsList = new ArrayList<ActivityMaster>(); 
+		try {
+			activitsList = actvtMstrRepo.findByServIdAndDelStatus(serviceId, 1);
+		}catch (Exception e) {
+			System.err.println("Exce in getAllActivitesByServiceId  " + e.getMessage());
+		}
+		return activitsList;
+	}
+	
 	@RequestMapping(value = { "/deleteActivity" }, method = RequestMethod.POST)
 	public @ResponseBody Info deleteActivity(@RequestParam int activityId, @RequestParam int userId) {
 		
@@ -161,6 +174,19 @@ public class MasterApiController {
 			info.setMsg("excep");
 		}
 		return info;
+	}
+	
+	@RequestMapping(value = {"/getActivityDetails"}, method=RequestMethod.POST)
+	public @ResponseBody List<ActivityMaster>  getActivityDetails(@RequestParam int serviceId){
+		List<ActivityMaster> activityDetailList = new ArrayList<ActivityMaster>();
+		try {
+			activityDetailList = actvtMstrRepo.getAllActivityDetailsList(serviceId);
+				System.err.println("Srvd list:"+activityDetailList.toString());
+			
+		}catch (Exception e) {
+			System.err.println("Exce in getActivityDetails  " + e.getMessage());
+		}
+		return activityDetailList;
 	}
 	
 	/**********************Task Periodicity Master**********************/
@@ -514,5 +540,23 @@ public class MasterApiController {
 			info.setMsg("excep");
 		}
 		return info;
+	}
+	
+	/**************Developer Periodicity Master****************/
+	
+	@Autowired DevPeriodicityMasterRepo devPeriodRepo;
+	
+	@RequestMapping(value = {"/getAllPeriodicityDurations"}, method = RequestMethod.GET)
+	public @ResponseBody List<DevPeriodicityMaster> getAllPeriodicityDurations(){
+		
+		List<DevPeriodicityMaster> list = new ArrayList<DevPeriodicityMaster>();
+		try {
+			list = devPeriodRepo.findAllByDelStatus(1);
+		}catch (Exception e) {
+			System.err.println("Exce in getAllPeriodicityDurations  " + e.getMessage());
+		}
+		
+		return list;
+		
 	}
 }

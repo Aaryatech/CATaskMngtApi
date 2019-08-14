@@ -16,7 +16,7 @@ public class TaskPeriodicityMaster {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int taskp_id;
+	private int taskpId;
 	private int finYearId;
 	private int actvId;
 	private int periodicityId;
@@ -32,11 +32,12 @@ public class TaskPeriodicityMaster {
 	private String exVar1;
 	private String exVar2;
 	
-	public int getTaskp_id() {
-		return taskp_id;
+	
+	public int getTaskpId() {
+		return taskpId;
 	}
-	public void setTaskp_id(int taskp_id) {
-		this.taskp_id = taskp_id;
+	public void setTaskpId(int taskpId) {
+		this.taskpId = taskpId;
 	}
 	public int getFinYearId() {
 		return finYearId;
@@ -126,13 +127,12 @@ public class TaskPeriodicityMaster {
 	}
 	@Override
 	public String toString() {
-		return "TaskPeriodicityMaster [taskp_id=" + taskp_id + ", finYearId=" + finYearId + ", actvId=" + actvId
+		return "TaskPeriodicityMaster [taskpId=" + taskpId + ", finYearId=" + finYearId + ", actvId=" + actvId
 				+ ", periodicityId=" + periodicityId + ", taskpDuration=" + taskpDuration + ", taskpSubline="
 				+ taskpSubline + ", taskpRefdate=" + taskpRefdate + ", taskpStatutoryDueDate=" + taskpStatutoryDueDate
 				+ ", delStatus=" + delStatus + ", updateDatetime=" + updateDatetime + ", updateUsername="
 				+ updateUsername + ", ex_int1=" + ex_int1 + ", ex_int2=" + ex_int2 + ", exVar1=" + exVar1 + ", exVar2="
 				+ exVar2 + "]";
 	}
-	
 		
 }

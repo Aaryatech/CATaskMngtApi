@@ -14,6 +14,7 @@ public class ActivityMaster {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int actiId;
 	private String actiName;
+	private int periodicityId;
 	private String actiDesc;	
 	private int servId;
 	private int delStatus;
@@ -38,6 +39,14 @@ public class ActivityMaster {
 
 	public void setActiName(String actiName) {
 		this.actiName = actiName;
+	}
+
+	public int getPeriodicityId() {
+		return periodicityId;
+	}
+
+	public void setPeriodicityId(int periodicityId) {
+		this.periodicityId = periodicityId;
 	}
 
 	public String getActiDesc() {
@@ -114,11 +123,11 @@ public class ActivityMaster {
 
 	@Override
 	public String toString() {
-		return "ActivityMaster [actiId=" + actiId + ", actiName=" + actiName + ", actiDesc=" + actiDesc + ", servId="
-				+ servId + ", delStatus=" + delStatus + ", updateDatetime=" + updateDatetime + ", updateUsername="
-				+ updateUsername + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2="
-				+ exVar2 + "]";
+		return "ActivityMaster [actiId=" + actiId + ", actiName=" + actiName + ", periodicityId=" + periodicityId
+				+ ", actiDesc=" + actiDesc + ", servId=" + servId + ", delStatus=" + delStatus + ", updateDatetime="
+				+ updateDatetime + ", updateUsername=" + updateUsername + ", exInt1=" + exInt1 + ", exInt2=" + exInt2
+				+ ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + "]";
 	}
-	
-	
+
+		
 }
