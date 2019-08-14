@@ -1,4 +1,4 @@
-package com.ats.cataskapi.logindetailrepo;
+package com.ats.cataskapi.custdetailrepo;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ats.cataskapi.model.custlogindetail.GetCustLoginDetail;
+import com.ats.cataskapi.model.custdetail.GetCustLoginDetail;
 
 public interface GetCustLoginDetailRepo extends JpaRepository<GetCustLoginDetail, Integer> {
 	

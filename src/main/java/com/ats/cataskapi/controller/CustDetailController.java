@@ -5,14 +5,20 @@ import java.util.List;
 
 import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ats.cataskapi.logindetailrepo.GetCustLoginDetailRepo;
-import com.ats.cataskapi.model.custlogindetail.GetCustLoginDetail;
+import com.ats.cataskapi.custdetailrepo.CustSignatoryMasterRepo;
+import com.ats.cataskapi.custdetailrepo.GetCustLoginDetailRepo;
+import com.ats.cataskapi.custdetailrepo.GetCustSignatoryRepo;
+import com.ats.cataskapi.model.ServiceMaster;
+import com.ats.cataskapi.model.custdetail.CustSignatoryMaster;
+import com.ats.cataskapi.model.custdetail.GetCustLoginDetail;
+import com.ats.cataskapi.model.custdetail.GetCustSignatory;
 
 @RestController
 public class CustDetailController   {
@@ -39,6 +45,46 @@ public class CustDetailController   {
 		}
 		
 		return custDetail;
+	}
+	
+	@Autowired GetCustSignatoryRepo getCustSignatoryRepo;
+	
+	@RequestMapping(value = {"/getCustSignatoryByCustId"}, method = RequestMethod.POST)
+	public @ResponseBody List<GetCustSignatory> getCustSignatoryByCustId(@RequestParam int custId) {
+		List<GetCustSignatory> custDetail = null;
+		try {
+			
+				custDetail = getCustSignatoryRepo.getGetCustSignatoryByCustId(custId);
+					if(custDetail.size()==0) {
+						System.err.println("null getCustSignatoryByCustId ");
+						custDetail=new ArrayList<>();
+					}
+			
+		}catch (Exception e) {
+			    System.err.println("Exce in getCustSignatoryByCustId  " );
+				e.printStackTrace();
+		}
+		
+		return custDetail;
+	}
+	
+	@Autowired CustSignatoryMasterRepo custSignatoryMasterRepo;
+	
+	@RequestMapping(value = { "/saveCustSignatory" }, method = RequestMethod.POST)
+	public @ResponseBody CustSignatoryMaster saveCustSignatory(@RequestBody CustSignatoryMaster custSing) {
+
+		CustSignatoryMaster serv = null;
+
+		try {
+			serv = custSignatoryMasterRepo.saveAndFlush(custSing);
+
+		} catch (Exception e) {
+			
+			System.err.println("Exce in saving saveCustSignatory " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		return serv;
 	}
 	
 }

@@ -1,4 +1,4 @@
-package com.ats.cataskapi.model.custlogindetail;
+package com.ats.cataskapi.model.custdetail;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
