@@ -9,14 +9,27 @@ public class ActivityPeriodDetails {
 	@Id
 	private int actiId;
 	private String actiName;
+	private String actiDesc;
 	private int periodicityId;
 	private String periodicityName;
+	private int servId;
+	
 	public int getActiId() {
 		return actiId;
 	}
+	
 	public void setActiId(int actiId) {
 		this.actiId = actiId;
 	}
+	
+	public String getActiDesc() {
+		return actiDesc;
+	}
+
+	public void setActiDesc(String actiDesc) {
+		this.actiDesc = actiDesc;
+	}
+
 	public String getActiName() {
 		return actiName;
 	}
@@ -35,11 +48,20 @@ public class ActivityPeriodDetails {
 	public void setPeriodicityName(String periodicityName) {
 		this.periodicityName = periodicityName;
 	}
+	
+	public int getServId() {
+		return servId;
+	}
+	public void setServId(int servId) {
+		this.servId = servId;
+	}
+
 	@Override
 	public String toString() {
-		return "ActivityPeriodDetails [actiId=" + actiId + ", actiName=" + actiName + ", periodicityId=" + periodicityId
-				+ ", periodicityName=" + periodicityName + "]";
+		return "ActivityPeriodDetails [actiId=" + actiId + ", actiName=" + actiName + ", actiDesc=" + actiDesc
+				+ ", periodicityId=" + periodicityId + ", periodicityName=" + periodicityName + ", servId=" + servId
+				+ "]";
 	}
-		
+	
 
 }

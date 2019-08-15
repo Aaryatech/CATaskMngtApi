@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ats.cataskapi.model.ActivityMaster;
 import com.ats.cataskapi.model.ActivityPeriodDetails;
 
 public interface ActivityPeriodDetailsRepo extends JpaRepository<ActivityPeriodDetails, Integer> {
 
 	@Query(value="SELECT m_activities.acti_id,\n" + 
 			"	m_activities.acti_name, \n" + 
+			"	m_activities.serv_id, \n" + 
+			"	 m_activities.acti_desc, \n" + 
 			"    dm_periodicity.periodicity_id, \n" + 
 			"    dm_periodicity.periodicity_name \n" + 
 			"   \n" + 

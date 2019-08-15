@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.cataskapi.custdetailrepo.CustomerDetailsRepo;
 import com.ats.cataskapi.model.ActivityMaster;
 import com.ats.cataskapi.model.ActivityPeriodDetails;
 import com.ats.cataskapi.model.CustomerDetailMaster;
+import com.ats.cataskapi.model.CustomerDetails;
 import com.ats.cataskapi.model.CustomerGroupMaster;
 import com.ats.cataskapi.model.CustomerHeaderMaster;
 import com.ats.cataskapi.model.DevPeriodicityMaster;
@@ -56,7 +58,7 @@ public class MasterApiController {
 	public @ResponseBody List<ServiceMaster> getAllServices() {
 		List<ServiceMaster> servicsList = new ArrayList<ServiceMaster>();
 		try {
-			servicsList = srvMstrRepo.findByDelStatus(1);
+			servicsList = srvMstrRepo.findByDelStatusOrderByServIdDesc(1);
 		}catch(Exception e) {
 			System.err.println("Exce in getAllServices " + e.getMessage());
 		}
@@ -407,7 +409,7 @@ public class MasterApiController {
 		
 		List<CustomerHeaderMaster> custHeadList = new ArrayList<CustomerHeaderMaster>();
 		try {
-			custHeadList = custHeadRepo.findAllByDelStatus(1);
+			custHeadList = custHeadRepo.findAllByDelStatusOrderByCustIdDesc(1);
 		}catch (Exception e) {
 			System.err.println("Exce in getAllCustomerHeaders  " + e.getMessage());
 		}
@@ -469,6 +471,21 @@ public class MasterApiController {
 			info.setMsg("excep");
 		}
 		return info;
+	}
+	
+	@Autowired CustomerDetailsRepo custDetlRepo;
+	@RequestMapping(value = {"/getAllCustomerInfo"}, method = RequestMethod.GET)
+	public @ResponseBody List<CustomerDetails> getAllCustomerInfo(){
+		
+		List<CustomerDetails> custHeadList = new ArrayList<CustomerDetails>();
+		try {
+			custHeadList = custDetlRepo.getAllCustomerDetails();
+		}catch (Exception e) {
+			System.err.println("Exce in getAllCustomerInfo  " + e.getMessage());
+		}
+		
+		return custHeadList;
+		
 	}
 	
 	/*****************************Customer Detail Master****************************/

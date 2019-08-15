@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "m_cust_header")
 public class CustomerHeaderMaster {
@@ -159,6 +161,7 @@ public class CustomerHeaderMaster {
 	public void setCustFileNo(String custFileNo) {
 		this.custFileNo = custFileNo;
 	}
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getCustDob() {
 		return custDob;
 	}

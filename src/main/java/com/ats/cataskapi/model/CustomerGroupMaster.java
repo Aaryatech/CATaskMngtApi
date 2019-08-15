@@ -14,6 +14,7 @@ public class CustomerGroupMaster {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int custGroupId;
 	private String custGroupName;
+	private String custGroupRemark;
 	private int delStatus;
 	private String updateDatetime;
 	private int updateUsername;
@@ -75,12 +76,19 @@ public class CustomerGroupMaster {
 	public void setExVar2(String exVar2) {
 		this.exVar2 = exVar2;
 	}
+	
+	public String getCustGroupRemark() {
+		return custGroupRemark;
+	}
+	public void setCustGroupRemark(String custGroupRemark) {
+		this.custGroupRemark = custGroupRemark;
+	}
 	@Override
 	public String toString() {
-		return "CustomerGroupMaster [custGroupId=" + custGroupId + ", custGroupName=" + custGroupName + ", delStatus="
-				+ delStatus + ", updateDatetime=" + updateDatetime + ", updateUsername=" + updateUsername + ", exInt1="
-				+ exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + "]";
+		return "CustomerGroupMaster [custGroupId=" + custGroupId + ", custGroupName=" + custGroupName
+				+ ", custGroupRemark=" + custGroupRemark + ", delStatus=" + delStatus + ", updateDatetime="
+				+ updateDatetime + ", updateUsername=" + updateUsername + ", exInt1=" + exInt1 + ", exInt2=" + exInt2
+				+ ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + "]";
 	}
-	
-	
+		
 }

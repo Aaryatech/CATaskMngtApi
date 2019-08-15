@@ -33,7 +33,15 @@ public class EmployeeMaster {
 	private int exInt2;
 	private String exVar1;
 	private String exVar2;
+	private String empSalary;
 	
+	
+	public String getEmpSalary() {
+		return empSalary;
+	}
+	public void setEmpSalary(String empSalary) {
+		this.empSalary = empSalary;
+	}
 	public int getEmpId() {
 		return empId;
 	}
@@ -145,6 +153,7 @@ public class EmployeeMaster {
 				+ ", empRoleId=" + empRoleId + ", empMob=" + empMob + ", empEmail=" + empEmail + ", empPass=" + empPass
 				+ ", empDesc=" + empDesc + ", empPic=" + empPic + ", delStatus=" + delStatus + ", updateDatetime="
 				+ updateDatetime + ", updateUsername=" + updateUsername + ", exInt1=" + exInt1 + ", exInt2=" + exInt2
-				+ ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + "]";
-	}	
+				+ ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + ", empSalary=" + empSalary + "]";
+	}
+		
 }

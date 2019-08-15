@@ -13,7 +13,7 @@ import com.ats.cataskapi.model.CustomerHeaderMaster;
 
 public interface CustomerHeaderMasterRepo extends JpaRepository<CustomerHeaderMaster, Integer> {
 
-	List<CustomerHeaderMaster> findAllByDelStatus(int del);
+	List<CustomerHeaderMaster> findAllByDelStatusOrderByCustIdDesc(int del);
 	
 	CustomerHeaderMaster findByCustIdAndDelStatus(int custHeadId, int del);
 	
