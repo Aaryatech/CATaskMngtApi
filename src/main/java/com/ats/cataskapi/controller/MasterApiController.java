@@ -14,22 +14,26 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ats.cataskapi.custdetailrepo.CustomerDetailsRepo;
 import com.ats.cataskapi.model.ActivityMaster;
 import com.ats.cataskapi.model.ActivityPeriodDetails;
+import com.ats.cataskapi.model.CustmrActivityMap;
 import com.ats.cataskapi.model.CustomerDetailMaster;
 import com.ats.cataskapi.model.CustomerDetails;
 import com.ats.cataskapi.model.CustomerGroupMaster;
 import com.ats.cataskapi.model.CustomerHeaderMaster;
 import com.ats.cataskapi.model.DevPeriodicityMaster;
 import com.ats.cataskapi.model.EmployeeMaster;
+import com.ats.cataskapi.model.FirmType;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
 import com.ats.cataskapi.model.TaskPeriodicityMaster;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.ActivityPeriodDetailsRepo;
+import com.ats.cataskapi.repositories.CustmrActivityMapRepo;
 import com.ats.cataskapi.repositories.CustomerDetailMasterRepo;
 import com.ats.cataskapi.repositories.CustomerGroupMasterRepo;
 import com.ats.cataskapi.repositories.CustomerHeaderMasterRepo;
 import com.ats.cataskapi.repositories.DevPeriodicityMasterRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
+import com.ats.cataskapi.repositories.FirmTypeRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
 import com.ats.cataskapi.repositories.TaskPeriodicityMasterRepo;
 
@@ -104,6 +108,7 @@ public class MasterApiController {
 		return info;
 
 	}
+	
 	
 	/**********************Activity Master**********************/
 	
@@ -473,6 +478,8 @@ public class MasterApiController {
 		return info;
 	}
 	
+	
+	/*********************   CustomerDetails  (Customer Header Master)************************/
 	@Autowired CustomerDetailsRepo custDetlRepo;
 	@RequestMapping(value = {"/getAllCustomerInfo"}, method = RequestMethod.GET)
 	public @ResponseBody List<CustomerDetails> getAllCustomerInfo(){
@@ -486,6 +493,20 @@ public class MasterApiController {
 		
 		return custHeadList;
 		
+	}
+	
+	@RequestMapping(value = {"/getcustById"}, method=RequestMethod.POST)
+	public @ResponseBody CustomerDetails getcustById(@RequestParam int custId) {
+		CustomerDetails custDetl = null;
+		
+		try {
+			custDetl = custDetlRepo.findByCustId(custId);
+			
+			
+		}catch (Exception e) {
+			System.err.println("Exce in getcustById  " + e.getMessage());
+		}
+		return custDetl;
 	}
 	
 	/*****************************Customer Detail Master****************************/
@@ -579,4 +600,93 @@ public class MasterApiController {
 		return list;
 		
 	}
+	
+	/************Firm Type**************/
+	@Autowired FirmTypeRepo firmTypeRepo;
+	
+	@RequestMapping(value = {"/getAllFirms"}, method = RequestMethod.GET)
+	public @ResponseBody List<FirmType> getAllFirms(){
+		List<FirmType> firms = new ArrayList<FirmType>();
+		try {
+			firms = firmTypeRepo.findAllBydelStatus(1);
+			
+		}catch (Exception e) {
+			System.err.println("Exce in getAllFirms  " + e.getMessage());
+		}
+		return firms;
+	}
+	
+	/*****************Customer Activity Mapping Master****************/
+	
+	@Autowired CustmrActivityMapRepo actMapRepo;
+	
+	@RequestMapping(value = {"/getAllMappedActivities"}, method = RequestMethod.GET)
+	public @ResponseBody List<CustmrActivityMap> getAllMappedActivities(){
+		List<CustmrActivityMap> activityMap = new ArrayList<CustmrActivityMap>();
+		try {
+			activityMap = actMapRepo.findAllBydelStatus(1);
+			
+		}catch (Exception e) {
+			System.err.println("Exce in getAllMappedActivities  " + e.getMessage());
+		}
+		return activityMap;
+		
+	}
+	
+	@RequestMapping(value = {"/addNewMappedActivities"}, method = RequestMethod.POST)
+	public @ResponseBody CustmrActivityMap addNewMappedActivities(@RequestBody  CustmrActivityMap activityMapped){
+		CustmrActivityMap actMap = null;
+		try {
+			actMap = actMapRepo.saveAndFlush(activityMapped);
+			
+		}catch (Exception e) {
+			
+			System.err.println("Exce in addNewMappedActivities  " + e.getMessage());
+		}
+		return actMap;		
+	}
+	
+	@RequestMapping(value = {"/getCustMappedActivitiesById"}, method = RequestMethod.POST)
+	@ResponseBody CustmrActivityMap getCustMappedActivitiesById(@RequestParam int actId) {
+		CustmrActivityMap actMap = null;
+		try {
+			actMap = actMapRepo.findByActvIdAndDelStatus(actId, 1);
+				
+			
+		}catch (Exception e) {
+			System.err.println("Exce in getCustMappedActivitiesById  " + e.getMessage());
+		}
+		
+		return actMap;
+		
+	}
+	
+	@RequestMapping(value = { "/deleteMappedActivity" }, method = RequestMethod.POST)
+	public @ResponseBody Info deleteMappedActivity(@RequestParam int mapId, @RequestParam int userId ) {
+
+		Info info = new Info();
+		try
+		{
+			int res = actMapRepo.deleteMappedCustomerActivity(mapId, userId);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in deleteMappedActivity  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+		
+		return info;
+	}
+	
 }

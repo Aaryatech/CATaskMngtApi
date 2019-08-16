@@ -19,6 +19,7 @@ public class EmployeeMaster {
 	private int empId;
 	private int empType;
 	private String empName;
+	private String empNickname;
 	private Date empDob;
 	private int empRoleId;
 	private String empMob;
@@ -61,6 +62,12 @@ public class EmployeeMaster {
 		this.empName = empName;
 	}
 	
+	public String getEmpNickname() {
+		return empNickname;
+	}
+	public void setEmpNickname(String empNickname) {
+		this.empNickname = empNickname;
+	}
 	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getEmpDob() {
 		return empDob;
@@ -149,11 +156,12 @@ public class EmployeeMaster {
 	}
 	@Override
 	public String toString() {
-		return "EmployeeMaster [empId=" + empId + ", empType=" + empType + ", empName=" + empName + ", empDob=" + empDob
-				+ ", empRoleId=" + empRoleId + ", empMob=" + empMob + ", empEmail=" + empEmail + ", empPass=" + empPass
-				+ ", empDesc=" + empDesc + ", empPic=" + empPic + ", delStatus=" + delStatus + ", updateDatetime="
-				+ updateDatetime + ", updateUsername=" + updateUsername + ", exInt1=" + exInt1 + ", exInt2=" + exInt2
-				+ ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + ", empSalary=" + empSalary + "]";
+		return "EmployeeMaster [empId=" + empId + ", empType=" + empType + ", empName=" + empName + ", empNickname="
+				+ empNickname + ", empDob=" + empDob + ", empRoleId=" + empRoleId + ", empMob=" + empMob + ", empEmail="
+				+ empEmail + ", empPass=" + empPass + ", empDesc=" + empDesc + ", empPic=" + empPic + ", delStatus="
+				+ delStatus + ", updateDatetime=" + updateDatetime + ", updateUsername=" + updateUsername + ", exInt1="
+				+ exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + ", empSalary="
+				+ empSalary + "]";
 	}
 		
 }
