@@ -29,5 +29,8 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 	@Query(value = "UPDATE m_emp SET emp_role_id=:roleId WHERE emp_id IN (:userIdList) ", nativeQuery = true)
 	int updateRoleId(@Param("roleId") int roleId, @Param("userIdList") List<String> userIdList);
 
+	@Query(value = " SELECT * from m_emp WHERE m_emp.emp_email=:userName AND m_emp.emp_pass=BINARY(:password) and del_status=1 ", nativeQuery = true)
+	EmployeeMaster loginCheck(@Param("userName") String userName, @Param("password") String password);
+
 
 }

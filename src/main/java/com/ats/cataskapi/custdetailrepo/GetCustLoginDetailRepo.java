@@ -39,7 +39,7 @@ public interface GetCustLoginDetailRepo extends JpaRepository<GetCustLoginDetail
 		
 			" m_services.serv_name,m_activities.acti_name,m_cust_detail.login_id,m_cust_detail.login_pass," + 
 			" m_cust_detail.login_que1,m_cust_detail.login_ans1,m_cust_detail.login_que2,m_cust_detail.login_ans2," + 
-			" m_cust_detail.login_remark,m_cust_detail.cust_detail_id,m_cust_detail.cust_id " + 
+			" m_cust_detail.login_remark,m_cust_detail.cust_detail_id,m_cust_detail.cust_id,m_cust_detail.actv_id,m_services.serv_id " + 
 			"" + 
 			" FROM m_cust_detail,m_cust_header,m_activities,m_services " + 
 			"" + 
@@ -48,5 +48,19 @@ public interface GetCustLoginDetailRepo extends JpaRepository<GetCustLoginDetail
 			" AND m_activities.del_status=1 AND m_services.del_status=1 AND m_cust_detail.cust_id=:custId ORDER BY m_cust_detail.cust_detail_id DESC ",nativeQuery=true)
 	
 	List<GetCustLoginDetail> getGetCustLoginDetailByCustId(@Param("custId") int custId);
+
+	@Query(value=" SELECT   m_cust_header.cust_firm_name, " + 
+			
+			" m_services.serv_name,m_activities.acti_name,m_cust_detail.login_id,m_cust_detail.login_pass," + 
+			" m_cust_detail.login_que1,m_cust_detail.login_ans1,m_cust_detail.login_que2,m_cust_detail.login_ans2," + 
+			" m_cust_detail.login_remark,m_cust_detail.cust_detail_id,m_cust_detail.cust_id, m_cust_detail.actv_id, m_services.serv_id " + 
+			"" + 
+			" FROM m_cust_detail,m_cust_header,m_activities,m_services " + 
+			"" + 
+			" WHERE m_cust_detail.cust_id=m_cust_header.cust_id AND m_cust_detail.actv_id=m_activities.acti_id and " + 
+			" m_activities.serv_id=m_services.serv_id AND m_cust_detail.del_status=1 AND m_cust_header.del_status=1 " + 
+			" AND m_activities.del_status=1 AND m_services.del_status=1 AND m_cust_detail.cust_detail_id=:custDetailId ",nativeQuery=true)
+	
+	GetCustLoginDetail getGetCustLoginDetailByCustDetailId(@Param("custDetailId") int custDetailId);
 
 }
