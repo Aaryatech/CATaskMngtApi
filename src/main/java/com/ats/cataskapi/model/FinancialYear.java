@@ -1,12 +1,17 @@
 package com.ats.cataskapi.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "dm_cal_year")
+@Table(name = "dm_fin_year")
 public class FinancialYear {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int finYearId;
 
 	private String finYearName;

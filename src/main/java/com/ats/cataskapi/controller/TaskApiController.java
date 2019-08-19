@@ -60,7 +60,7 @@ public class TaskApiController {
 	FinancialYearRepo financialYearRepo;
 
 	@RequestMapping(value = { "/saveTask1" }, method = RequestMethod.POST)
-	public @ResponseBody CustmrActivityMap saveCustSignatory(@RequestBody CustmrActivityMap custact) {
+	public @ResponseBody CustmrActivityMap saveCustSignatory(@RequestBody CustmrActivityMap custserv) {
 
 		Date date = Calendar.getInstance().getTime();
 		Date dm = Calendar.getInstance().getTime();
@@ -70,7 +70,7 @@ public class TaskApiController {
 		Task serv = null;
 		int totdays = 0;
 
-		CustmrActivityMap custserv = null;
+		CustmrActivityMap cust = null;
 
 		ActivityMaster actv = new ActivityMaster();
 
@@ -80,7 +80,7 @@ public class TaskApiController {
 		period = devPeriodRepo.findByPeriodicityIdAndDelStatus(custserv.getPeriodicityId(), 1);
 		
 		try {
- 			custserv = actMapRepo.saveAndFlush(custact);
+			cust = actMapRepo.saveAndFlush(custserv);
 			perId = custserv.getPeriodicityId();
 
 			String strDate = dateFormat.format(custserv.getActvStartDate());
@@ -142,7 +142,7 @@ public class TaskApiController {
 			e.printStackTrace();
 
 		}
-		return custserv;
+		return cust;
 	}
 
 }

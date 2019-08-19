@@ -15,7 +15,7 @@ public interface CustomerGroupMasterRepo extends JpaRepository<CustomerGroupMast
 
 	CustomerGroupMaster findByCustGroupIdAndDelStatus(int custGrpId, int del);
 	
-	List<CustomerGroupMaster> findAllByDelStatus(int del);
+	List<CustomerGroupMaster> findByDelStatusOrderByCustGroupIdDesc(int del);
 	
 	@Transactional
 	@Modifying

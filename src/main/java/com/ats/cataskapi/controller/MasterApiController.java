@@ -272,7 +272,7 @@ public class MasterApiController {
 		
 		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
 		try {
-			empList = empRepo.findAllBydelStatus(1);
+			empList = empRepo.findAllByDelStatusOrderByEmpIdDesc(1);
 		}catch (Exception e) {
 			System.err.println("Exce in getAllEmployees  " + e.getMessage());
 		}
@@ -344,7 +344,7 @@ public class MasterApiController {
 		
 		List<CustomerGroupMaster> cstmrGrpList = new ArrayList<CustomerGroupMaster>();
 		try {
-			cstmrGrpList = cstmrGrpRepo.findAllByDelStatus(1);
+			cstmrGrpList = cstmrGrpRepo.findByDelStatusOrderByCustGroupIdDesc(1);
 		}catch (Exception e) {
 			System.err.println("Exce in getAllCustomerGroups  " + e.getMessage());
 		}
