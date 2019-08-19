@@ -22,6 +22,7 @@ import com.ats.cataskapi.model.CustomerHeaderMaster;
 import com.ats.cataskapi.model.DevPeriodicityMaster;
 import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.FirmType;
+import com.ats.cataskapi.model.GetActivityPeriodicity;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
 import com.ats.cataskapi.model.TaskPeriodicityMaster;
@@ -34,6 +35,7 @@ import com.ats.cataskapi.repositories.CustomerHeaderMasterRepo;
 import com.ats.cataskapi.repositories.DevPeriodicityMasterRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 import com.ats.cataskapi.repositories.FirmTypeRepo;
+import com.ats.cataskapi.repositories.GetActivityPeriodicityRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
 import com.ats.cataskapi.repositories.TaskPeriodicityMasterRepo;
 
@@ -689,4 +691,20 @@ public class MasterApiController {
 		return info;
 	}
 	
+	/**********************************************/
+	@Autowired GetActivityPeriodicityRepo getActiPeriodRepo;
+	
+	@RequestMapping(value = {"/getPeriodicityByActivityId"}, method = RequestMethod.POST)
+	public @ResponseBody GetActivityPeriodicity getPeriodicityByActId(@RequestParam int activityId) {
+		GetActivityPeriodicity period = null; 
+		try {
+			period = getActiPeriodRepo.getPriodicityByActid(activityId);
+			System.err.println("MapPeriod--------------"+period.toString());
+		}catch (Exception e) {
+			System.err.println("Exce in getPeriodicityByActivityId  " + e.getMessage());
+			e.printStackTrace();
+		}
+		return period;
+		
+	}
 }
