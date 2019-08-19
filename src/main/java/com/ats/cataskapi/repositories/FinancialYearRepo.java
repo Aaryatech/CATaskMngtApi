@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 public interface FinancialYearRepo  extends JpaRepository<FinancialYear, Integer> {
 
 	
-	@Query(value="SELECT * from dm_fin_year  where dm_fin_year.fin_start_date >:finDate AND dm_fin_year.fin_end_date<:finDate ",nativeQuery=true)
+	@Query(value="SELECT *\n" + 
+			"FROM dm_fin_year\n" + 
+			"WHERE :finDate between dm_fin_year.fin_start_date AND dm_fin_year.fin_end_date ",nativeQuery=true)
 	FinancialYear getFinYearBetDate(@Param("finDate") String  finDate);
 }

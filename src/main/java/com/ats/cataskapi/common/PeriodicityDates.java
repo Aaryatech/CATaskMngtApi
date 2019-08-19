@@ -1,6 +1,7 @@
 package com.ats.cataskapi.common;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class PeriodicityDates {
 
-	public static List<String> getDates( String fromDate,
+	public static List<DateValues> getDates( String fromDate,
 			  String toDate,int periodicityId) {
 		
 		List<String> arryadate = new ArrayList<>();
@@ -26,6 +27,7 @@ public class PeriodicityDates {
 		String sundayDates = new String();
 		 Date date = Calendar.getInstance().getTime();  
          DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+        List<DateValues> dateList=new ArrayList<DateValues>();
         
 		
 		try {
@@ -40,6 +42,12 @@ public class PeriodicityDates {
 				if(periodicityId==1) {
 					if (dayOfWeek == 0) {
 						arryadate.add(dateFormat.format(j));
+						
+						DateValues dv=new DateValues();
+						dv.setDate(c.getTime());
+						dv.setValue(""+c.getWeekYear());
+						dateList.add(dv);
+						
 						sundayDates = sundayDates + "," + dddate.format(j);
 						System.out.println("Sunday " + dddate.format(j));
 						totalcount++;
@@ -52,6 +60,12 @@ public class PeriodicityDates {
 							|| 15 == c.get(Calendar.DAY_OF_MONTH)) {
 						System.out.println("Hello Bi Weekly " + dddate.format(j));
 						arryadate.add(dddate.format(j));
+						
+						DateValues dv=new DateValues();
+						dv.setDate(c.getTime());
+						dv.setValue(""+c.getWeekYear());
+						dateList.add(dv);
+						
 					}
 
 					
@@ -62,6 +76,12 @@ public class PeriodicityDates {
 					//c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
 					System.err.println("Month End " + dddate.format(j));
 					arryadate.add(dddate.format(j));
+					
+					DateValues dv=new DateValues();
+					dv.setDate(c.getTime());
+					dv.setValue(""+c.getWeekYear());
+					dateList.add(dv);
+					
 				}
 				}
 				//Quarterly
@@ -74,6 +94,12 @@ public class PeriodicityDates {
 					System.out.println("Hello Quarterly  " + dddate.format(j));
 	
 					arryadate.add(dddate.format(j));
+					
+					DateValues dv=new DateValues();
+					dv.setDate(c.getTime());
+					dv.setValue(""+c.getWeekYear());
+					dateList.add(dv);
+					
 				}
 				}
 				//Yearly
@@ -83,12 +109,24 @@ public class PeriodicityDates {
 						||c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH)==2){
 					System.err.println("Half Yearly   " + dddate.format(j));
 					arryadate.add(dddate.format(j));
+					
+					DateValues dv=new DateValues();
+					dv.setDate(c.getTime());
+					dv.setValue(""+c.getWeekYear());
+					dateList.add(dv);
+					
 				}
 				}
 				else {
 					if (c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH)==2){
 						System.out.println("Hello  Yearly   " + dddate.format(j));
 						arryadate.add(dddate.format(j));
+						
+						DateValues dv=new DateValues();
+						dv.setDate(c.getTime());
+						dv.setValue(""+c.getWeekYear());
+						dateList.add(dv);
+						
 					}
 				}
 				System.err.println("date array " +arryadate.toString());
@@ -100,8 +138,35 @@ public class PeriodicityDates {
 			e.printStackTrace();// TODO: handle exception
 		}
 
-		return arryadate;
+		return dateList;
 
+	}
+	
+	
+	
+	
+	 
+	 public static String addDaysToGivenDate(String oldDate,int daysToAdd) {
+
+	System.out.println("Date before Addition: "+oldDate);
+	//Specifying date format that matches the given date
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	Calendar c = Calendar.getInstance();
+	try{
+	  //Setting the date to the given date
+	 c.setTime(sdf.parse(oldDate));
+	}catch(ParseException e){
+	e.printStackTrace();
+	}
+	 
+	//Number of Days to add
+	c.add(Calendar.DAY_OF_MONTH, daysToAdd);  
+	//Date after adding the days to the given date
+	String newDate = sdf.format(c.getTime());  
+	//Displaying the new Date after addition of Days
+	System.out.println("Date after Addition: "+newDate);
+
+	     return newDate;
 	}
 
 }

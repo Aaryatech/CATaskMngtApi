@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "t_task")
+@Table(name = "t_tasks")
 public class Task {
 
 	@Id
@@ -31,6 +31,7 @@ public class Task {
 	private String taskEndDate;
 
 	private String taskStatutoryDueDate;
+	
 
 	private int taskStatus;
 
