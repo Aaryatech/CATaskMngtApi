@@ -9,5 +9,7 @@ import com.ats.cataskapi.model.DevPeriodicityMaster;
 public interface DevPeriodicityMasterRepo extends JpaRepository<DevPeriodicityMaster, Integer> {
 
 	List<DevPeriodicityMaster> findAllByDelStatus(int del);
+
+	DevPeriodicityMaster findByPeriodicityIdAndDelStatus(int periodicityId, int i);
 	
 }

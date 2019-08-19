@@ -1,5 +1,6 @@
 package com.ats.cataskapi.common;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,15 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class PeriodicityDates {
 
-	public  List<Date> getDates( String fromDate,
-			  String toDate) {
-		System.err.println("Hello  ");
-		List<Date> arryadate = new ArrayList<>();
+	public static List<String> getDates( String fromDate,
+			  String toDate,int periodicityId) {
+		
+		List<String> arryadate = new ArrayList<>();
 
 		SimpleDateFormat yydate = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat dddate = new SimpleDateFormat("dd-MM-yyyy");
 		int totalcount = 0;
 		String sundayDates = new String();
+		 Date date = Calendar.getInstance().getTime();  
+         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+        
+		
 		try {
 			for (Date j = yydate.parse(fromDate); j.compareTo(yydate.parse(toDate)) <= 0;) {
 				// System.err.println("a");
@@ -30,24 +35,37 @@ public class PeriodicityDates {
 				c.setTime(j);
 				int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
 				// System.err.println("day of week " + dayOfWeek);
-				if (dayOfWeek == 0) {
-					arryadate.add(j);
-					sundayDates = sundayDates + "," + dddate.format(j);
-					System.out.println("Sunday " + dddate.format(j));
-					totalcount++;
-				}
 				
-				if (c.get(Calendar.DAY_OF_MONTH) == c.getActualMaximum(Calendar.DAY_OF_MONTH)
-						|| 15 == c.get(Calendar.DAY_OF_MONTH)) {
-					System.out.println("Hello Bi Weekly " + dddate.format(j));
-					arryadate.add(j);
-				}
+				//week
+				if(periodicityId==1) {
+					if (dayOfWeek == 0) {
+						arryadate.add(dateFormat.format(j));
+						sundayDates = sundayDates + "," + dddate.format(j);
+						System.out.println("Sunday " + dddate.format(j));
+						totalcount++;
+					}
+					
+				}//bi week
+				else if(periodicityId==2) {
 
+					if (c.get(Calendar.DAY_OF_MONTH) == c.getActualMaximum(Calendar.DAY_OF_MONTH)
+							|| 15 == c.get(Calendar.DAY_OF_MONTH)) {
+						System.out.println("Hello Bi Weekly " + dddate.format(j));
+						arryadate.add(dddate.format(j));
+					}
+
+					
+				}
+				//monthly
+				else if(periodicityId==3) {
 				if (c.get(Calendar.DAY_OF_MONTH) == c.getActualMaximum(Calendar.DAY_OF_MONTH)) {
 					//c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
 					System.err.println("Month End " + dddate.format(j));
-					arryadate.add(j);
+					arryadate.add(dddate.format(j));
 				}
+				}
+				//Quarterly
+				else if(periodicityId==4) {
 								
 				if (c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH)==5
 						||c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH)==8
@@ -55,20 +73,25 @@ public class PeriodicityDates {
 						||c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH)==2){
 					System.out.println("Hello Quarterly  " + dddate.format(j));
 	
-					arryadate.add(j);
+					arryadate.add(dddate.format(j));
 				}
-				
+				}
+				//Yearly
+				else if(periodicityId==5) {
+							
 				if (c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH)==8
 						||c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH)==2){
 					System.err.println("Half Yearly   " + dddate.format(j));
-					arryadate.add(j);
+					arryadate.add(dddate.format(j));
 				}
-				
-				if (c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH)==2){
-					System.out.println("Hello  Yearly   " + dddate.format(j));
-					arryadate.add(j);
 				}
-
+				else {
+					if (c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH)==2){
+						System.out.println("Hello  Yearly   " + dddate.format(j));
+						arryadate.add(dddate.format(j));
+					}
+				}
+				System.err.println("date array " +arryadate.toString());
 				j.setTime(j.getTime() + 1000 * 60 * 60 * 24);
 			} // end of for
 
