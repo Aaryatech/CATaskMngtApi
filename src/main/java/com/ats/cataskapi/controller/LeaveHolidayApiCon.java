@@ -1,8 +1,12 @@
 package com.ats.cataskapi.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import java.util.List; 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +21,13 @@ import com.ats.cataskapi.model.CalenderYear;
 import com.ats.cataskapi.model.GetHoliday;
 import com.ats.cataskapi.model.Holiday;
 import com.ats.cataskapi.model.Info;
+import com.ats.cataskapi.model.LeaveApply;
+import com.ats.cataskapi.model.LeaveDetail;
 import com.ats.cataskapi.repositories.CalculateYearRepository;
 import com.ats.cataskapi.repositories.GetHolidayRepo;
-import com.ats.cataskapi.repositories.HolidayRepo; 
+import com.ats.cataskapi.repositories.HolidayRepo;
+import com.ats.cataskapi.repositories.LeaveApplyRepository;
+import com.ats.cataskapi.repositories.LeaveDetailRepo; 
  
 
 @RestController
@@ -33,7 +41,13 @@ public class LeaveHolidayApiCon {
  
 	@Autowired
 	CalculateYearRepository calculateYearRepository;
-
+ 
+	@Autowired
+	LeaveApplyRepository leaveApplyRepository;
+	
+	@Autowired
+	LeaveDetailRepo leaveDetailRepo;
+	
 	// -----------Holiday-----------------------
 	@RequestMapping(value = { "/saveHoliday" }, method = RequestMethod.POST)
 	public @ResponseBody Holiday saveHoliday(@RequestBody Holiday holiday) {
@@ -145,6 +159,44 @@ public class LeaveHolidayApiCon {
 		}
 
 		return calendearYear;
+
+	}
+	
+	
+
+	@RequestMapping(value = { "/saveLeaveApply" }, method = RequestMethod.POST)
+	public @ResponseBody LeaveApply saveLeaveApply(@RequestBody LeaveApply leave) {
+
+		LeaveApply save = new LeaveApply();
+		try {
+
+			save = leaveApplyRepository.saveAndFlush(leave);
+			 
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return save;
+
+	}
+	 
+	@RequestMapping(value = { "getLeaveListByEmp" }, method = RequestMethod.POST)
+	public @ResponseBody List<LeaveDetail> getLeaveListByLocIdAndEmp(@RequestParam("empId") int empId) {
+
+		List<LeaveDetail> employeeInfo = new ArrayList<LeaveDetail>();
+
+		try {
+
+			employeeInfo = leaveDetailRepo.getLeaveListByEmp(empId);
+			 
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return employeeInfo;
 
 	}
    

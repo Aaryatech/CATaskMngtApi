@@ -23,7 +23,7 @@ public interface WeeklyOffRepo extends JpaRepository<WeeklyOff, Integer> {
 
 	WeeklyOff findBywoIdAndDelStatus(int woId,int i);
 
-	@Query(value="select w.* from weekly_off w,emp_info e where e.loc_id=w.loc_id and e.emp_id=:empId and w.del_status=1 ",nativeQuery=true)
-	List<WeeklyOff> getWeeklyOffListByEmpId(@Param("empId") int empId);
+	@Query(value="select w.* from weekly_off w where w.del_status=1",nativeQuery=true)
+	List<WeeklyOff> getWeeklyOffListByEmpId();
 
 }

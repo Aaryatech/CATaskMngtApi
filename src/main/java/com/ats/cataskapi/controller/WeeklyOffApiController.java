@@ -148,7 +148,7 @@ public class WeeklyOffApiController {
 		List<WeeklyOff> list = new ArrayList<WeeklyOff>();
 		try {
 
-			list = weeklyOffRepo.getWeeklyOffListByEmpId(empId);
+			list = weeklyOffRepo.getWeeklyOffListByEmpId();
 
 		} catch (Exception e) {
 
@@ -166,7 +166,7 @@ public class WeeklyOffApiController {
 		List<Holiday> list = new ArrayList<Holiday>();
 		try {
 
-			list = holidayRepo.getHolidayByEmpIdAndFromDateTodate(empId, fromDate, toDate);
+			list = holidayRepo.getHolidayByEmpIdAndFromDateTodate(fromDate, toDate);
 
 		} catch (Exception e) {
 
@@ -201,8 +201,8 @@ public class WeeklyOffApiController {
 			arryadate.clear();
 			datearry = new String();
 
-			weeklyList = weeklyOffRepo.getWeeklyOffListByEmpId(empId);
-			holidayList = holidayRepo.getHolidayByEmpIdAndFromDateTodate(empId, fromDate, toDate);
+			weeklyList = weeklyOffRepo.getWeeklyOffListByEmpId();
+			holidayList = holidayRepo.getHolidayByEmpIdAndFromDateTodate( fromDate, toDate);
 			arryadate = new ArrayList<>();
 
 			for (int i = 0; i < weeklyList.size(); i++) {
