@@ -32,5 +32,9 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 	@Query(value = " SELECT * from m_emp WHERE m_emp.emp_email=:userName AND m_emp.emp_pass=BINARY(:password) and del_status=1 ", nativeQuery = true)
 	EmployeeMaster loginCheck(@Param("userName") String userName, @Param("password") String password);
 
+	List<EmployeeMaster> findByEmpRoleIdAndDelStatus(int roleId, int i);
+
+	List<EmployeeMaster> findByEmpTypeAndDelStatus(int roleId, int i);
+
 
 }
