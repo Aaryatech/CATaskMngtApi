@@ -2,8 +2,8 @@ package com.ats.cataskapi.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
- 
- import java.util.Calendar;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
- import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.cataskapi.common.DateValues;
@@ -39,17 +40,17 @@ public class TaskApiController {
 	@Autowired
 	CustmrActivityMapRepo actMapRepo;
 
-//	@RequestMapping(value = { "/saveTask" }, method = RequestMethod.POST)
-//	public @ResponseBody List<String> saveTask(@RequestParam String strDate1, @RequestParam String endDate1,
-//			@RequestParam int perId) {
-//
-//		List<String> listDate = PeriodicityDates.getDates(strDate1, endDate1, perId);
-//		int totdays = listDate.size();
-//		Date date = new Date();
-//		System.out.println("after fun call**" + listDate.toString());
-//
-//		return listDate;
-//	}
+	@RequestMapping(value = { "/saveTask" }, method = RequestMethod.POST)
+	public @ResponseBody List<DateValues> saveTask(@RequestParam String strDate1, @RequestParam String endDate1,
+			@RequestParam int perId) {
+
+		List<DateValues> listDate = PeriodicityDates.getDates(strDate1, endDate1, perId);
+		int totdays = listDate.size();
+		Date date = new Date();
+		System.out.println("after fun call**" + listDate.toString());
+
+		return listDate;
+	}
 
 	@Autowired
 	ActivityMasterRepo actvtMstrRepo;
@@ -58,7 +59,8 @@ public class TaskApiController {
 	@Autowired
 	FinancialYearRepo financialYearRepo;
 
-	@Autowired ServiceMasterRepo srvMstrRepo;
+	@Autowired
+	ServiceMasterRepo srvMstrRepo;
 
 	@RequestMapping(value = { "/saveTask1" }, method = RequestMethod.POST)
 	public @ResponseBody CustmrActivityMap saveCustSignatory(@RequestBody CustmrActivityMap custserv) {
@@ -66,7 +68,6 @@ public class TaskApiController {
 		Date date = Calendar.getInstance().getTime();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
 
 		int perId = 0;
 		Task serv = null;
@@ -80,7 +81,7 @@ public class TaskApiController {
 
 		DevPeriodicityMaster period = new DevPeriodicityMaster();
 		period = devPeriodRepo.findByPeriodicityIdAndDelStatus(custserv.getPeriodicityId(), 1);
-		
+
 		try {
 			cust = actMapRepo.saveAndFlush(custserv);
 			perId = custserv.getPeriodicityId();
@@ -93,30 +94,30 @@ public class TaskApiController {
 			List<DateValues> listDate = PeriodicityDates.getDates(strDate, endDate, perId);
 			totdays = listDate.size();
 			System.out.println("after fun call**" + listDate.toString());
-			
+
 			ServiceMaster servc = new ServiceMaster();
-			 
-		    servc = srvMstrRepo.findByServIdAndDelStatus(actv.getServId(), 1);
-			 
+
+			servc = srvMstrRepo.findByServIdAndDelStatus(actv.getServId(), 1);
+
 			for (int i = 0; i < listDate.size(); i++) {
-			 
+
 				Task task = new Task();
 
 				Date date1 = listDate.get(i).getDate();
 				date1.setTime(date1.getTime() + 1000 * 60 * 60 * 24 * (custserv.getActvStatutoryDays()));
 				task.setTaskStatutoryDueDate(dateFormat.format(date1));
-				
-				System.out.println("stat date       **" + task.getTaskStatutoryDueDate());
-				FinancialYear fin=new FinancialYear();
-				fin=financialYearRepo.getFinYearBetDate(String.valueOf(task.getTaskStatutoryDueDate()));
-				System.out.println("Fin response"+fin.toString());
-				 
-				task.setTaskStartDate(PeriodicityDates.addDaysToGivenDate(task.getTaskStatutoryDueDate(), -30));
-				
-				StringBuilder sb1 = new StringBuilder(actv.getActiName());
 
-				sb1.append(period.getPeriodicityName()).append(i);
-				
+				System.out.println("stat date       **" + task.getTaskStatutoryDueDate());
+				FinancialYear fin = new FinancialYear();
+				fin = financialYearRepo.getFinYearBetDate(String.valueOf(task.getTaskStatutoryDueDate()));
+				System.out.println("Fin response" + fin.toString());
+
+				task.setTaskStartDate(PeriodicityDates.addDaysToGivenDate(task.getTaskStatutoryDueDate(), -30));
+
+				StringBuilder sb1 = new StringBuilder(servc.getServName());
+
+				sb1.append("-").append(actv.getActiName()).append(listDate.get(i).getValue());
+				System.out.println("Fin task name" + sb1);
 
 				task.setActvId(custserv.getActvId());
 				task.setCustId(custserv.getCustId());
@@ -144,7 +145,7 @@ public class TaskApiController {
 				serv = taskRepo.saveAndFlush(task);
 
 			}
-			
+
 		} catch (Exception e) {
 
 			System.err.println("Exce in saving saveTask " + e.getMessage());
