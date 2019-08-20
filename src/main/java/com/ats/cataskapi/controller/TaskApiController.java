@@ -20,12 +20,12 @@ import com.ats.cataskapi.model.ActivityMaster;
 import com.ats.cataskapi.model.CustmrActivityMap;
 import com.ats.cataskapi.model.DevPeriodicityMaster;
 import com.ats.cataskapi.model.FinancialYear;
-
+import com.ats.cataskapi.model.ServiceMaster;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.CustmrActivityMapRepo;
 import com.ats.cataskapi.repositories.DevPeriodicityMasterRepo;
 import com.ats.cataskapi.repositories.FinancialYearRepo;
-
+import com.ats.cataskapi.repositories.ServiceMasterRepo;
 import com.ats.cataskapi.task.model.Task;
 import com.ats.cataskapi.task.repo.TaskRepo;
 
@@ -57,6 +57,8 @@ public class TaskApiController {
 	DevPeriodicityMasterRepo devPeriodRepo;
 	@Autowired
 	FinancialYearRepo financialYearRepo;
+
+	@Autowired ServiceMasterRepo srvMstrRepo;
 
 	@RequestMapping(value = { "/saveTask1" }, method = RequestMethod.POST)
 	public @ResponseBody CustmrActivityMap saveCustSignatory(@RequestBody CustmrActivityMap custserv) {
@@ -91,7 +93,11 @@ public class TaskApiController {
 			List<DateValues> listDate = PeriodicityDates.getDates(strDate, endDate, perId);
 			totdays = listDate.size();
 			System.out.println("after fun call**" + listDate.toString());
-
+			
+			ServiceMaster servc = new ServiceMaster();
+			 
+		    servc = srvMstrRepo.findByServIdAndDelStatus(actv.getServId(), 1);
+			 
 			for (int i = 0; i < listDate.size(); i++) {
 			 
 				Task task = new Task();
@@ -139,7 +145,6 @@ public class TaskApiController {
 
 			}
 			
-
 		} catch (Exception e) {
 
 			System.err.println("Exce in saving saveTask " + e.getMessage());
