@@ -20,6 +20,6 @@ public interface ActivityPeriodDetailsRepo extends JpaRepository<ActivityPeriodD
 			"FROM m_activities, dm_periodicity\n" + 
 			"WHERE m_activities.del_status=1 AND\n" + 
 			"	m_activities.serv_id=:serviceId AND\n" + 
-			"	  dm_periodicity.periodicity_id=m_activities.acti_id",nativeQuery=true)
+			"	  dm_periodicity.periodicity_id=m_activities.periodicity_id",nativeQuery=true)
 	List<ActivityPeriodDetails> getAllActivityDetailsList(@Param("serviceId") int serviceId);
 }

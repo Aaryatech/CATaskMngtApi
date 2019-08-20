@@ -25,6 +25,7 @@ import com.ats.cataskapi.model.FirmType;
 import com.ats.cataskapi.model.GetActivityPeriodicity;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
+import com.ats.cataskapi.model.ShowCustActiMapped;
 import com.ats.cataskapi.model.TaskPeriodicityMaster;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.ActivityPeriodDetailsRepo;
@@ -37,6 +38,7 @@ import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 import com.ats.cataskapi.repositories.FirmTypeRepo;
 import com.ats.cataskapi.repositories.GetActivityPeriodicityRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
+import com.ats.cataskapi.repositories.ShowCustActiMappedRepo;
 import com.ats.cataskapi.repositories.TaskPeriodicityMasterRepo;
 
 @RestController
@@ -691,7 +693,23 @@ public class MasterApiController {
 		return info;
 	}
 	
-	/**********************************************/
+	
+	/************************/
+	@Autowired ShowCustActiMappedRepo custActMapRepo;
+	@RequestMapping(value = {"/getAllCustActivityMapped"}, method = RequestMethod.POST)
+	public @ResponseBody List<ShowCustActiMapped> getAllCustActivityMapped(@RequestParam int custId){
+		List<ShowCustActiMapped> custActivityMap = new ArrayList<ShowCustActiMapped>();
+		try {
+			custActivityMap = custActMapRepo.getAllCustActiMapList(custId);
+			
+		}catch (Exception e) {
+			System.err.println("Exce in getAllCustActivityMapped  " + e.getMessage());
+		}
+		return custActivityMap;
+		
+	}
+	
+	/***************************************************************/
 	@Autowired GetActivityPeriodicityRepo getActiPeriodRepo;
 	
 	@RequestMapping(value = {"/getPeriodicityByActivityId"}, method = RequestMethod.POST)
@@ -707,4 +725,9 @@ public class MasterApiController {
 		return period;
 		
 	}
+	
+	/**********************Task List Home Page**************************/
+	
+	
+	
 }
