@@ -15,15 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.cataskapi.model.EmployeeListWithAvailableHours;
 import com.ats.cataskapi.model.GetWeeklyOff;
 import com.ats.cataskapi.model.Holiday;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.LeaveCount;
+import com.ats.cataskapi.model.LeaveDetailWithFreeHours;
 import com.ats.cataskapi.model.WeeklyOff;
+import com.ats.cataskapi.repositories.EmployeeListWithAvailableHoursRepo;
 import com.ats.cataskapi.repositories.GetWeeklyOffRepo;
 import com.ats.cataskapi.repositories.HolidayRepo;
 import com.ats.cataskapi.repositories.WeeklyOffRepo;
- 
 
 @RestController
 public class WeeklyOffApiController {
@@ -36,6 +38,9 @@ public class WeeklyOffApiController {
 
 	@Autowired
 	HolidayRepo holidayRepo;
+
+	@Autowired
+	EmployeeListWithAvailableHoursRepo employeeListWithAvailableHoursRepo;
 
 	@RequestMapping(value = { "/getWeeklyOffList" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetWeeklyOff> getWeeklyOffList(@RequestParam("companyId") int companyId,
@@ -202,7 +207,7 @@ public class WeeklyOffApiController {
 			datearry = new String();
 
 			weeklyList = weeklyOffRepo.getWeeklyOffListByEmpId();
-			holidayList = holidayRepo.getHolidayByEmpIdAndFromDateTodate( fromDate, toDate);
+			holidayList = holidayRepo.getHolidayByEmpIdAndFromDateTodate(fromDate, toDate);
 			arryadate = new ArrayList<>();
 
 			for (int i = 0; i < weeklyList.size(); i++) {
@@ -671,6 +676,142 @@ public class WeeklyOffApiController {
 		}
 
 		return result + 1;
+	}
+
+	@RequestMapping(value = { "/getTotalAvailableHours" }, method = RequestMethod.POST)
+	public @ResponseBody LeaveDetailWithFreeHours  getTotalAvailableHours(
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+
+		List<EmployeeListWithAvailableHours> list = new ArrayList<>();
+		SimpleDateFormat dd = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
+		LeaveDetailWithFreeHours leaveDetailWithFreeHours = new LeaveDetailWithFreeHours();
+		
+		try {
+
+			list = employeeListWithAvailableHoursRepo.getLeaveRecord(fromDate, toDate);
+			int empCount = employeeListWithAvailableHoursRepo.getEmpCount();
+			
+			LeaveCount totalDayCount = calculateHolidayBetweenDate(0,fromDate, toDate); 
+			leaveDetailWithFreeHours.setTotalFreeHours(totalDayCount.getLeavecount()*7*empCount);
+			
+			for (int i = 0; i < list.size(); i++) {
+
+				String lvfmdt = yy.format(list.get(i).getLeaveFromdt());
+				String lvtodt = yy.format(list.get(i).getLeaveTodt());
+
+				/*System.out.println("leave from date " + yy.parse(lvfmdt));
+				System.out.println("leave to date " + yy.parse(lvtodt));
+				System.out.println(" from date " + yy.parse(fromDate));
+				System.out.println(" to date " + yy.parse(toDate));*/
+
+				if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
+						&& yy.parse(toDate).compareTo(yy.parse(lvfmdt)) >= 0
+						&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) < 0) {
+
+					System.out.println("in if");
+					if (list.get(i).getLeaveDuration() == 0) {
+
+						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)), toDate); 
+						list.get(i).setBsyHours((float) (bsyDaycount.getLeavecount() * 3.5));
+						leaveDetailWithFreeHours.setTotalBsyHours(list.get(i).getBsyHours()+leaveDetailWithFreeHours.getTotalBsyHours());
+
+					} else {
+
+						 
+						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)), toDate); 
+						list.get(i).setBsyHours(bsyDaycount.getLeavecount() * 7);
+						leaveDetailWithFreeHours.setTotalBsyHours(list.get(i).getBsyHours()+leaveDetailWithFreeHours.getTotalBsyHours());
+					}
+
+				} else if (yy.parse(fromDate).compareTo(yy.parse(lvtodt)) <= 0
+						&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0
+						&& yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) > 0) {
+
+					System.out.println("in if else 2");
+
+					if (list.get(i).getLeaveDuration() == 0) {
+
+						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, yy.format(yy.parse(lvtodt))); 
+						list.get(i).setBsyHours((float) (bsyDaycount.getLeavecount() * 3.5));
+						leaveDetailWithFreeHours.setTotalBsyHours(list.get(i).getBsyHours()+leaveDetailWithFreeHours.getTotalBsyHours());
+
+					} else {
+
+						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, yy.format(yy.parse(lvtodt))); 
+						list.get(i).setBsyHours(bsyDaycount.getLeavecount() * 7);
+						leaveDetailWithFreeHours.setTotalBsyHours(list.get(i).getBsyHours()+leaveDetailWithFreeHours.getTotalBsyHours());
+					}
+
+				} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
+						&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0) {
+
+					System.out.println("in if else 3");
+
+					if (list.get(i).getLeaveDuration() == 0) {
+
+						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
+								yy.format(yy.parse(lvtodt)));
+						list.get(i).setBsyHours((float) (bsyDaycount.getLeavecount() * 3.5));
+						leaveDetailWithFreeHours.setTotalBsyHours(list.get(i).getBsyHours()+leaveDetailWithFreeHours.getTotalBsyHours());
+
+					} else {
+
+						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
+								yy.format(yy.parse(lvtodt)));
+						list.get(i).setBsyHours(bsyDaycount.getLeavecount() * 7);
+						leaveDetailWithFreeHours.setTotalBsyHours(list.get(i).getBsyHours()+leaveDetailWithFreeHours.getTotalBsyHours());
+					}
+
+				} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) >= 0
+						&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) <= 0) {
+
+					System.out.println("in if else 4");
+
+					if (list.get(i).getLeaveDuration() == 0) {
+
+						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, toDate);
+						list.get(i).setBsyHours((float) (bsyDaycount.getLeavecount() * 3.5));
+						leaveDetailWithFreeHours.setTotalBsyHours(list.get(i).getBsyHours()+leaveDetailWithFreeHours.getTotalBsyHours());
+
+					} else {
+
+						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, toDate);
+						list.get(i).setBsyHours(bsyDaycount.getLeavecount() * 7);
+						leaveDetailWithFreeHours.setTotalBsyHours(list.get(i).getBsyHours()+leaveDetailWithFreeHours.getTotalBsyHours());
+					}
+				}
+
+			}
+			
+			leaveDetailWithFreeHours.setTotalAvailableHours(leaveDetailWithFreeHours.getTotalFreeHours()-leaveDetailWithFreeHours.getTotalBsyHours());
+			leaveDetailWithFreeHours.setList(list);
+			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return leaveDetailWithFreeHours;
+
+	}
+
+	public int difffunWithoutMinus(String date1, String date2) {
+
+		SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		int result = 0;
+
+		try {
+			Date date3 = myFormat.parse(date1);
+			Date date4 = myFormat.parse(date2);
+			long diff = date4.getTime() - date3.getTime();
+			result = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+		} catch (Exception e) {
+
+		}
+
+		return result;
 	}
 
 }
