@@ -181,6 +181,33 @@ public class LeaveHolidayApiCon {
 		return save;
 
 	}
+	
+	@RequestMapping(value = { "/deleteLeaveApply" }, method = RequestMethod.POST)
+	public @ResponseBody Info deleteLeaveApply(@RequestParam("leaveId") int leaveId) {
+
+		Info info = new Info();
+		
+		try {
+
+			int delete = leaveApplyRepository.deleteLeaveApply(leaveId);
+			
+			if(delete>0) {
+				info.setError(false);
+				info.setMessage("successfull");
+			}else {
+				info.setError(true);
+				info.setMessage("error");
+			}
+			 
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return info;
+
+	}
 	 
 	@RequestMapping(value = { "getLeaveListByEmp" }, method = RequestMethod.POST)
 	public @ResponseBody List<LeaveDetail> getLeaveListByLocIdAndEmp(@RequestParam("empId") int empId) {
