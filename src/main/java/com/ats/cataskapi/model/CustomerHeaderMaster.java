@@ -18,7 +18,7 @@ public class CustomerHeaderMaster {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int custId;
 	private int ownerEmpId;
-	private int custFirmType;
+	 
 	private int custType;
 	private int custGroupId;
 	private String custFirmName;
@@ -59,12 +59,7 @@ public class CustomerHeaderMaster {
 	public void setOwnerEmpId(int ownerEmpId) {
 		this.ownerEmpId = ownerEmpId;
 	}
-	public int getCustFirmType() {
-		return custFirmType;
-	}
-	public void setCustFirmType(int custFirmType) {
-		this.custFirmType = custFirmType;
-	}
+	 
 	public int getCustType() {
 		return custType;
 	}
@@ -225,16 +220,16 @@ public class CustomerHeaderMaster {
 	}
 	@Override
 	public String toString() {
-		return "CustomerHeaderMaster [custId=" + custId + ", ownerEmpId=" + ownerEmpId + ", custFirmType="
-				+ custFirmType + ", custType=" + custType + ", custGroupId=" + custGroupId + ", custFirmName="
-				+ custFirmName + ", custAssesseeTypeId=" + custAssesseeTypeId + ", custAssesseeName=" + custAssesseeName
-				+ ", custPanNo=" + custPanNo + ", custEmailId=" + custEmailId + ", custPhoneNo=" + custPhoneNo
-				+ ", custAddr1=" + custAddr1 + ", custAddr2=" + custAddr2 + ", custCity=" + custCity + ", custPinCode="
-				+ custPinCode + ", custBusinNatute=" + custBusinNatute + ", custIsDscAvail=" + custIsDscAvail
-				+ ", custFolderId=" + custFolderId + ", custFileNo=" + custFileNo + ", custDob=" + custDob
-				+ ", custAadhar=" + custAadhar + ", delStatus=" + delStatus + ", isActive=" + isActive
-				+ ", updateDatetime=" + updateDatetime + ", updateUsername=" + updateUsername + ", exInt1=" + exInt1
-				+ ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + "]";
+		return "CustomerHeaderMaster [custId=" + custId + ", ownerEmpId=" + ownerEmpId + ", custType=" + custType
+				+ ", custGroupId=" + custGroupId + ", custFirmName=" + custFirmName + ", custAssesseeTypeId="
+				+ custAssesseeTypeId + ", custAssesseeName=" + custAssesseeName + ", custPanNo=" + custPanNo
+				+ ", custEmailId=" + custEmailId + ", custPhoneNo=" + custPhoneNo + ", custAddr1=" + custAddr1
+				+ ", custAddr2=" + custAddr2 + ", custCity=" + custCity + ", custPinCode=" + custPinCode
+				+ ", custBusinNatute=" + custBusinNatute + ", custIsDscAvail=" + custIsDscAvail + ", custFolderId="
+				+ custFolderId + ", custFileNo=" + custFileNo + ", custDob=" + custDob + ", custAadhar=" + custAadhar
+				+ ", delStatus=" + delStatus + ", isActive=" + isActive + ", updateDatetime=" + updateDatetime
+				+ ", updateUsername=" + updateUsername + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1="
+				+ exVar1 + ", exVar2=" + exVar2 + "]";
 	}
-	
+	 
 }

@@ -338,6 +338,45 @@ public class MasterApiController {
 		return info;
 	}
 	
+
+	@RequestMapping(value = { "/updateEmployeeActiveness" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateEmployeeActiveness(@RequestParam int empId, @RequestParam int userId) {
+
+		
+		Info info = new Info();
+		EmployeeMaster emp = new EmployeeMaster();
+		int stat=0;
+		try
+		{
+			emp = empRepo.findByEmpIdAndDelStatus(empId, 1);
+			
+			if(emp.getIsActive()==1) {
+				stat=0;
+			}else {
+				stat=1;
+			}
+			
+			int res = empRepo.updateEmployeeActive(empId, userId,stat);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in deleteTaskPeriodicity  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+		return info;
+	}
+	
 	/*********************Customer Group Master************************/
 	@Autowired CustomerGroupMasterRepo cstmrGrpRepo;
 	

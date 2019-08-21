@@ -186,7 +186,7 @@ public class TaskApiController {
 	public @ResponseBody List<EmployeeMaster> getEmpByEmpTypeId(@RequestParam int roleId) {
 		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
 		try {
-			empList = empRepo.findByEmpTypeAndDelStatus(roleId, 1);
+			empList = empRepo.findByEmpTypeAndDelStatusAndIsActive(roleId, 1,1);
 		}catch (Exception e) {
 			System.err.println("Exce in getServiceById" + e.getMessage());
 		}

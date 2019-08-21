@@ -22,7 +22,13 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 	@Query(value="UPDATE m_emp SET del_status=0, update_username=:userId WHERE emp_id=:empId",nativeQuery=true)
 	int deleteEmployee(@Param("empId") int empId, @Param("userId") int userId);
 	
-	//UPDATE m_emp SET del_status=0 WHERE emp_id IN (:emp_id) 
+	
+	@Transactional
+	@Modifying
+	@Query(value="UPDATE m_emp SET is_active=:stat, update_username=:userId WHERE emp_id=:empId",nativeQuery=true)
+	int updateEmployeeActive(@Param("empId") int empId, @Param("userId") int userId,@Param("stat") int stat);
+	
+	
 	
 	@Transactional
 	@Modifying
@@ -35,6 +41,8 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 	List<EmployeeMaster> findByEmpRoleIdAndDelStatus(int roleId, int i);
 
 	List<EmployeeMaster> findByEmpTypeAndDelStatus(int roleId, int i);
+
+	List<EmployeeMaster> findByEmpTypeAndDelStatusAndIsActive(int roleId, int i, int j);
 
 
 }
