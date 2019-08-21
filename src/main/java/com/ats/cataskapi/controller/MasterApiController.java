@@ -26,6 +26,7 @@ import com.ats.cataskapi.model.GetActivityPeriodicity;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
 import com.ats.cataskapi.model.ShowCustActiMapped;
+import com.ats.cataskapi.model.TaskListHome;
 import com.ats.cataskapi.model.TaskPeriodicityMaster;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.ActivityPeriodDetailsRepo;
@@ -39,6 +40,7 @@ import com.ats.cataskapi.repositories.FirmTypeRepo;
 import com.ats.cataskapi.repositories.GetActivityPeriodicityRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
 import com.ats.cataskapi.repositories.ShowCustActiMappedRepo;
+import com.ats.cataskapi.repositories.TaskListHomeRepo;
 import com.ats.cataskapi.repositories.TaskPeriodicityMasterRepo;
 
 @RestController
@@ -766,7 +768,57 @@ public class MasterApiController {
 	}
 	
 	/**********************Task List Home Page**************************///;.
+	@Autowired TaskListHomeRepo taskListRepo;
 	
+	@RequestMapping(value = {"/getTaskListByEmpId"}, method = RequestMethod.POST)
+	public @ResponseBody List<TaskListHome> getTaskListByEmpId(@RequestParam int empId) {
+		List<TaskListHome> taskList = null;
+		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getTaskList(empId);			
+			
+		}catch (Exception e) {
+			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
+	
+	@RequestMapping(value = {"/getTaskListByFilters"}, method = RequestMethod.POST)
+	public @ResponseBody List<TaskListHome> getTaskListByFilters(@RequestParam int empId, @RequestParam String fromDate,
+			@RequestParam String toDate, @RequestParam int service, @RequestParam int activity, @RequestParam int custId) {
+		List<TaskListHome> taskList = null;
+		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			
+			if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && custId!=0){
+				
+				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId);
+			}
+			else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0) {
+				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity);
+			}
+			else if(empId!=0 && fromDate!=null && toDate!=null) {
+				taskList = taskListRepo.getTaskList(empId, fromDate, toDate);
+				System.err.println("getTaskList(empId, fromDate, toDate)");
+			}
+			else if(empId!=0) {
+				taskList = taskListRepo.getTaskList(empId);
+				System.err.println("getTaskList(empId)");
+			}
+			
+		}catch (Exception e) {
+			System.err.println("Exce in getTaskListByFilters  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
 	
 	
 }

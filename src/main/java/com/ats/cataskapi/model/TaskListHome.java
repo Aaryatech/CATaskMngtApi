@@ -18,13 +18,14 @@ public class TaskListHome {
 	private Date taskStatutoryDueDate;
 	private String mngrBudHr;
 	private String empBudHr;
-	private int taskEmpIds;
+	private String taskEmpIds;
 	private String empName;
 	private String servName;
 	private String actiName;
 	private String periodicityName;
-	private String cust_groupName;
+	private String custGroupName;
 	private String finYearName;
+	private int taskStatus;
 	
 	public int getTaskId() {
 		return taskId;
@@ -74,10 +75,10 @@ public class TaskListHome {
 	public void setEmpBudHr(String empBudHr) {
 		this.empBudHr = empBudHr;
 	}
-	public int getTaskEmpIds() {
+	public String getTaskEmpIds() {
 		return taskEmpIds;
 	}
-	public void setTaskEmpIds(int taskEmpIds) {
+	public void setTaskEmpIds(String taskEmpIds) {
 		this.taskEmpIds = taskEmpIds;
 	}
 	public String getEmpName() {
@@ -104,17 +105,24 @@ public class TaskListHome {
 	public void setPeriodicityName(String periodicityName) {
 		this.periodicityName = periodicityName;
 	}
-	public String getCust_groupName() {
-		return cust_groupName;
-	}
-	public void setCust_groupName(String cust_groupName) {
-		this.cust_groupName = cust_groupName;
-	}
 	public String getFinYearName() {
 		return finYearName;
 	}
 	public void setFinYearName(String finYearName) {
 		this.finYearName = finYearName;
+	}
+	public String getCustGroupName() {
+		return custGroupName;
+	}
+	public void setCustGroupName(String custGroupName) {
+		this.custGroupName = custGroupName;
+	}
+	
+	public int getTaskStatus() {
+		return taskStatus;
+	}
+	public void setTaskStatus(int taskStatus) {
+		this.taskStatus = taskStatus;
 	}
 	@Override
 	public String toString() {
@@ -122,9 +130,9 @@ public class TaskListHome {
 				+ ", taskEndDate=" + taskEndDate + ", taskStatutoryDueDate=" + taskStatutoryDueDate + ", mngrBudHr="
 				+ mngrBudHr + ", empBudHr=" + empBudHr + ", taskEmpIds=" + taskEmpIds + ", empName=" + empName
 				+ ", servName=" + servName + ", actiName=" + actiName + ", periodicityName=" + periodicityName
-				+ ", cust_groupName=" + cust_groupName + ", finYearName=" + finYearName + "]";
+				+ ", custGroupName=" + custGroupName + ", finYearName=" + finYearName + ", taskStatus=" + taskStatus
+				+ "]";
 	}
-	
 	
 	
 }
