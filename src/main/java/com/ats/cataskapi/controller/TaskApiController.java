@@ -22,6 +22,7 @@ import com.ats.cataskapi.model.CustmrActivityMap;
 import com.ats.cataskapi.model.DevPeriodicityMaster;
 import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.FinancialYear;
+import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.CustmrActivityMapRepo;
@@ -194,6 +195,34 @@ public class TaskApiController {
 	}
 	
 	
+	@RequestMapping(value = { "/taskAssignmentUpdate" }, method = RequestMethod.POST)
+	public @ResponseBody Info taskAssignmentUpdate(@RequestParam List<Integer> taskIdList, @RequestParam String empIdList) {
+
+		Info info = new Info();
+		try
+		{
+			int res = taskRepo.assignTask(taskIdList, empIdList);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in deleteService  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+
+		return info;
+
+	}
 	
 	
 	
