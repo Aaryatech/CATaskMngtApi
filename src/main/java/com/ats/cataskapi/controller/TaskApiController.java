@@ -101,7 +101,7 @@ public class TaskApiController {
 			System.out.println("perId: " + perId);
 			List<DateValues> listDate = PeriodicityDates.getDates(strDate, endDate, perId);
 			totdays = listDate.size();
-			System.out.println("after fun call**" + listDate.toString());
+			
 
 			ServiceMaster servc = new ServiceMaster();
 
@@ -112,19 +112,22 @@ public class TaskApiController {
 				Task task = new Task();
 
 				Date date1 = listDate.get(i).getDate();
-				date1.setTime(date1.getTime() + 1000 * 60 * 60 * 24 * (custserv.getActvStatutoryDays()));
-				task.setTaskStatutoryDueDate(dateFormat.format(date1));
+				//date1.setTime(date1.getTime() + (1000 * 60 * 60 * 24 * (custserv.getActvStatutoryDays())));
+				
+				//task.setTaskStatutoryDueDate(dateFormat.format(date1));
+				System.out.println("date bef stat**" +dateFormat.format(date1));
+				task.setTaskStatutoryDueDate(PeriodicityDates.addDaysToGivenDate(dateFormat.format(date1), custserv.getActvStatutoryDays()));
 
 				System.out.println("stat date       **" + task.getTaskStatutoryDueDate());
 				FinancialYear fin = new FinancialYear();
 				fin = financialYearRepo.getFinYearBetDate(String.valueOf(task.getTaskStatutoryDueDate()));
-				System.out.println("Fin response" + fin.toString());
+		
 
 				task.setTaskStartDate(PeriodicityDates.addDaysToGivenDate(task.getTaskStatutoryDueDate(), -30));
 
 				StringBuilder sb1 = new StringBuilder(servc.getServName());
 
-				sb1.append("-").append(actv.getActiName()).append(listDate.get(i).getValue());
+				sb1.append("-").append(actv.getActiName()).append("-").append(listDate.get(i).getValue());
 				System.out.println("Fin task name" + sb1);
 
 				task.setActvId(custserv.getActvId());
@@ -196,13 +199,13 @@ public class TaskApiController {
 	
 	
 	@RequestMapping(value = { "/taskAssignmentUpdate" }, method = RequestMethod.POST)
-	public @ResponseBody Info taskAssignmentUpdate(@RequestParam List<Integer> taskIdList, @RequestParam String empIdList) {
+	public @ResponseBody Info taskAssignmentUpdate(@RequestParam List<Integer> taskIdList, @RequestParam String empIdList, @RequestParam String userId, @RequestParam String curDateTime) {
 
 		Info info = new Info();
 		try
 		{
-			int res = taskRepo.assignTask(taskIdList, empIdList);
-
+			int res = taskRepo.assignTask(taskIdList, empIdList,userId,curDateTime);
+			
 			if (res > 0) {
 				info.setError(false);
 				info.setMsg("success");

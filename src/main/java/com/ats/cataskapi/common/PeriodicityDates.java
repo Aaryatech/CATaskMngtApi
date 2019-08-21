@@ -42,13 +42,13 @@ public class PeriodicityDates {
 						String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
 						int a=Integer.parseInt(result[1])+1;
 						String n = "WK ".concat(String.valueOf(c.get(Calendar.WEEK_OF_YEAR)).concat(" ").concat(result[1]).concat("-").concat(String.valueOf(a)));
-						System.err.println("Final String is" + n);
+						//System.err.println("Final String is" + n);
 
 						dv.setValue(n);
 						dateList.add(dv);
 
 						sundayDates = sundayDates + "," + dddate.format(j);
-						System.out.println("Sunday " + dddate.format(j));
+						//System.out.println("Sunday " + dddate.format(j));
 						totalcount++;
 					}
 
@@ -57,7 +57,7 @@ public class PeriodicityDates {
 
 					if (c.get(Calendar.DAY_OF_MONTH) == c.getActualMaximum(Calendar.DAY_OF_MONTH)
 							|| 15 == c.get(Calendar.DAY_OF_MONTH)) {
-						System.out.println("Hello Bi Weekly " + dddate.format(j));
+						//System.out.println("Hello Bi Weekly " + dddate.format(j));
 						arryadate.add(dddate.format(j));
 						String biweek=null;
 						if(c.get(Calendar.DAY_OF_MONTH)<=15) {
@@ -107,7 +107,7 @@ public class PeriodicityDates {
 				else if (periodicityId == 3) {
 					if (c.get(Calendar.DAY_OF_MONTH) == c.getActualMaximum(Calendar.DAY_OF_MONTH)) {
 						// c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
-						System.err.println("Month End " + dddate.format(j));
+						//System.err.println("Month End " + dddate.format(j));
 						arryadate.add(dddate.format(j));
 						
 						String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
@@ -116,7 +116,7 @@ public class PeriodicityDates {
 						DateValues dv = new DateValues();
 						dv.setDate(c.getTime());
 						String monthName = null;
-						System.err.println("Month No." + c.get(Calendar.MONTH) + "***" + c.get(Calendar.YEAR));
+						//System.err.println("Month No." + c.get(Calendar.MONTH) + "***" + c.get(Calendar.YEAR));
 						if (c.get(Calendar.MONTH) == 0) {
 							monthName = "Jan";
 						} else if (c.get(Calendar.MONTH) == 1) {
@@ -145,7 +145,7 @@ public class PeriodicityDates {
 						//String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
 
 						String n ="MT ".concat(monthName).concat(" ").concat(result[1]).concat("-").concat(String.valueOf(a));
-						System.err.println("Final String is" + n);
+						//System.err.println("Final String is" + n);
 
 						dv.setValue(n);
 						dateList.add(dv);
@@ -159,7 +159,7 @@ public class PeriodicityDates {
 							|| c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH) == 8
 							|| c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 11
 							|| c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 2) {
-						System.out.println("Hello Quarterly  " + dddate.format(j));
+						//System.out.println("Hello Quarterly  " + dddate.format(j));
 
 						arryadate.add(dddate.format(j));
 
@@ -179,7 +179,7 @@ public class PeriodicityDates {
 						String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
 						int a=Integer.parseInt(result[1])+1;
 						String n = quarNo.concat(result[1]).concat("-").concat(String.valueOf(a));
-						System.err.println("Final String is" + n);
+						//System.err.println("Final String is" + n);
 
 						dv.setValue(n);
 						 
@@ -192,7 +192,7 @@ public class PeriodicityDates {
 
 					if (c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH) == 8
 							|| c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 2) {
-						System.err.println("Half Yearly   " + dddate.format(j));
+						//System.err.println("Half Yearly   " + dddate.format(j));
 						arryadate.add(dddate.format(j));
 						DateValues dv = new DateValues();
 						dv.setDate(c.getTime());
@@ -200,7 +200,7 @@ public class PeriodicityDates {
 						int a=Integer.parseInt(result[1])+1;
 						
  						String n = "FY ".concat(result[1]).concat("-").concat(String.valueOf(a));
-						System.err.println("Final String is" + n);
+						//System.err.println("Final String is" + n);
 
 						dv.setValue(n);
 						dateList.add(dv);
@@ -208,7 +208,7 @@ public class PeriodicityDates {
 					}
 				} else {
 					if (c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 2) {
-						System.out.println("Hello  Yearly   " + dddate.format(j));
+						//System.out.println("Hello  Yearly   " + dddate.format(j));
 						arryadate.add(dddate.format(j));
 						String text=null;
 
@@ -228,7 +228,7 @@ public class PeriodicityDates {
 
 					}
 				}
-				System.err.println("date array " + arryadate.toString());
+				//System.err.println("date array " + arryadate.toString());
 				j.setTime(j.getTime() + 1000 * 60 * 60 * 24);
 			} // end of for
 
