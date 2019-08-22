@@ -847,7 +847,7 @@ public class MasterApiController {
 	public @ResponseBody List<StatusMaster> getAllStatus() {
 		List<StatusMaster> statusList = new ArrayList<StatusMaster>();
 		try {
-			statusList = statusMstrRepo.findAllByDelStatus(1);
+			statusList = statusMstrRepo.findAllByDelStatusAndIsEditable(1, 1);
 		}catch(Exception e) {
 			System.err.println("Exce in getAllStatus " + e.getMessage());
 		}
