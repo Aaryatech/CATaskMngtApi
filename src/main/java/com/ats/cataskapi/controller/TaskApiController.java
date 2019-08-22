@@ -227,9 +227,17 @@ public class TaskApiController {
 
 	}
 	
-	
-	
-	
+	@RequestMapping(value = {"/getAllFinYear"}, method = RequestMethod.GET)
+	public @ResponseBody List<FinancialYear> getAllFinYear() {
+		List<FinancialYear> yrList = new ArrayList<FinancialYear>();
+		try {
+			yrList = financialYearRepo.findByDelStatus(1);
+		}catch (Exception e) {
+			System.err.println("Exce in getServiceById" + e.getMessage());
+		}
+		return yrList;
+	}
+	 
 	
 
 }
