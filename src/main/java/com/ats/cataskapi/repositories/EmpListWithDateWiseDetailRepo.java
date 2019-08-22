@@ -13,7 +13,7 @@ public interface EmpListWithDateWiseDetailRepo extends JpaRepository<EmpListWith
 	@Query(value="select emp_id, emp_name from m_emp where del_status=1",nativeQuery=true)
 	List<EmpListWithDateWiseDetail> getEmployeeList();
 
-	@Query(value="select count(*) from t_leave_apply where   :date between leave_fromdt and  leave_todt and emp_id=:empId and leave_duration=:type",nativeQuery=true)
+	@Query(value="select count(*) from t_leave_apply where   :date between leave_fromdt and  leave_todt and emp_id=:empId and leave_duration=:type and del_status=1",nativeQuery=true)
 	int getcountOfLeave(@Param("date") String date,@Param("empId") int empId, @Param("type") int type);
 	
 
