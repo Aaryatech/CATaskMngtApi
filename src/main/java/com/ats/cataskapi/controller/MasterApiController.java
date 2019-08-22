@@ -865,6 +865,18 @@ public class MasterApiController {
 		return status;
 	}
 	
+	
+	@RequestMapping(value = {"/getMaxStatusValue"}, method = RequestMethod.GET)
+	public @ResponseBody int getMaxStatusValue() {
+		int maxStatus = 0;
+		try {
+			maxStatus = statusMstrRepo.getMaxStateValue();
+		}catch(Exception e) {
+			System.err.println("Exce in getMaxStatusValue " + e.getMessage());
+		}
+		return maxStatus;
+	}
+	
 	@RequestMapping(value = { "/deleteStatusById" }, method = RequestMethod.POST)
 	public @ResponseBody Info deleteStatusById(@RequestParam int statusId, @RequestParam int userId ) {
 
