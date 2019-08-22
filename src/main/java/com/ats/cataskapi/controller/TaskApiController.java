@@ -165,7 +165,33 @@ public class TaskApiController {
 		}
 		return cust;
 	}
-	
+	/*************************Update Task*************************/
+	@RequestMapping(value = { "/updateTaskByTaskId" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal ) {
+
+		Info info = new Info();
+		try {
+			int res = taskRepo.updateStatus(taskId, statusVal);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in updateTaskByTaskId  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+		
+		return info;
+	}
 	
 	 //Harsha Date:20 Aug 2019 
 	

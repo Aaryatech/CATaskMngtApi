@@ -26,6 +26,7 @@ import com.ats.cataskapi.model.GetActivityPeriodicity;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
 import com.ats.cataskapi.model.ShowCustActiMapped;
+import com.ats.cataskapi.model.StatusMaster;
 import com.ats.cataskapi.model.TaskListHome;
 import com.ats.cataskapi.model.TaskPeriodicityMaster;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
@@ -40,6 +41,7 @@ import com.ats.cataskapi.repositories.FirmTypeRepo;
 import com.ats.cataskapi.repositories.GetActivityPeriodicityRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
 import com.ats.cataskapi.repositories.ShowCustActiMappedRepo;
+import com.ats.cataskapi.repositories.StatusMasterRepo;
 import com.ats.cataskapi.repositories.TaskListHomeRepo;
 import com.ats.cataskapi.repositories.TaskPeriodicityMasterRepo;
 
@@ -49,7 +51,7 @@ public class MasterApiController {
 	/******************ServiceMaster*******************/
 	@Autowired ServiceMasterRepo srvMstrRepo;
 	@RequestMapping(value = { "/saveService" }, method = RequestMethod.POST)
-	public @ResponseBody ServiceMaster saveInstitute(@RequestBody ServiceMaster service) {
+	public @ResponseBody ServiceMaster saveService(@RequestBody ServiceMaster service) {
 
 		ServiceMaster serv = null;
 
@@ -777,7 +779,7 @@ public class MasterApiController {
 			
 			taskList = new ArrayList<TaskListHome>();
 			taskList = taskListRepo.getTaskList(empId);			
-			
+
 		}catch (Exception e) {
 			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());
 			e.printStackTrace();
@@ -821,4 +823,97 @@ public class MasterApiController {
 	}
 	
 	
+	
+	/*******************************Status Master********************************/
+	
+	@Autowired StatusMasterRepo statusMstrRepo;
+	@RequestMapping(value = { "/saveStatus" }, method = RequestMethod.POST)
+	public @ResponseBody StatusMaster saveStatus(@RequestBody StatusMaster status) {
+
+		StatusMaster stat = null;
+
+		try {
+			stat = statusMstrRepo.saveAndFlush(status);
+
+		} catch (Exception e) {
+			System.err.println("Exce in saving saveStatus " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		return stat;
+	}
+	
+	@RequestMapping(value = {"/getAllStatus"}, method = RequestMethod.GET)
+	public @ResponseBody List<StatusMaster> getAllStatus() {
+		List<StatusMaster> statusList = new ArrayList<StatusMaster>();
+		try {
+			statusList = statusMstrRepo.findAllByDelStatus(1);
+		}catch(Exception e) {
+			System.err.println("Exce in getAllStatus " + e.getMessage());
+		}
+		return statusList;
+	}
+	
+	@RequestMapping(value = {"/getStatusById"}, method = RequestMethod.POST)
+	public @ResponseBody StatusMaster getStatusById(@RequestParam int statusId) {
+		StatusMaster status = new StatusMaster();
+		try {
+			status = statusMstrRepo.findByStatusMstId(statusId);
+		}catch(Exception e) {
+			System.err.println("Exce in getStatusById " + e.getMessage());
+		}
+		return status;
+	}
+	
+	@RequestMapping(value = { "/deleteStatusById" }, method = RequestMethod.POST)
+	public @ResponseBody Info deleteStatusById(@RequestParam int statusId, @RequestParam int userId ) {
+
+		Info info = new Info();
+		try
+		{
+			int res = statusMstrRepo.deleteStatusById(statusId, userId);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in deleteStatusById  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+		
+		return info;
+	}
+	
+	@RequestMapping(value = {"/getStatusByEmpTypeIds"}, method = RequestMethod.POST)
+	public @ResponseBody List<StatusMaster> getStatusByEmpIds(@RequestParam int empType) {
+		List<StatusMaster> statusList = new ArrayList<StatusMaster>();
+		try {
+			statusList = statusMstrRepo.getStatusByEmpType(empType);
+		}catch(Exception e) {
+			System.err.println("Exce in getStatusByEmpIds " + e.getMessage());
+		}
+		return statusList;
+	}
+	
+	
+	/**************************Communication & Log***************************/
+	@RequestMapping(value = {"/getTaskByTaskId"}, method = RequestMethod.POST)
+	public @ResponseBody TaskListHome getTaskByTaskId(@RequestParam int empType, @RequestParam int taskId) {
+		TaskListHome task = new TaskListHome();
+		try {
+			task = taskListRepo.getTaskById(empType, taskId);
+		}catch(Exception e) {
+			System.err.println("Exce in getStatusByEmpIds " + e.getMessage());
+		}
+		return task;
+	}
 }
