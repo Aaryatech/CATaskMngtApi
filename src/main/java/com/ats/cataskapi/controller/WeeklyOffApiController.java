@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.cataskapi.common.DateConvertor;
 import com.ats.cataskapi.model.DateWithAttendanceSts;
+import com.ats.cataskapi.model.EmpListWithDateList;
 import com.ats.cataskapi.model.EmpListWithDateWiseDetail;
 import com.ats.cataskapi.model.EmployeeListWithAvailableHours;
 import com.ats.cataskapi.model.GetWeeklyOff;
@@ -815,11 +816,13 @@ public class WeeklyOffApiController {
 	}
 
 	@RequestMapping(value = { "/daywiseLeaveHistoryofEmployee" }, method = RequestMethod.POST)
-	public @ResponseBody List<EmpListWithDateWiseDetail> daywiseLeaveHistoryofEmployee(
+	public @ResponseBody EmpListWithDateList daywiseLeaveHistoryofEmployee(
 			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
 
 		List<EmpListWithDateWiseDetail> list = new ArrayList<>();
-
+		EmpListWithDateList empListWithDateList = new EmpListWithDateList();
+		List<String> dateslist = new ArrayList<>();
+		 
 		try {
 			List<Date> dates = new ArrayList<Date>();
 			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -831,10 +834,12 @@ public class WeeklyOffApiController {
 			long curTime = startDate.getTime();
 
 			while (curTime <= endTime) {
-
+				
+				dateslist.add(formatter.format(new Date(curTime)));
 				dates.add(new Date(curTime));
 				curTime += interval;
-
+				
+				
 			}
 			DateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			String holidayArray = new String();
@@ -936,13 +941,16 @@ public class WeeklyOffApiController {
 				list.get(j).setAtndsList(atndsList);
 
 			}
+			
+			empListWithDateList.setDateslist(dateslist);
+			empListWithDateList.setEmpListWithDateWiseDetailLst(list);
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
 
-		return list;
+		return empListWithDateList;
 
 	}
 
