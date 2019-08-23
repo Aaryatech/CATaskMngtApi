@@ -52,7 +52,8 @@ public class CustDetailController {
 	public @ResponseBody GetCustLoginDetail getCustLoginDetailByCustDetailId(@RequestParam int custDetailId) {
 		GetCustLoginDetail custDetail = null;
 		try {
-
+				System.out.println("DetailId----------------"+custDetailId);
+				
 			custDetail = getCustLoginDetailRepo.getGetCustLoginDetailByCustDetailId(custDetailId);
 
 			if (custDetail == null) {

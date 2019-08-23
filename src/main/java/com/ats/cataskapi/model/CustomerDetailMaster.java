@@ -22,6 +22,17 @@ public class CustomerDetailMaster {
 		private String loginQue2;
 		private String loginAns2;
 		private String loginRemark;
+		
+		private String signfName;
+		private String signlName;
+		private String signRegNo;
+		private String signDesign;
+		private String signPhno;
+		private String contactName;
+		private String contactEmail;
+		private String contactPhno;		
+		private String custRemark;
+		
 		private int delStatus;
 		private String updateDatetime;
 		private int updateUsername;
@@ -89,6 +100,65 @@ public class CustomerDetailMaster {
 		public void setLoginRemark(String loginRemark) {
 			this.loginRemark = loginRemark;
 		}
+		
+		
+		
+		public String getSignfName() {
+			return signfName;
+		}
+		public void setSignfName(String signfName) {
+			this.signfName = signfName;
+		}
+		public String getSignlName() {
+			return signlName;
+		}
+		public void setSignlName(String signlName) {
+			this.signlName = signlName;
+		}
+		public String getSignRegNo() {
+			return signRegNo;
+		}
+		public void setSignRegNo(String signRegNo) {
+			this.signRegNo = signRegNo;
+		}
+		public String getSignDesign() {
+			return signDesign;
+		}
+		public void setSignDesign(String signDesign) {
+			this.signDesign = signDesign;
+		}
+		public String getSignPhno() {
+			return signPhno;
+		}
+		public void setSignPhno(String signPhno) {
+			this.signPhno = signPhno;
+		}
+		public String getContactName() {
+			return contactName;
+		}
+		public void setContactName(String contactName) {
+			this.contactName = contactName;
+		}
+		public String getContactEmail() {
+			return contactEmail;
+		}
+		public void setContactEmail(String contactEmail) {
+			this.contactEmail = contactEmail;
+		}
+		public String getContactPhno() {
+			return contactPhno;
+		}
+		public void setContactPhno(String contactPhno) {
+			this.contactPhno = contactPhno;
+		}
+		public String getCustRemark() {
+			return custRemark;
+		}
+		public void setCustRemark(String custRemark) {
+			this.custRemark = custRemark;
+		}
+	
+		
 		public int getDelStatus() {
 			return delStatus;
 		}
@@ -136,9 +206,12 @@ public class CustomerDetailMaster {
 			return "CustomerDetailMaster [custDetailId=" + custDetailId + ", custId=" + custId + ", actvId=" + actvId
 					+ ", loginId=" + loginId + ", loginPass=" + loginPass + ", loginQue1=" + loginQue1 + ", loginAns1="
 					+ loginAns1 + ", loginQue2=" + loginQue2 + ", loginAns2=" + loginAns2 + ", loginRemark="
-					+ loginRemark + ", delStatus=" + delStatus + ", updateDatetime=" + updateDatetime
-					+ ", updateUsername=" + updateUsername + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1="
-					+ exVar1 + ", exVar2=" + exVar2 + "]";
-		}		
+					+ loginRemark + ", signfName=" + signfName + ", signlName=" + signlName + ", signRegNo=" + signRegNo
+					+ ", signDesign=" + signDesign + ", signPhno=" + signPhno + ", contactName=" + contactName
+					+ ", contactEmail=" + contactEmail + ", contactPhno=" + contactPhno + ", custRemark=" + custRemark
+					+ ", delStatus=" + delStatus + ", updateDatetime=" + updateDatetime + ", updateUsername="
+					+ updateUsername + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2="
+					+ exVar2 + "]";
+		}
 		
 }
