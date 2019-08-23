@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ats.cataskapi.custdetailrepo.CustSignatoryMasterRepo;
 import com.ats.cataskapi.custdetailrepo.GetCustLoginDetailRepo;
 import com.ats.cataskapi.custdetailrepo.GetCustSignatoryRepo;
+import com.ats.cataskapi.model.CustNameId;
 import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.ServiceMaster;
 import com.ats.cataskapi.model.custdetail.CustSignatoryMaster;
 import com.ats.cataskapi.model.custdetail.GetCustLoginDetail;
 import com.ats.cataskapi.model.custdetail.GetCustSignatory;
+import com.ats.cataskapi.repositories.CustNameIdRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 
 @RestController
@@ -149,6 +151,28 @@ public class CustDetailController {
 
 		}
 		return res;
+	}
+	
+	
+	
+	@Autowired
+	CustNameIdRepo custNameRepo;
+
+	@RequestMapping(value = { "/getCustNameById" }, method = RequestMethod.POST)
+	public @ResponseBody CustNameId saveCustSignatory(@RequestParam int custId) {
+
+		CustNameId cust = null;
+
+		try {
+			cust = custNameRepo.getCustNameId(custId);
+
+		} catch (Exception e) {
+
+			System.err.println("Exce in  getCustNameById " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		return cust;
 	}
 
 }
