@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.cataskapi.common.DateConvertor;
 import com.ats.cataskapi.common.DateValues;
 import com.ats.cataskapi.common.PeriodicityDates;
 import com.ats.cataskapi.model.ActivityMaster;
@@ -35,6 +36,8 @@ import com.ats.cataskapi.task.model.Task;
 import com.ats.cataskapi.task.repo.GetTaskListRepo;
 import com.ats.cataskapi.task.repo.TaskRepo;
 
+import ch.qos.logback.classic.pattern.DateConverter;
+
 @RestController
 public class TaskApiController {
 
@@ -44,6 +47,9 @@ public class TaskApiController {
 
 	@Autowired
 	CustmrActivityMapRepo actMapRepo;
+	
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 
 	/*
 	 * @RequestMapping(value = { "/saveTask" }, method = RequestMethod.POST)
@@ -74,7 +80,6 @@ public class TaskApiController {
 	public @ResponseBody CustmrActivityMap saveCustSignatory(@RequestBody CustmrActivityMap custserv) {
 
 		Date date = Calendar.getInstance().getTime();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 		int perId = 0;
@@ -225,12 +230,13 @@ public class TaskApiController {
 	
 	
 	@RequestMapping(value = { "/taskAssignmentUpdate" }, method = RequestMethod.POST)
-	public @ResponseBody Info taskAssignmentUpdate(@RequestParam List<Integer> taskIdList, @RequestParam String empIdList, @RequestParam String userId, @RequestParam String curDateTime) {
+	public @ResponseBody Info taskAssignmentUpdate(@RequestParam List<Integer> taskIdList, @RequestParam String empIdList, @RequestParam String userId, @RequestParam String curDateTime, @RequestParam String workDate) {
 
 		Info info = new Info();
 		try
 		{
-			int res = taskRepo.assignTask(taskIdList, empIdList,userId,curDateTime);
+			String endDate = DateConvertor.convertToYMD(workDate);
+			int res = taskRepo.assignTask(taskIdList, empIdList,userId,curDateTime,endDate);
 			
 			if (res > 0) {
 				info.setError(false);
