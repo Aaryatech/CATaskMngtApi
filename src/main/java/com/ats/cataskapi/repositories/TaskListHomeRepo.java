@@ -59,8 +59,9 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        AND         m_activities.periodicity_id=dm_periodicity.periodicity_id               \n" + 
 			"        AND         t_tasks.cust_id=m_cust_header.cust_id               \n" + 
 			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id\n" + 
-			"        AND		 dm_status_mst.status_value=t_tasks.task_status", nativeQuery=true)
-	List<TaskListHome> getTaskList(@Param("empId") int empId);
+			"        AND		 dm_status_mst.status_value=t_tasks.task_status\n"+
+			"  		 AND		 t_tasks.task_status NOT IN (:statusIds)", nativeQuery=true)
+	List<TaskListHome> getTaskList(@Param("empId") int empId,@Param("statusIds") List<String> statusIds);
 
 	/**************************************************************************/
 	/*@Query(value="SELECT \n" + 

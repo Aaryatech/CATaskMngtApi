@@ -773,12 +773,12 @@ public class MasterApiController {
 	@Autowired TaskListHomeRepo taskListRepo;
 	
 	@RequestMapping(value = {"/getTaskListByEmpId"}, method = RequestMethod.POST)
-	public @ResponseBody List<TaskListHome> getTaskListByEmpId(@RequestParam int empId) {
+	public @ResponseBody List<TaskListHome> getTaskListByEmpId(@RequestParam int empId, @RequestParam  List<String> statusIds) {
 		List<TaskListHome> taskList = null;
 		try {
 			
 			taskList = new ArrayList<TaskListHome>();
-			taskList = taskListRepo.getTaskList(empId);			
+			taskList = taskListRepo.getTaskList(empId, statusIds);			
 
 		}catch (Exception e) {
 			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());
@@ -791,7 +791,8 @@ public class MasterApiController {
 	
 	@RequestMapping(value = {"/getTaskListByFilters"}, method = RequestMethod.POST)
 	public @ResponseBody List<TaskListHome> getTaskListByFilters(@RequestParam int empId, @RequestParam String fromDate,
-			@RequestParam String toDate, @RequestParam int service, @RequestParam int activity, @RequestParam int custId) {
+			@RequestParam String toDate, @RequestParam int service, @RequestParam int activity, @RequestParam int custId,
+			@RequestParam List<String> statusIds) {
 		List<TaskListHome> taskList = null;
 		try {
 			
@@ -809,7 +810,7 @@ public class MasterApiController {
 				System.err.println("getTaskList(empId, fromDate, toDate)");
 			}*/
 			else if(empId!=0) {
-				taskList = taskListRepo.getTaskList(empId);
+				taskList = taskListRepo.getTaskList(empId, statusIds);
 				System.err.println("getTaskList(empId)");
 			}
 			
