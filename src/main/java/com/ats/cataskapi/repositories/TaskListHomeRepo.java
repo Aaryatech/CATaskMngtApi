@@ -225,7 +225,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"                AND m_cust_group.del_status=1 ),\n" + 
 			"            0)          \n" + 
 			"        END AS cust_group_name,\n" + 
-			"        dm_fin_year.fin_year_name                         \n" + 
+			"        dm_fin_year.fin_year_name                  \n" + 
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        m_emp,\n" + 
