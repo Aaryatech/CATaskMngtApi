@@ -19,7 +19,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        t_tasks.mngr_bud_hr,\n" + 
 			"        t_tasks.emp_bud_hr,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
-			"        dm_status_mst.status_text AS task_status,\n" + 
+			"        dm_status_mst.status_text AS task_status, dm_status_mst.status_color,\n" + 
 			"        m_emp.emp_name,\n" + 
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
@@ -209,7 +209,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        t_tasks.mngr_bud_hr,\n" + 
 			"        t_tasks.emp_bud_hr,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
-			"        dm_status_mst.status_text AS task_status,\n" + 
+			"        dm_status_mst.status_text AS task_status, dm_status_mst.status_color,\n" + 
 			"        m_emp.emp_name,\n" + 
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 

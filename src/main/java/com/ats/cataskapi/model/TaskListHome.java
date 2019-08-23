@@ -26,6 +26,7 @@ public class TaskListHome {
 	private String custGroupName;
 	private String finYearName;
 	private String taskStatus;
+	private String statusColor;
 	
 	public int getTaskId() {
 		return taskId;
@@ -124,6 +125,12 @@ public class TaskListHome {
 	public void setTaskStatus(String taskStatus) {
 		this.taskStatus = taskStatus;
 	}
+	public String getStatusColor() {
+		return statusColor;
+	}
+	public void setStatusColor(String statusColor) {
+		this.statusColor = statusColor;
+	}
 	@Override
 	public String toString() {
 		return "TaskListHome [taskId=" + taskId + ", taskText=" + taskText + ", taskStartDate=" + taskStartDate
@@ -131,8 +138,8 @@ public class TaskListHome {
 				+ mngrBudHr + ", empBudHr=" + empBudHr + ", taskEmpIds=" + taskEmpIds + ", empName=" + empName
 				+ ", servName=" + servName + ", actiName=" + actiName + ", periodicityName=" + periodicityName
 				+ ", custGroupName=" + custGroupName + ", finYearName=" + finYearName + ", taskStatus=" + taskStatus
-				+ "]";
+				+ ", statusColor=" + statusColor + "]";
 	}
-	
+		
 	
 }
