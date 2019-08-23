@@ -18,9 +18,14 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        t_tasks.task_statutory_due_date,\n" + 
 			"        t_tasks.mngr_bud_hr,\n" + 
 			"        t_tasks.emp_bud_hr,\n" + 
-			"        t_tasks.task_emp_ids,\n" + 
+			"        t_tasks.task_emp_ids,\n" +			
+			"        t_tasks.ex_int1,\n" +
+			"        t_tasks.ex_int2,\n" +
+			"        t_tasks.ex_var1,\n" +
+			"        t_tasks.ex_var2,\n" +
 			"        dm_status_mst.status_text AS task_status, dm_status_mst.status_color,\n" + 
 			"        m_emp.emp_name,\n" + 
+			"        m_emp.emp_id,\n" + 
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
@@ -58,7 +63,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 	List<TaskListHome> getTaskList(@Param("empId") int empId);
 
 	/**************************************************************************/
-	@Query(value="SELECT \n" + 
+	/*@Query(value="SELECT \n" + 
 			"        t_tasks.task_id,\n" + 
 			"        t_tasks.task_text,\n" + 
 			"        t_tasks.task_start_date,\n" + 
@@ -97,10 +102,10 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        t_tasks.cust_id=m_cust_header.cust_id AND\n" + 
 			"        m_cust_header.cust_group_id=m_cust_group.cust_group_id AND\n" + 
 			"        dm_fin_year.fin_year_id=t_tasks.task_fy_id", nativeQuery=true)
-	List<TaskListHome> getTaskList(@Param("empId")int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate);
+	List<TaskListHome> getTaskList(@Param("empId")int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate);*/
 /*****************************************************************************************/
 	
-	@Query(value="SELECT \n" + 
+	/*@Query(value="SELECT \n" + 
 			"        t_tasks.task_id,\n" + 
 			"        t_tasks.task_text,\n" + 
 			"        t_tasks.task_start_date,\n" + 
@@ -143,7 +148,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        dm_fin_year.fin_year_id=t_tasks.task_fy_id", nativeQuery=true)
 
 	List<TaskListHome> getTaskList(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate, 
-			@Param("service") int service, @Param("activity") int activity);
+			@Param("service") int service, @Param("activity") int activity);*/
 
 /*****************************************************************************************/
 	
@@ -156,8 +161,13 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        t_tasks.mngr_bud_hr,\n" + 
 			"        t_tasks.emp_bud_hr,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
-			"        dm_status_mst.status_text AS task_status,\n" + 
+			"        t_tasks.ex_int1,\n" +
+			"        t_tasks.ex_int2,\n" +
+			"        t_tasks.ex_var1,\n" +
+			"        t_tasks.ex_var2,\n" +
+			"        dm_status_mst.status_text AS task_status, dm_status_mst.status_color, \n" + 
 			"        m_emp.emp_name,\n" + 
+			"        m_emp.emp_id,\n" +
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
@@ -209,8 +219,13 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        t_tasks.mngr_bud_hr,\n" + 
 			"        t_tasks.emp_bud_hr,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
+			"        t_tasks.ex_int1,\n" +
+			"        t_tasks.ex_int2,\n" +
+			"        t_tasks.ex_var1,\n" +
+			"        t_tasks.ex_var2,\n" +
 			"        dm_status_mst.status_text AS task_status, dm_status_mst.status_color,\n" + 
 			"        m_emp.emp_name,\n" + 
+			"        m_emp.emp_id,\n" +
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 

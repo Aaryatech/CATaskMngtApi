@@ -20,6 +20,7 @@ public class TaskListHome {
 	private String empBudHr;
 	private String taskEmpIds;
 	private String empName;
+	private int empId;
 	private String servName;
 	private String actiName;
 	private String periodicityName;
@@ -27,6 +28,10 @@ public class TaskListHome {
 	private String finYearName;
 	private String taskStatus;
 	private String statusColor;
+	private int exInt1;
+	private String exVar1;
+	private int exInt2;
+	private String exVar2;
 	
 	public int getTaskId() {
 		return taskId;
@@ -131,15 +136,45 @@ public class TaskListHome {
 	public void setStatusColor(String statusColor) {
 		this.statusColor = statusColor;
 	}
+	public int getEmpId() {
+		return empId;
+	}
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}	
+	public int getExInt1() {
+		return exInt1;
+	}
+	public void setExInt1(int exInt1) {
+		this.exInt1 = exInt1;
+	}
+	public String getExVar1() {
+		return exVar1;
+	}
+	public void setExVar1(String exVar1) {
+		this.exVar1 = exVar1;
+	}
+	public int getExInt2() {
+		return exInt2;
+	}
+	public void setExInt2(int exInt2) {
+		this.exInt2 = exInt2;
+	}
+	public String getExVar2() {
+		return exVar2;
+	}
+	public void setExVar2(String exVar2) {
+		this.exVar2 = exVar2;
+	}
 	@Override
 	public String toString() {
 		return "TaskListHome [taskId=" + taskId + ", taskText=" + taskText + ", taskStartDate=" + taskStartDate
 				+ ", taskEndDate=" + taskEndDate + ", taskStatutoryDueDate=" + taskStatutoryDueDate + ", mngrBudHr="
 				+ mngrBudHr + ", empBudHr=" + empBudHr + ", taskEmpIds=" + taskEmpIds + ", empName=" + empName
-				+ ", servName=" + servName + ", actiName=" + actiName + ", periodicityName=" + periodicityName
-				+ ", custGroupName=" + custGroupName + ", finYearName=" + finYearName + ", taskStatus=" + taskStatus
-				+ ", statusColor=" + statusColor + "]";
+				+ ", empId=" + empId + ", servName=" + servName + ", actiName=" + actiName + ", periodicityName="
+				+ periodicityName + ", custGroupName=" + custGroupName + ", finYearName=" + finYearName
+				+ ", taskStatus=" + taskStatus + ", statusColor=" + statusColor + ", exInt1=" + exInt1 + ", exVar1="
+				+ exVar1 + ", exInt2=" + exInt2 + ", exVar2=" + exVar2 + "]";
 	}
-		
 	
 }
