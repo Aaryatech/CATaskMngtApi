@@ -22,7 +22,7 @@ public interface GetAllCommunicationByTaskIdRepo extends JpaRepository<GetAllCom
 			"    t_comunication.ex_var1,\n" + 
 			"    t_comunication.ex_var2,\n" + 
 			"    m_emp.emp_name,m_emp.emp_nickName,m_emp.emp_pic, \n" + 
-			"    t_tasks.task_text,t_comunication.del_status \n" + 
+			"    t_tasks.task_text,t_comunication.del_status ,t_comunication.type_id\n" + 
 			"FROM\n" + 
 			"    t_comunication,\n" + 
 			"    m_emp,\n" + 

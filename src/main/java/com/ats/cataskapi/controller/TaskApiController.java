@@ -1,6 +1,7 @@
 package com.ats.cataskapi.controller;
 
 import java.text.DateFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ats.cataskapi.common.DateConvertor;
 import com.ats.cataskapi.common.DateValues;
 import com.ats.cataskapi.common.PeriodicityDates;
+import com.ats.cataskapi.communication.Repo.CommunicationRepo;
+import com.ats.cataskapi.communication.model.Communication;
 import com.ats.cataskapi.model.ActivityMaster;
 import com.ats.cataskapi.model.CustmrActivityMap;
 import com.ats.cataskapi.model.DevPeriodicityMaster;
@@ -35,7 +38,7 @@ import com.ats.cataskapi.task.model.GetTaskList;
 import com.ats.cataskapi.task.model.Task;
 import com.ats.cataskapi.task.repo.GetTaskListRepo;
 import com.ats.cataskapi.task.repo.TaskRepo;
-
+  
 import ch.qos.logback.classic.pattern.DateConverter;
 
 @RestController
@@ -76,6 +79,11 @@ public class TaskApiController {
 	@Autowired
 	ServiceMasterRepo srvMstrRepo;
 
+	
+
+	@Autowired
+	CommunicationRepo communicationRepo;
+	
 	@RequestMapping(value = { "/saveTask1" }, method = RequestMethod.POST)
 	public @ResponseBody CustmrActivityMap saveCustSignatory(@RequestBody CustmrActivityMap custserv) {
 
@@ -117,9 +125,7 @@ public class TaskApiController {
 				Task task = new Task();
 
 				Date date1 = listDate.get(i).getDate();
-				//date1.setTime(date1.getTime() + (1000 * 60 * 60 * 24 * (custserv.getActvStatutoryDays())));
-				
-				//task.setTaskStatutoryDueDate(dateFormat.format(date1));
+				 
 				System.out.println("date bef stat**" +dateFormat.format(date1));
 				task.setTaskStatutoryDueDate(PeriodicityDates.addDaysToGivenDate(dateFormat.format(date1), custserv.getActvStatutoryDays()));
 
@@ -159,6 +165,24 @@ public class TaskApiController {
 				task.setUpdateUsername(custserv.getUpdateUsername());
 
 				serv = taskRepo.saveAndFlush(task);
+				if(serv!=null) {
+					Communication comcat=new Communication();
+					comcat.setCommunText("Task Created");
+					comcat.setDelStatus(1);
+					comcat.setEmpId(custserv.getUpdateUsername());
+					comcat.setExInt1(1);
+					comcat.setExInt2(1);
+					comcat.setExVar1("NA");
+					comcat.setExVar2("NA");
+					comcat.setTypeId(2);
+					comcat.setRemark("NA");
+					comcat.setTaskId(serv.getTaskId());
+					comcat.setUpdateDatetime(dateFormat1.format(date));
+					comcat.setUpdateUser(custserv.getUpdateUsername());
+					Communication save = communicationRepo.saveAndFlush(comcat);
+					 
+				}
+			
 
 			}
 

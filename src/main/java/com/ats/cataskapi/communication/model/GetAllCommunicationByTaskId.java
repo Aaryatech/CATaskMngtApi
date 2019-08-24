@@ -37,6 +37,8 @@ public class GetAllCommunicationByTaskId {
 	private String empNickname;
 	
 	private String  empPic;
+	
+	private int typeId;
  
 	public int getCommunId() {
 		return communId;
@@ -154,17 +156,27 @@ public class GetAllCommunicationByTaskId {
 		this.empPic = empPic;
 	}
 
+	
+	
+	
+	public int getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
+	}
+
 	@Override
 	public String toString() {
 		return "GetAllCommunicationByTaskId [communId=" + communId + ", taskId=" + taskId + ", empId=" + empId
 				+ ", communText=" + communText + ", updateDatetime=" + updateDatetime + ", exInt1=" + exInt1
 				+ ", exInt2=" + exInt2 + ", delStatus=" + delStatus + ", exVar1=" + exVar1 + ", exVar2=" + exVar2
 				+ ", empName=" + empName + ", taskText=" + taskText + ", empNickname=" + empNickname + ", empPic="
-				+ empPic + "]";
+				+ empPic + ", typeId=" + typeId + "]";
 	}
 
 	 
-	
 	
 	
 	

@@ -34,6 +34,30 @@ public class Communication {
 	
 	private int delStatus;
 
+	private int typeId;
+	
+	
+	private String remark;
+	
+	
+	
+
+
+	public int getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 
 	public int getCommunId() {
 		return communId;
