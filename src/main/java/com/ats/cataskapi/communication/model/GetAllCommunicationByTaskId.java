@@ -1,12 +1,11 @@
 package com.ats.cataskapi.communication.model;
 
-import java.util.Date;
+ 
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+ 
 @Entity
 public class GetAllCommunicationByTaskId {
 	
@@ -19,7 +18,7 @@ public class GetAllCommunicationByTaskId {
 
 	private String communText;
 
-	private Date updateDatetime;
+	private String updateDatetime;
 
 	private int exInt1;
 
@@ -35,6 +34,9 @@ public class GetAllCommunicationByTaskId {
 	
 	private String taskText;
 	
+	private String empNickname;
+	
+	private String  empPic;
  
 	public int getCommunId() {
 		return communId;
@@ -67,12 +69,12 @@ public class GetAllCommunicationByTaskId {
 	public void setCommunText(String communText) {
 		this.communText = communText;
 	}
-	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy hh:mm:ss a")
-	public Date getUpdateDatetime() {
+
+	public String getUpdateDatetime() {
 		return updateDatetime;
 	}
 
-	public void setUpdateDatetime(Date updateDatetime) {
+	public void setUpdateDatetime(String updateDatetime) {
 		this.updateDatetime = updateDatetime;
 	}
 
@@ -132,14 +134,34 @@ public class GetAllCommunicationByTaskId {
 		this.delStatus = delStatus;
 	}
 
+	
+	
+	public String getEmpNickname() {
+		return empNickname;
+	}
+
+	public void setEmpNickname(String empNickname) {
+		this.empNickname = empNickname;
+	}
+
+	
+	
+	public String getEmpPic() {
+		return empPic;
+	}
+
+	public void setEmpPic(String empPic) {
+		this.empPic = empPic;
+	}
+
 	@Override
 	public String toString() {
 		return "GetAllCommunicationByTaskId [communId=" + communId + ", taskId=" + taskId + ", empId=" + empId
 				+ ", communText=" + communText + ", updateDatetime=" + updateDatetime + ", exInt1=" + exInt1
 				+ ", exInt2=" + exInt2 + ", delStatus=" + delStatus + ", exVar1=" + exVar1 + ", exVar2=" + exVar2
-				+ ", empName=" + empName + ", taskText=" + taskText + "]";
+				+ ", empName=" + empName + ", taskText=" + taskText + ", empNickname=" + empNickname + ", empPic="
+				+ empPic + "]";
 	}
-
 
 	 
 	
