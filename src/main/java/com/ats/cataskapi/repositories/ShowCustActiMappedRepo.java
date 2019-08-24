@@ -46,7 +46,7 @@ public interface ShowCustActiMappedRepo extends JpaRepository<ShowCustActiMapped
 			"        AND  m_cust_acti_map.del_status=1 \n" + 
 			"        AND  m_cust_acti_map.actv_id=m_activities.acti_id \n" + 
 			"        AND  m_services.serv_id=m_activities.serv_id \n" + 
-			"        AND  m_activities.periodicity_id=dm_periodicity.periodicity_id", nativeQuery=true)
+			"        AND  m_activities.periodicity_id=dm_periodicity.periodicity_id ORDER BY  m_cust_acti_map.mapping_id DESC", nativeQuery=true)
 	List<ShowCustActiMapped> getAllCustActiMapList(@Param("custId") int custId);
 }
 

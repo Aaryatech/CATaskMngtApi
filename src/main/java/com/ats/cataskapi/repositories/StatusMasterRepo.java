@@ -15,7 +15,7 @@ import com.ats.cataskapi.model.StatusMaster;
 @Repository
 public interface StatusMasterRepo extends JpaRepository<StatusMaster, Integer> {
 	
-	public List<StatusMaster> findAllByDelStatusAndIsEditable(int del, int isEdit);
+	public List<StatusMaster> findAllByDelStatusAndIsEditableOrderByStatusMstIdDesc(int del, int isEdit);
 
 	public StatusMaster findByStatusMstId(int statusId);
 
