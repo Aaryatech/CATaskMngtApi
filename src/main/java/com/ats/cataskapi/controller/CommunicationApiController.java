@@ -30,7 +30,7 @@ public class CommunicationApiController {
 
 			commmunicate = getAllCommunicationByTaskIdRepo.getCommunicationListByTaskId(taskId);
 			 
-//System.out.println("data is "+commmunicate.toString());
+System.out.println("data is "+commmunicate.toString());
 		} catch (Exception e) {
 
 			e.printStackTrace();
