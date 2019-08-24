@@ -38,6 +38,11 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks,\n" + 
 			"    dm_fin_year\n" + 
 			"WHERE\n" + 
-			"    t_tasks.cust_id = m_cust_header.cust_id AND t_tasks.task_fy_id = dm_fin_year.fin_year_id AND m_services.serv_id = t_tasks.serv_id AND m_activities.acti_id = t_tasks.actv_id AND dm_periodicity.periodicity_id = t_tasks.periodicity_id AND t_tasks.task_status = 0 AND t_tasks.del_status = 1 ",nativeQuery=true)
+			"    t_tasks.cust_id = m_cust_header.cust_id AND "
+			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
+			+ "m_services.serv_id = t_tasks.serv_id AND "
+			+ "m_activities.acti_id = t_tasks.actv_id AND "
+			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
+			+ "t_tasks.task_status = 0 AND t_tasks.del_status = 1  ORDER BY t_tasks.task_id DESC",nativeQuery=true)
 	List<GetTaskList> getAllTaskList();
 }
