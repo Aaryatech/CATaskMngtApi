@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
- 
- import com.ats.cataskapi.task.model.GetTaskList;
+import org.springframework.data.repository.query.Param;
+
+import com.ats.cataskapi.task.model.GetTaskList;
 
 public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 	
@@ -43,6 +44,6 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
-			+ "t_tasks.task_status = 0 AND t_tasks.del_status = 1  ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllTaskList();
+			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllTaskList(@Param("stat") int stat);
 }

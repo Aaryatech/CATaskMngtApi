@@ -194,6 +194,119 @@ public class TaskApiController {
 		}
 		return cust;
 	}
+	
+
+	@RequestMapping(value = { "/saveMannualTask" }, method = RequestMethod.POST)
+	public @ResponseBody Info saveMannualTask(@RequestBody CustmrActivityMap custserv) {
+
+		Date date = Calendar.getInstance().getTime();
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+		int perId = 0;
+		Task serv = null;
+		int totdays = 0;
+
+		Info inf =new Info();
+		CustmrActivityMap cust = null;
+
+		ActivityMaster actv = new ActivityMaster();
+
+		actv = actvtMstrRepo.findByActiIdAndDelStatus(custserv.getActvId(), 1);
+
+		DevPeriodicityMaster period = new DevPeriodicityMaster();
+		period = devPeriodRepo.findByPeriodicityIdAndDelStatus(custserv.getPeriodicityId(), 1);
+
+		try {
+			 
+			perId = custserv.getPeriodicityId();
+
+			String strDate = dateFormat.format(custserv.getActvStartDate());
+			//System.out.println("Converted String str: " + strDate);
+			String endDate = dateFormat.format(custserv.getActvEndDate());
+			//System.out.println("Converted String end: " + endDate);
+			//System.out.println("perId: " + perId);
+			List<DateValues> listDate = PeriodicityDates.getDates(strDate, endDate, perId);
+			totdays = listDate.size();
+			
+
+			ServiceMaster servc = new ServiceMaster();
+
+			servc = srvMstrRepo.findByServIdAndDelStatus(actv.getServId(), 1);
+
+			for (int i = 0; i < listDate.size(); i++) {
+
+				Task task = new Task();
+
+				Date date1 = listDate.get(i).getDate();
+				 
+				//System.out.println("date bef stat**" +dateFormat.format(date1));
+				task.setTaskStatutoryDueDate(PeriodicityDates.addDaysToGivenDate(dateFormat.format(date1), custserv.getActvStatutoryDays()));
+
+				//System.out.println("stat date       **" + task.getTaskStatutoryDueDate());
+				FinancialYear fin = new FinancialYear();
+				fin = financialYearRepo.getFinYearBetDate(String.valueOf(task.getTaskStatutoryDueDate()));
+		
+
+				task.setTaskStartDate(PeriodicityDates.addDaysToGivenDate(task.getTaskStatutoryDueDate(), -30));
+
+				StringBuilder sb1 = new StringBuilder(servc.getServName());
+
+				sb1.append("-").append(actv.getActiName()).append("-").append(listDate.get(i).getValue());
+				//System.out.println("Fin task name" + sb1);
+
+				task.setActvId(custserv.getActvId());
+				task.setCustId(custserv.getCustId());
+				task.setDelStatus(1);
+				task.setEmpBudHr(custserv.getActvEmpBudgHr());
+				task.setExInt1(1);
+				task.setExInt2(1);
+				task.setExVar1("NA");
+				task.setExVar2("NA");
+				task.setMappingId(0);
+				task.setPeriodicityId(custserv.getPeriodicityId());
+
+				task.setMngrBudHr(custserv.getActvManBudgHr());
+				task.setServId(custserv.getExInt1());
+				task.setTaskCode("NA");
+				task.setTaskEmpIds(custserv.getExVar1());
+				task.setTaskFyId(fin.getFinYearId());
+				task.setTaskEndDate(dateFormat.format(date));
+				task.setTaskStatus(-1);
+				task.setTaskSubline("NA");
+				task.setTaskText(String.valueOf(sb1));
+				task.setUpdateDatetime(dateFormat1.format(date));
+				task.setUpdateUsername(custserv.getUpdateUsername());
+
+				serv = taskRepo.saveAndFlush(task);
+				if(serv!=null) {
+					Communication comcat=new Communication();
+					comcat.setCommunText("Manual Task Created");
+					comcat.setDelStatus(1);
+					comcat.setEmpId(custserv.getUpdateUsername());
+					comcat.setExInt1(1);
+					comcat.setExInt2(1);
+					comcat.setExVar1("NA");
+					comcat.setExVar2("NA");
+					comcat.setTypeId(2);
+					comcat.setRemark("NA");
+					comcat.setTaskId(serv.getTaskId());
+					comcat.setUpdateDatetime(dateFormat1.format(date));
+					comcat.setUpdateUser(custserv.getUpdateUsername());
+					Communication save = communicationRepo.saveAndFlush(comcat);
+					 
+				}
+			
+
+			}
+
+		} catch (Exception e) {
+
+			System.err.println("Exce in saving saveTask " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		return inf;
+	}
 	/*************************Update Task*************************/
 	@RequestMapping(value = { "/updateTaskByTaskId" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal ) {
@@ -227,11 +340,11 @@ public class TaskApiController {
 	@Autowired
 	GetTaskListRepo getTaskListRepo;
 	
-	@RequestMapping(value = {"/getAllTaskList"}, method = RequestMethod.GET)
-	public @ResponseBody List<GetTaskList> getAllTaskList() {
+	@RequestMapping(value = {"/getAllTaskList"}, method = RequestMethod.POST)
+	public @ResponseBody List<GetTaskList> getAllTaskList(@RequestParam int stat ) {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
 		try {
-			servicsList = getTaskListRepo.getAllTaskList();
+			servicsList = getTaskListRepo.getAllTaskList(stat);
 		}catch(Exception e) {
 			System.err.println("Exce in getAllTaskList " + e.getMessage());
 		}
