@@ -108,10 +108,10 @@ public class TaskApiController {
 			perId = custserv.getPeriodicityId();
 
 			String strDate = dateFormat.format(custserv.getActvStartDate());
-			System.out.println("Converted String str: " + strDate);
+			//System.out.println("Converted String str: " + strDate);
 			String endDate = dateFormat.format(custserv.getActvEndDate());
-			System.out.println("Converted String end: " + endDate);
-			System.out.println("perId: " + perId);
+			//System.out.println("Converted String end: " + endDate);
+			//System.out.println("perId: " + perId);
 			List<DateValues> listDate = PeriodicityDates.getDates(strDate, endDate, perId);
 			totdays = listDate.size();
 			
@@ -126,10 +126,10 @@ public class TaskApiController {
 
 				Date date1 = listDate.get(i).getDate();
 				 
-				System.out.println("date bef stat**" +dateFormat.format(date1));
+				//System.out.println("date bef stat**" +dateFormat.format(date1));
 				task.setTaskStatutoryDueDate(PeriodicityDates.addDaysToGivenDate(dateFormat.format(date1), custserv.getActvStatutoryDays()));
 
-				System.out.println("stat date       **" + task.getTaskStatutoryDueDate());
+				//System.out.println("stat date       **" + task.getTaskStatutoryDueDate());
 				FinancialYear fin = new FinancialYear();
 				fin = financialYearRepo.getFinYearBetDate(String.valueOf(task.getTaskStatutoryDueDate()));
 		
@@ -139,7 +139,7 @@ public class TaskApiController {
 				StringBuilder sb1 = new StringBuilder(servc.getServName());
 
 				sb1.append("-").append(actv.getActiName()).append("-").append(listDate.get(i).getValue());
-				System.out.println("Fin task name" + sb1);
+				//System.out.println("Fin task name" + sb1);
 
 				task.setActvId(custserv.getActvId());
 				task.setCustId(custserv.getCustId());
@@ -259,7 +259,17 @@ public class TaskApiController {
 		Info info = new Info();
 		try
 		{
-			String endDate = DateConvertor.convertToYMD(workDate);
+			
+			String endDate=null;
+			if(workDate.isEmpty()==false) {
+				//System.err.println("in if**"+workDate);
+				  endDate = DateConvertor.convertToYMD(workDate);
+			}else {
+				//System.err.println("in else**"+workDate);
+				endDate="0000-00-00";
+			}
+		
+			
 			int res = taskRepo.assignTask(taskIdList, empIdList,userId,curDateTime,endDate);
 			
 			if (res > 0) {
