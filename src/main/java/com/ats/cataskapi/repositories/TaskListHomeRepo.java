@@ -40,7 +40,12 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"                AND m_cust_group.del_status=1 ),\n" + 
 			"            0) \n" + 
 			"        END AS cust_group_name,\n" + 
-			"        dm_fin_year.fin_year_name                    \n" + 
+			"        dm_fin_year.fin_year_name,\n" + 
+			"		   (SELECT   GROUP_CONCAT(DISTINCT c.emp_name) \n" + 
+			"        	 FROM t_tasks i, \n" + 
+			"         		m_emp c \n" + 
+			"			WHERE FIND_IN_SET(c.emp_id, task_emp_ids) AND\n" + 
+			"         		i.task_id=t_tasks.task_id) as employees	"+				
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        m_emp,\n" + 
@@ -183,7 +188,12 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"                AND m_cust_group.del_status=1 ),\n" + 
 			"            0)        \n" + 
 			"        END AS cust_group_name,\n" + 
-			"        dm_fin_year.fin_year_name                    \n" + 
+			"        dm_fin_year.fin_year_name, \n" +
+			"		   (SELECT   GROUP_CONCAT(DISTINCT c.emp_name) \n" + 
+			"        	 FROM t_tasks i, \n" + 
+			"         		m_emp c \n" + 
+			"			WHERE FIND_IN_SET(c.emp_id, task_emp_ids) AND\n" + 
+			"         		i.task_id=t_tasks.task_id) as employees	"+	
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        m_emp,\n" + 
