@@ -15,7 +15,7 @@ public interface ActivityPeriodDetailsRepo extends JpaRepository<ActivityPeriodD
 			"	m_activities.serv_id, \n" + 
 			"	 m_activities.acti_desc, \n" + 
 			"    dm_periodicity.periodicity_id, \n" + 
-			"    dm_periodicity.periodicity_name \n" + 
+			"    dm_periodicity.periodicity_name,m_activities.ex_int1 \n" + 
 			"   \n" + 
 			"FROM m_activities, dm_periodicity\n" + 
 			"WHERE m_activities.del_status=1 AND\n" + 

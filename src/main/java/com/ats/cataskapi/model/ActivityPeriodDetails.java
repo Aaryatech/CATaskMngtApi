@@ -13,6 +13,7 @@ public class ActivityPeriodDetails {
 	private int periodicityId;
 	private String periodicityName;
 	private int servId;
+	private int exInt1;
 	
 	public int getActiId() {
 		return actiId;
@@ -56,11 +57,19 @@ public class ActivityPeriodDetails {
 		this.servId = servId;
 	}
 
+	public int getExInt1() {
+		return exInt1;
+	}
+
+	public void setExInt1(int exInt1) {
+		this.exInt1 = exInt1;
+	}
+
 	@Override
 	public String toString() {
 		return "ActivityPeriodDetails [actiId=" + actiId + ", actiName=" + actiName + ", actiDesc=" + actiDesc
 				+ ", periodicityId=" + periodicityId + ", periodicityName=" + periodicityName + ", servId=" + servId
-				+ "]";
+				+ ", exInt1=" + exInt1 + "]";
 	}
 	
 
