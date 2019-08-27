@@ -29,4 +29,9 @@ public interface ActivityMasterRepo extends JpaRepository<ActivityMaster, Intege
 	@Query(value = "UPDATE m_activities SET ex_int1=:isActiveStatus WHERE serv_id=:servId", nativeQuery = true)
 	int updateIsActiveStatus(@Param("servId") int servId, @Param("isActiveStatus") int isActiveStatus);
 
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE m_activities SET ex_int1=:isActiveStatus WHERE acti_id=:actiId", nativeQuery = true)
+	int updateIsActiveStatusByActiId(@Param("actiId")int actiId,@Param("isActiveStatus") int isActiveStatus);
+
 }

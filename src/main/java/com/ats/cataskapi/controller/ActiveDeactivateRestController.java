@@ -44,26 +44,50 @@ public class ActiveDeactivateRestController {
 		return taskList;
 	}
 
+	@RequestMapping(value = { "/getTaskListForisactiveByActId" }, method = RequestMethod.POST)
+	public @ResponseBody List<Task> getTaskListForisactiveByActId(@RequestParam("actiId") int actiId) {
+
+		List<Task> taskList = new ArrayList<Task>();
+
+		try {
+
+			taskList = taskRepo.getTaskListForisactiveByActId(actiId);
+
+		} catch (Exception e) {
+			System.err.println("Exce in getActivityById" + e.getMessage());
+		}
+		return taskList;
+	}
+
 	@RequestMapping(value = { "/updateServiceIsActiveStatus" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateServiceIsActiveStatus(@RequestParam("servId") int servId,
-			@RequestParam("isActiveStatus") int isActiveStatus, @RequestParam("taskIds") List<Integer> taskIds) {
+			@RequestParam("actiId") int actiId, @RequestParam("isActiveStatus") int isActiveStatus,
+			@RequestParam("taskIds") List<Integer> taskIds) {
 
 		Info info = new Info();
 
 		try {
 
-			int update = srvMstrRepo.updateIsActiveStatus(servId,isActiveStatus);
-			
-			update = actvtMstrRepo.updateIsActiveStatus(servId,isActiveStatus);
-			
-			update = taskRepo.updateIsActiveStatus(taskIds,isActiveStatus);
-			
+			if (actiId == 0) {
+				
+				int update = srvMstrRepo.updateIsActiveStatus(servId, isActiveStatus);
+
+				update = actvtMstrRepo.updateIsActiveStatus(servId, isActiveStatus);
+
+				update = taskRepo.updateIsActiveStatus(taskIds, isActiveStatus);
+			}else {
+				
+				int update = actvtMstrRepo.updateIsActiveStatusByActiId(actiId,isActiveStatus);
+				
+				update = taskRepo.updateIsActiveStatus(taskIds,isActiveStatus);
+			}
+
 			info.setError(false);
 			info.setMessage("successfully");
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 			info.setError(true);
 			info.setMessage("failed");
 		}
