@@ -206,20 +206,21 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        dm_status_mst\n" + 
 			"    WHERE\n" + 
 			"        t_tasks.del_status=1                   \n" + 
-			"        AND         m_emp.emp_id=2                  \n" + 
-			"        AND         FIND_IN_SET(2,t_tasks.task_emp_ids)                   \n" + 
-			"        AND         t_tasks.task_start_date BETWEEN '2019-08-01' AND '2019-08-22'            \n" + 
-			"        AND         m_services.serv_id=1                 \n" + 
-			"        AND         m_activities.acti_id=5                \n" + 
-			"        AND         m_cust_group.cust_group_id=8                \n" + 
+			"        AND         m_emp.emp_id=:empId                  \n" + 
+			"        AND         FIND_IN_SET(:empId,t_tasks.task_emp_ids)                   \n" + 
+			"        AND         t_tasks.task_start_date BETWEEN :fromDate AND :toDate           \n" + 
+			"        AND         m_services.serv_id=:service                 \n" + 
+			"        AND         m_activities.acti_id=:activity                \n" + 
+			"        AND         m_cust_group.cust_group_id=:custId                \n" + 
 			"        AND         t_tasks.actv_id=m_activities.acti_id                   \n" + 
 			"        AND         t_tasks.serv_id=m_services.serv_id                   \n" + 
 			"        AND         m_activities.periodicity_id=dm_periodicity.periodicity_id                   	  AND		  t_tasks.task_status=dm_status_mst.status_value\n" + 
 			"        AND         t_tasks.cust_id=m_cust_header.cust_id                  \n" + 
 			"        AND         m_cust_header.cust_group_id=m_cust_group.cust_group_id                   \n" + 
-			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id", nativeQuery=true)
+			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id\n"+
+			" 		 AND		 t_tasks.task_status NOT IN (:statusIds)", nativeQuery=true)
 	List<TaskListHome> getTaskList(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
-			@Param("service") int service, @Param("activity") int activity, @Param("custId") int custId);
+			@Param("service") int service, @Param("activity") int activity, @Param("custId") int custId, @Param("statusIds") List<String> statusIds);
 
 	@Query(value = "SELECT\n" + 
 			"        t_tasks.task_id,\n" + 

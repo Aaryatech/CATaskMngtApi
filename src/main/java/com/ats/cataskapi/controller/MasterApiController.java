@@ -29,6 +29,7 @@ import com.ats.cataskapi.model.ShowCustActiMapped;
 import com.ats.cataskapi.model.StatusMaster;
 import com.ats.cataskapi.model.TaskListHome;
 import com.ats.cataskapi.model.TaskPeriodicityMaster;
+import com.ats.cataskapi.model.TotalWorkHrs;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.ActivityPeriodDetailsRepo;
 import com.ats.cataskapi.repositories.CustmrActivityMapRepo;
@@ -44,6 +45,7 @@ import com.ats.cataskapi.repositories.ShowCustActiMappedRepo;
 import com.ats.cataskapi.repositories.StatusMasterRepo;
 import com.ats.cataskapi.repositories.TaskListHomeRepo;
 import com.ats.cataskapi.repositories.TaskPeriodicityMasterRepo;
+import com.ats.cataskapi.repositories.TotalWorkHrsRepo;
 
 @RestController
 public class MasterApiController {	
@@ -800,8 +802,9 @@ public class MasterApiController {
 			
 			if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && custId!=0){
 				
-				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId);
+				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId, statusIds);
 			}
+			
 			/*else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0) {
 				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity);
 			}
@@ -928,5 +931,18 @@ public class MasterApiController {
 			System.err.println("Exce in getStatusByEmpIds " + e.getMessage());
 		}
 		return task;
+	}
+	
+	@Autowired TotalWorkHrsRepo workHrsRepo;
+	
+	@RequestMapping(value = {"/getEmpWorkHrsByEmpId"}, method = RequestMethod.POST)
+	public @ResponseBody List<TotalWorkHrs> getEmpWorkHrsByEmpId(@RequestParam int taskId) {
+		List<TotalWorkHrs> hrs = new ArrayList<TotalWorkHrs>();
+		try {
+			hrs = workHrsRepo.getEmpTtlWorkHrs(taskId);
+		}catch(Exception e) {
+			System.err.println("Exce in getEmpWorkHrsByEmpId " + e.getMessage());
+		}
+		return hrs;
 	}
 }

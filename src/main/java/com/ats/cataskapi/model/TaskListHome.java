@@ -32,7 +32,15 @@ public class TaskListHome {
 	private String exVar1;
 	private int exInt2;
 	private String exVar2;
+	private String employees;	
 	
+	
+	public String getEmployees() {
+		return employees;
+	}
+	public void setEmployees(String employees) {
+		this.employees = employees;
+	}
 	public int getTaskId() {
 		return taskId;
 	}
@@ -174,7 +182,8 @@ public class TaskListHome {
 				+ ", empId=" + empId + ", servName=" + servName + ", actiName=" + actiName + ", periodicityName="
 				+ periodicityName + ", custGroupName=" + custGroupName + ", finYearName=" + finYearName
 				+ ", taskStatus=" + taskStatus + ", statusColor=" + statusColor + ", exInt1=" + exInt1 + ", exVar1="
-				+ exVar1 + ", exInt2=" + exInt2 + ", exVar2=" + exVar2 + "]";
+				+ exVar1 + ", exInt2=" + exInt2 + ", exVar2=" + exVar2 + ", employees=" + employees + "]";
 	}
+	
 	
 }
