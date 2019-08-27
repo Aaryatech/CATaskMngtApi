@@ -22,14 +22,14 @@ public interface CustomerDetailsRepo extends JpaRepository<CustomerDetails, Inte
 			"        m_cust_header.cust_pan_no,\n" + 
 			"        m_cust_header.cust_email_id,\n" + 
 			"        m_cust_header.cust_phone_no,\n" + 
+			"        m_cust_header.is_active,\n" + 
 			"        m_emp.emp_name\n" + 
 			"    FROM\n" + 
 			"        m_cust_header,\n" + 
 			"        m_emp\n" + 
 			"    WHERE\n" + 
 			"        m_cust_header.del_status=1 \n" + 
-			"        AND    m_cust_header.owner_emp_id=m_emp.emp_id \n" + 
-			"        \n" + 
+			"        AND    m_cust_header.owner_emp_id=m_emp.emp_id \n" + 			
 			"    ORDER BY\n" + 
 			"        m_cust_header.cust_id DESC",nativeQuery=true)
 	List<CustomerDetails> getAllCustomerDetails();

@@ -58,7 +58,24 @@ public class ActiveDeactivateRestController {
 		}
 		return taskList;
 	}
+	
+	@RequestMapping(value = { "/getTaskListCustIsActive" }, method = RequestMethod.POST)
+	public @ResponseBody List<Task> getTaskListCustIsActive(@RequestParam("custId") int custId) {
 
+		List<Task> taskList = new ArrayList<Task>();
+
+		try {
+
+			taskList = taskRepo.getTaskListByCustId(custId);
+
+		} catch (Exception e) {
+			System.err.println("Exce in getTaskListCustIsActive" + e.getMessage());
+		}
+		return taskList;
+	}
+
+	
+	
 	@RequestMapping(value = { "/updateServiceIsActiveStatus" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateServiceIsActiveStatus(@RequestParam("servId") int servId,
 			@RequestParam("actiId") int actiId, @RequestParam("isActiveStatus") int isActiveStatus,

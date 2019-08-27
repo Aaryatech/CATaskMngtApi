@@ -14,6 +14,8 @@ public class CustomerDetails {
 	private String custEmailId;
 	private String custPhoneNo;
 	private String empName;
+	private int isActive;
+	
 	public int getCustId() {
 		return custId;
 	}
@@ -62,11 +64,18 @@ public class CustomerDetails {
 	public void setEmpName(String empName) {
 		this.empName = empName;
 	}
+	public int getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(int isActive) {
+		this.isActive = isActive;
+	}
 	@Override
 	public String toString() {
 		return "CustomerDetails [custId=" + custId + ", custFirmName=" + custFirmName + ", custGroupName="
 				+ custGroupName + ", custAssesseeName=" + custAssesseeName + ", custPanNo=" + custPanNo
-				+ ", custEmailId=" + custEmailId + ", custPhoneNo=" + custPhoneNo + ", empName=" + empName + "]";
+				+ ", custEmailId=" + custEmailId + ", custPhoneNo=" + custPhoneNo + ", empName=" + empName
+				+ ", isActive=" + isActive + "]";
 	}
 	
 	

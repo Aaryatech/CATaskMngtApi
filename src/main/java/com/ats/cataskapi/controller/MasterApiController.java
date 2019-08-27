@@ -46,6 +46,7 @@ import com.ats.cataskapi.repositories.StatusMasterRepo;
 import com.ats.cataskapi.repositories.TaskListHomeRepo;
 import com.ats.cataskapi.repositories.TaskPeriodicityMasterRepo;
 import com.ats.cataskapi.repositories.TotalWorkHrsRepo;
+import com.ats.cataskapi.task.repo.TaskRepo;
 
 @RestController
 public class MasterApiController {	
@@ -958,5 +959,33 @@ public class MasterApiController {
 			System.err.println("Exce in getEmpWorkHrsByEmpId " + e.getMessage());
 		}
 		return hrs;
+	}
+	
+	/**************Active Deactive*************/
+@Autowired TaskRepo taskRepo;
+	
+	@RequestMapping(value = { "/updateCustomerIsActiveStatus" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateServiceIsActiveStatus(@RequestParam("custId") int custId,
+			@RequestParam("isActiveStatus") int isActiveStatus, @RequestParam("taskIds") List<Integer> taskIds) {
+
+		Info info = new Info();
+
+		try {
+
+			int update = custHeadRepo.updateIsActiveStatus(custId,isActiveStatus);	
+			
+			update = taskRepo.updateIsActiveStatus(taskIds,isActiveStatus);
+			
+			info.setError(false);
+			info.setMessage("successfully");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			info.setError(true);
+			info.setMessage("failed");
+		}
+		
+		return info;
 	}
 }

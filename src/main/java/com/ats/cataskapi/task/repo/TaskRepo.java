@@ -45,4 +45,6 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 	@Query(value = "select * from t_tasks where actv_id=:actiId  and task_status not in (0,8,9)", nativeQuery = true)
 	List<Task> getTaskListForisactiveByActId(int actiId);
 
+	@Query(value = "select * from t_tasks where cust_id=:custId and task_status not in (0,8,9)", nativeQuery = true)
+	public List<Task> getTaskListByCustId(@Param("custId") int custId);
 }
