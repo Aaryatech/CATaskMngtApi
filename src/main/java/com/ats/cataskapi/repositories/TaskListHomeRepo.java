@@ -167,58 +167,63 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        t_tasks.mngr_bud_hr,\n" + 
 			"        t_tasks.emp_bud_hr,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
-			"        t_tasks.ex_int1,\n" +
-			"        t_tasks.ex_int2,\n" +
-			"        t_tasks.ex_var1,\n" +
-			"        t_tasks.ex_var2,\n" +
-			"        dm_status_mst.status_text AS task_status, dm_status_mst.status_color, \n" + 
+			"        t_tasks.ex_int1,\n" + 
+			"        t_tasks.ex_int2,\n" + 
+			"        t_tasks.ex_var1,\n" + 
+			"        t_tasks.ex_var2,\n" + 
+			"        dm_status_mst.status_text AS task_status,\n" + 
+			"        dm_status_mst.status_color,\n" + 
 			"        m_emp.emp_name,\n" + 
-			"        m_emp.emp_id,\n" +
+			"        m_emp.emp_id,\n" + 
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        CASE \n" + 
-			"            WHEN m_cust_header.cust_group_id=0           THEN m_cust_header.cust_firm_name     \n" + 
+			"        CASE              \n" + 
+			"            WHEN m_cust_header.cust_group_id=0           \n" + 
+			"            	THEN m_cust_header.cust_firm_name                  \n" + 
 			"            ELSE COALESCE(( SELECT\n" + 
-			"                m_cust_group.cust_group_name                         \n" + 
+			"                m_cust_group.cust_group_name                                      \n" + 
 			"            FROM\n" + 
-			"                m_cust_group                                   \n" + 
+			"                m_cust_group                                                \n" + 
 			"            WHERE\n" + 
-			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id        \n" + 
+			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id                         \n" + 
 			"                AND m_cust_group.del_status=1 ),\n" + 
-			"            0)        \n" + 
+			"            0)                 \n" + 
 			"        END AS cust_group_name,\n" + 
-			"        dm_fin_year.fin_year_name, \n" +
-			"		   (SELECT   GROUP_CONCAT(DISTINCT c.emp_name) \n" + 
-			"        	 FROM t_tasks i, \n" + 
-			"         		m_emp c \n" + 
-			"			WHERE FIND_IN_SET(c.emp_id, task_emp_ids) AND\n" + 
-			"         		i.task_id=t_tasks.task_id) as employees	"+	
+			"        dm_fin_year.fin_year_name,\n" + 
+			"         (SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)            \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) \n" + 
+			"            AND            i.task_id=t_tasks.task_id) as employees     \n" + 
+			"       \n" + 
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        m_emp,\n" + 
 			"        m_services,\n" + 
 			"        m_activities,\n" + 
 			"        dm_periodicity,\n" + 
-			"        m_cust_group,\n" + 
 			"        m_cust_header,\n" + 
 			"        dm_fin_year,\n" + 
-			"        dm_status_mst\n" + 
+			"        dm_status_mst     \n" + 
 			"    WHERE\n" + 
-			"        t_tasks.del_status=1                   \n" + 
-			"        AND         m_emp.emp_id=:empId                  \n" + 
-			"        AND         FIND_IN_SET(:empId,t_tasks.task_emp_ids)                   \n" + 
-			"        AND         t_tasks.task_start_date BETWEEN :fromDate AND :toDate           \n" + 
-			"        AND         m_services.serv_id=:service                 \n" + 
-			"        AND         m_activities.acti_id=:activity                \n" + 
-			"        AND         m_cust_group.cust_group_id=:custId                \n" + 
-			"        AND         t_tasks.actv_id=m_activities.acti_id                   \n" + 
-			"        AND         t_tasks.serv_id=m_services.serv_id                   \n" + 
-			"        AND         m_activities.periodicity_id=dm_periodicity.periodicity_id                   	  AND		  t_tasks.task_status=dm_status_mst.status_value\n" + 
-			"        AND         t_tasks.cust_id=m_cust_header.cust_id                  \n" + 
-			"        AND         m_cust_header.cust_group_id=m_cust_group.cust_group_id                   \n" + 
-			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id\n"+
-			" 		 AND		 t_tasks.task_status NOT IN (:statusIds)", nativeQuery=true)
+			"        t_tasks.del_status=1                            \n" + 
+			"        AND         m_emp.emp_id=:empId                           \n" + 
+			"        AND         FIND_IN_SET(m_emp.emp_id,t_tasks.task_emp_ids)                            \n" + 
+			"        AND         t_tasks.task_start_date BETWEEN :fromDate AND :toDate             \n" + 
+			"        AND         m_services.serv_id=:service                          \n" + 
+			"        AND         m_activities.acti_id=:activity                         \n" + 
+			"        AND         m_cust_header.cust_id=:custId                        \n" + 
+			"        AND         t_tasks.actv_id=m_activities.acti_id                            \n" + 
+			"        AND         m_activities.serv_id=m_services.serv_id                            \n" + 
+			"        AND         m_activities.periodicity_id=dm_periodicity.periodicity_id                 \n" + 
+			"        AND   	 	t_tasks.task_status=dm_status_mst.status_value         \n" + 
+			"        AND         t_tasks.cust_id=m_cust_header.cust_id                             \n" + 
+			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id     \n" + 
+			"        AND  		t_tasks.task_status NOT IN(:statusIds)", nativeQuery=true)
 	List<TaskListHome> getTaskList(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
 			@Param("service") int service, @Param("activity") int activity, @Param("custId") int custId, @Param("statusIds") List<String> statusIds);
 

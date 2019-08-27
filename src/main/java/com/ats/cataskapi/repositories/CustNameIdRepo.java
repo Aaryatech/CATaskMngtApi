@@ -16,4 +16,15 @@ public interface CustNameIdRepo extends JpaRepository<CustNameId, Integer> {
 			" m_cust_header.cust_id FROM m_cust_header where m_cust_header.cust_id=:custId and m_cust_header.del_status=1   ",nativeQuery=true)
 	CustNameId getCustNameId(@Param("custId") int custId);
 	
+	@Query(value = "SELECT CASE WHEN m_cust_header.cust_group_id=0 \n" + 
+			"	THEN m_cust_header.cust_firm_name \n" + 
+			"	 ELSE (SELECT m_cust_group.cust_group_name \n" + 
+			"                    FROM m_cust_group \n" + 
+			"                    WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id  AND\n" + 
+			"			   			 m_cust_group.del_status=1)  END AS cust_name,\n" + 
+			"                         m_cust_header.cust_id \n" + 
+			"FROM m_cust_header\n" + 
+			"where  m_cust_header.del_status=1",nativeQuery=true)
+	public List<CustNameId> getCustomers();
+	
 }

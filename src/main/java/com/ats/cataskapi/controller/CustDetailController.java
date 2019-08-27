@@ -174,5 +174,18 @@ public class CustDetailController {
 		}
 		return cust;
 	}
-
+	
+	@RequestMapping(value = { "/getCustNames"}, method = RequestMethod.GET)
+	public @ResponseBody List<CustNameId> getCustNames(){
+		
+		List<CustNameId> list = new ArrayList<CustNameId>();
+		try {
+			list = custNameRepo.getCustomers();
+		}catch (Exception e) {
+			e.getMessage();
+		}
+		
+		return list;
+		
+	}
 }
