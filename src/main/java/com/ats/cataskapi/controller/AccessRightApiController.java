@@ -146,7 +146,7 @@ public class AccessRightApiController {
 		
 		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
 		try {
-			empList = userListRepository.findAllByDelStatusOrderByEmpIdDesc(1);
+			empList = userListRepository.findAllByDelStatusAndIsActiveOrderByEmpIdDesc(1,1);
 		}catch (Exception e) {
 			System.err.println("Exce in getAllEmployees  " + e.getMessage());
 		}

@@ -408,10 +408,29 @@ public class TaskApiController {
 	
 	
 	@RequestMapping(value = {"/getAllInactiveTaskList"}, method = RequestMethod.POST)
-	public @ResponseBody List<GetTaskList> getAllInactiveTaskList(@RequestParam int empId ) {
+	public @ResponseBody List<GetTaskList> getAllInactiveTaskList(@RequestParam int empId,@RequestParam int servId ,@RequestParam String itemsAct,@RequestParam String itemsCust ) {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
 		try {
-			servicsList = getTaskListRepo.getAllInactiveTaskByEmpId(empId);
+			
+			if(itemsCust.equals("0") && itemsAct.equals("0") && servId==0) {
+				servicsList = getTaskListRepo.getAllInactiveTaskByEmpId(empId);
+			}
+			else if(itemsCust.contains("0") &&  itemsAct.contains("0") ) {
+				
+				servicsList = getTaskListRepo.getInactiveTaskByEmpIdAllCustAct(empId,servId);
+				
+			}else if(itemsCust.contains("0") ) {
+				
+				servicsList = getTaskListRepo.getAllInactiveTaskByEmpIdAllCust(empId,servId,itemsAct);
+				
+			}else if(itemsAct.contains("0")) {
+				
+				servicsList = getTaskListRepo.getAllInactiveTaskByEmpIdAllAct(empId,servId,itemsCust);
+			}else {
+				servicsList = getTaskListRepo.getAllInactiveTaskByEmpIdSpec(empId,servId,itemsCust,itemsAct);
+			}
+			
+			
 		}catch(Exception e) {
 			System.err.println("Exce in getAllTaskList " + e.getMessage());
 		}

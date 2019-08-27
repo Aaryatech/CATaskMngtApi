@@ -280,7 +280,7 @@ public class MasterApiController {
 		
 		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
 		try {
-			empList = empRepo.findAllByDelStatusOrderByEmpIdDesc(1);
+			empList = empRepo.findAllByDelStatusAndIsActiveOrderByEmpIdDesc(1,1);
 		}catch (Exception e) {
 			System.err.println("Exce in getAllEmployees  " + e.getMessage());
 		}
