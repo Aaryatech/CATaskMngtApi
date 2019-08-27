@@ -335,6 +335,42 @@ public class TaskApiController {
 		return info;
 	}
 	
+	
+	@RequestMapping(value = { "/updateManualTaskByTaskId" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateManualTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal ) {
+
+		Info info = new Info();
+		int res=0;
+		try {
+			
+			if(statusVal==1) {
+				  res = taskRepo.updateStatus(taskId, statusVal);
+
+			}
+			else {
+				  res=taskRepo.updateStatus1(taskId);
+			}
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in updateTaskByTaskId  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+		
+		return info;
+	}
+	
 	 //Harsha Date:20 Aug 2019 
 	
 	@Autowired
@@ -345,6 +381,18 @@ public class TaskApiController {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
 		try {
 			servicsList = getTaskListRepo.getAllTaskList(stat);
+		}catch(Exception e) {
+			System.err.println("Exce in getAllTaskList " + e.getMessage());
+		}
+		return servicsList;
+	}
+	
+	
+	@RequestMapping(value = {"/getAllManualTaskList"}, method = RequestMethod.POST)
+	public @ResponseBody List<GetTaskList> getAllManualTaskList(@RequestParam int stat,@RequestParam int empId ) {
+		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
+		try {
+			servicsList = getTaskListRepo.getAllManualTaskList(stat,empId);
 		}catch(Exception e) {
 			System.err.println("Exce in getAllTaskList " + e.getMessage());
 		}
