@@ -29,6 +29,11 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 	@Query(value="UPDATE t_tasks SET t_tasks.del_status=0 WHERE t_tasks.task_id=:taskId",nativeQuery=true)
 	int updateStatus1(@Param("taskId") int taskId);
 	
+	@Transactional
+	@Modifying
+	@Query(value="UPDATE t_tasks SET t_tasks.is_active=1 WHERE t_tasks.task_id=:taskId",nativeQuery=true)
+	int activateTask(@Param("taskId") int taskId);
+	
 	
 	
 	

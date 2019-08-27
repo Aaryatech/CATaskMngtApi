@@ -60,6 +60,8 @@ public class Task {
 	private int actvId;
 
 	private int servId;
+	
+	private int isActive;
 
 	public int getTaskId() {
 		return taskId;
@@ -252,6 +254,16 @@ public class Task {
 	public void setServId(int servId) {
 		this.servId = servId;
 	}
+	
+	
+
+	public int getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(int isActive) {
+		this.isActive = isActive;
+	}
 
 	@Override
 	public String toString() {
@@ -262,7 +274,9 @@ public class Task {
 				+ empBudHr + ", delStatus=" + delStatus + ", updateDatetime=" + updateDatetime + ", updateUsername="
 				+ updateUsername + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2="
 				+ exVar2 + ", custId=" + custId + ", periodicityId=" + periodicityId + ", actvId=" + actvId
-				+ ", servId=" + servId + "]";
+				+ ", servId=" + servId + ", isActive=" + isActive + "]";
 	}
+
+	
 
 }

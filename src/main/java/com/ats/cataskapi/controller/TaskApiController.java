@@ -151,6 +151,7 @@ public class TaskApiController {
 				task.setExVar2("NA");
 				task.setMappingId(custserv.getMappingId());
 				task.setPeriodicityId(custserv.getPeriodicityId());
+				task.setIsActive(1);
 
 				task.setMngrBudHr(custserv.getActvManBudgHr());
 				task.setServId(actv.getServId());
@@ -264,7 +265,7 @@ public class TaskApiController {
 				task.setExVar2("NA");
 				task.setMappingId(0);
 				task.setPeriodicityId(custserv.getPeriodicityId());
-
+				task.setIsActive(1);
 				task.setMngrBudHr(custserv.getActvManBudgHr());
 				task.setServId(custserv.getExInt1());
 				task.setTaskCode("NA");
@@ -344,11 +345,17 @@ public class TaskApiController {
 		try {
 			
 			if(statusVal==1) {
+				//task approval by Manager
 				  res = taskRepo.updateStatus(taskId, statusVal);
 
 			}
-			else {
+			else if(statusVal==0) {
+				//task disapproval by Manager
 				  res=taskRepo.updateStatus1(taskId);
+			}
+			else if(statusVal==2) {
+				//to activate inactive task
+				  res=taskRepo.activateTask(taskId);
 			}
 
 			if (res > 0) {
@@ -393,6 +400,18 @@ public class TaskApiController {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
 		try {
 			servicsList = getTaskListRepo.getAllManualTaskList(stat,empId);
+		}catch(Exception e) {
+			System.err.println("Exce in getAllTaskList " + e.getMessage());
+		}
+		return servicsList;
+	}
+	
+	
+	@RequestMapping(value = {"/getAllInactiveTaskList"}, method = RequestMethod.POST)
+	public @ResponseBody List<GetTaskList> getAllInactiveTaskList(@RequestParam int empId ) {
+		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
+		try {
+			servicsList = getTaskListRepo.getAllInactiveTaskByEmpId(empId);
 		}catch(Exception e) {
 			System.err.println("Exce in getAllTaskList " + e.getMessage());
 		}
