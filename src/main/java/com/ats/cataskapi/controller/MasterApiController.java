@@ -289,6 +289,20 @@ public class MasterApiController {
 		
 	}
 	
+	@RequestMapping(value = {"/getAllEmployeesWithRoleName"}, method = RequestMethod.GET)
+	public @ResponseBody List<EmployeeMaster> getAllEmployeesWithRoleName(){
+		
+		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
+		try {
+			empList = empRepo.getAllEmployeesWithRoleName();
+		}catch (Exception e) {
+			System.err.println("Exce in getAllEmployees  " + e.getMessage());
+		}
+		
+		return empList;
+		
+	}
+	
 	@RequestMapping(value = {"/saveNewEmployee"}, method = RequestMethod.POST)
 	public @ResponseBody EmployeeMaster saveNewEmployee(@RequestBody EmployeeMaster employee) {
 		EmployeeMaster emp = null;

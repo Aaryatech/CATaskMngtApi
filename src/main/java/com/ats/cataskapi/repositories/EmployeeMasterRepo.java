@@ -19,17 +19,14 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE m_emp SET del_status=0, update_username=:userId WHERE emp_id=:empId",nativeQuery=true)
+	@Query(value = "UPDATE m_emp SET del_status=0, update_username=:userId WHERE emp_id=:empId", nativeQuery = true)
 	int deleteEmployee(@Param("empId") int empId, @Param("userId") int userId);
-	
-	
+
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE m_emp SET is_active=:stat, update_username=:userId WHERE emp_id=:empId",nativeQuery=true)
-	int updateEmployeeActive(@Param("empId") int empId, @Param("userId") int userId,@Param("stat") int stat);
-	
-	
-	
+	@Query(value = "UPDATE m_emp SET is_active=:stat, update_username=:userId WHERE emp_id=:empId", nativeQuery = true)
+	int updateEmployeeActive(@Param("empId") int empId, @Param("userId") int userId, @Param("stat") int stat);
+
 	@Transactional
 	@Modifying
 	@Query(value = "UPDATE m_emp SET emp_role_id=:roleId WHERE emp_id IN (:userIdList) ", nativeQuery = true)
@@ -44,5 +41,11 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 
 	List<EmployeeMaster> findByEmpTypeAndDelStatusAndIsActive(int roleId, int i, int j);
 
+	@Query(value = "select e.emp_id, e.emp_type, e.emp_name, e.emp_nickname, e.emp_dob, e.emp_role_id,\n"
+			+ "e.emp_mob,\n" + "e.emp_email,\n" + "e.emp_pass,\n" + "e.emp_desc,\n" + "e.emp_pic,\n" + "e.emp_salary,\n"
+			+ "e.del_status,\n" + "e.is_active,\n" + "e.update_datetime,\n" + "e.update_username,\n" + "e.ex_int1,\n"
+			+ "e.ex_int2,\n"
+			+ "e.ex_var1,coalesce((select r.role_name from m_assign_role r where r.role_id=e.emp_role_id),'Not Assigned') as ex_var2 from m_emp e where e.del_status=1 order by emp_role_id,e.emp_name", nativeQuery = true)
+	List<EmployeeMaster> getAllEmployeesWithRoleName();
 
 }
