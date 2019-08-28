@@ -125,9 +125,9 @@ public class TaskApiController {
 			servc = srvMstrRepo.findByServIdAndDelStatus(actv.getServId(), 1);
 
 			for (int i = 0; i < listDate.size(); i++) {
-
+				
 				Task task = new Task();
-
+				task.setTaskId(i);
 				Date date1 = listDate.get(i).getDate();
 				 
 				//System.out.println("date bef stat**" +dateFormat.format(date1));
