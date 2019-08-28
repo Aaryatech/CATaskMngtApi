@@ -21,10 +21,10 @@ public class DailyWorkLogApiController {
 	@Autowired DailyWorkLogRepo workLogRepo;
 	
 	@RequestMapping(value = {"/getAllDailyWorkLogs"}, method=RequestMethod.POST)
-	public @ResponseBody List<DailyWorkLog> getAllDailyWorkLogs(@RequestParam int empId ){
+	public @ResponseBody List<DailyWorkLog> getAllDailyWorkLogs(@RequestParam int taskId ){
 		List<DailyWorkLog> logList = new ArrayList<DailyWorkLog>();
 		try {
-			logList = workLogRepo.findByDelStatusAndEmpId(1, empId);
+			logList = workLogRepo.findByDelStatusAndTaskId(taskId);
 			
 		}catch (Exception e) {
 			System.out.println("Excep in getAllDailyWorkLogs : "+e.getMessage());
