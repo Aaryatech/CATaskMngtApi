@@ -988,4 +988,18 @@ public class MasterApiController {
 		
 		return info;
 	}
+	
+	
+	@RequestMapping(value = {"/getDevPerodicityById"}, method = RequestMethod.POST)
+	public @ResponseBody DevPeriodicityMaster getDevPerodicityById(@RequestParam int periodicityId) {
+		DevPeriodicityMaster period = new DevPeriodicityMaster();
+		try {
+ 			period = devPeriodRepo.findByPeriodicityIdAndDelStatus(periodicityId, 1);
+
+		}catch (Exception e) {
+			System.err.println("Exce in getTaskPerodicityId" + e.getMessage());
+		}
+		return period;
+	}
+	
 }

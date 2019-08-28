@@ -158,7 +158,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
-			+ "  t_tasks.del_status = 1   AND t_tasks.is_active = 0 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.servId=:servId  ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+			+ "  t_tasks.del_status = 1   AND t_tasks.is_active = 0 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.serv_id=:servId  ORDER BY t_tasks.task_id DESC",nativeQuery=true)
 	List<GetTaskList> getInactiveTaskByEmpIdAllCustAct(@Param("empId") int empId, @Param("servId") int servId);
 
 	@Query(value=" SELECT\n" + 
@@ -195,8 +195,8 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
-			+ "  t_tasks.del_status = 1   AND t_tasks.is_active = 0 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.servId=:servId AND t_tasks.cust_id IN(:itemsCust) AND t_task.avtv_id IN(:itemsAct) ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllInactiveTaskByEmpIdSpec(@Param("empId") int empId, @Param("servId") int servId,@Param("itemsCust")  String itemsCust,@Param("itemsAct") String itemsAct);
+			+ "  t_tasks.del_status = 1   AND t_tasks.is_active = 0 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.serv_id=:servId AND t_tasks.cust_id IN(:itemsCust) AND t_tasks.actv_id IN(:itemsAct) ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllInactiveTaskByEmpIdSpec(@Param("empId") int empId, @Param("servId") int servId,@Param("itemsCust") List<String> itemsCust,@Param("itemsAct") List<String> itemsAct);
 
 	@Query(value=" SELECT\n" + 
 			"    t_tasks.task_id,\n" + 
@@ -232,8 +232,8 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
-			+ "  t_tasks.del_status = 1   AND t_tasks.is_active = 0 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.servId=:servId AND t_tasks.cust_id IN(:itemsCust) ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllInactiveTaskByEmpIdAllAct(@Param("empId") int empId,@Param("servId")  int servId, @Param("itemsCust") String itemsCust);
+			+ "  t_tasks.del_status = 1   AND t_tasks.is_active = 0 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.serv_id=:servId AND t_tasks.cust_id IN(:itemsCust) ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllInactiveTaskByEmpIdAllAct(@Param("empId") int empId,@Param("servId")  int servId, @Param("itemsCust") List<String> itemsCust);
 
 	@Query(value=" SELECT\n" + 
 			"    t_tasks.task_id,\n" + 
@@ -269,7 +269,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
-			+ "  t_tasks.del_status = 1   AND t_tasks.is_active = 0 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.servId=:servId  AND t_task.avtv_id IN(:itemsAct) ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllInactiveTaskByEmpIdAllCust(@Param("empId") int empId, @Param("servId") int servId,@Param("itemsAct") String itemsAct);
+			+ "  t_tasks.del_status = 1   AND t_tasks.is_active = 0 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.serv_id=:servId  AND t_tasks.actv_id IN(:itemsAct) ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllInactiveTaskByEmpIdAllCust(@Param("empId") int empId, @Param("servId") int servId,@Param("itemsAct") List<String> itemsAct);
 	
 }
