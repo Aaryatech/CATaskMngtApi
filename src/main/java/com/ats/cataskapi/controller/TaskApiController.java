@@ -28,6 +28,7 @@ import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.FinancialYear;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
+import com.ats.cataskapi.model.SetttingKeyValue;
 import com.ats.cataskapi.model.TaskListHome;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.CustmrActivityMapRepo;
@@ -35,6 +36,7 @@ import com.ats.cataskapi.repositories.DevPeriodicityMasterRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 import com.ats.cataskapi.repositories.FinancialYearRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
+import com.ats.cataskapi.repositories.SetttingKeyValueRepo;
 import com.ats.cataskapi.repositories.TaskListHomeRepo;
 import com.ats.cataskapi.task.model.GetTaskList;
 import com.ats.cataskapi.task.model.Task;
@@ -46,7 +48,8 @@ import ch.qos.logback.classic.pattern.DateConverter;
 @RestController
 public class TaskApiController {
 
-     //Harsha Date:19 Aug 2019
+
+    //Harsha Date:19 Aug 2019
 	@Autowired
 	TaskRepo taskRepo;
 
@@ -243,8 +246,8 @@ public class TaskApiController {
 	}
 	
 	
-	
-	
+	@Autowired
+	SetttingKeyValueRepo setttingKeyValueRepo;
 
 	@RequestMapping(value = { "/saveMannualTask" }, method = RequestMethod.POST)
 	public @ResponseBody Info saveMannualTask(@RequestBody CustmrActivityMap custserv) {
@@ -303,6 +306,10 @@ public class TaskApiController {
 
 				sb1.append("-").append(actv.getActiName()).append("-").append(listDate.get(i).getValue());
 				//System.out.println("Fin task name" + sb1);
+				
+				
+				SetttingKeyValue sk=new SetttingKeyValue();
+				sk=setttingKeyValueRepo.findBySettingKeyAndDelStatus("ManualTaskMapId",1);
 
 				task.setActvId(custserv.getActvId());
 				task.setCustId(custserv.getCustId());
@@ -312,7 +319,7 @@ public class TaskApiController {
 				task.setExInt2(1);
 				task.setExVar1("NA");
 				task.setExVar2("NA");
-				task.setMappingId(0);
+				task.setMappingId(sk.getIntValue());
 				task.setPeriodicityId(custserv.getPeriodicityId());
 				task.setIsActive(1);
 				task.setMngrBudHr(String.valueOf(custserv.getActvManBudgHr()));
@@ -448,7 +455,12 @@ public class TaskApiController {
 	public @ResponseBody List<GetTaskList> getAllManualTaskList(@RequestParam int stat,@RequestParam int empId ) {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
 		try {
-			servicsList = getTaskListRepo.getAllManualTaskList(stat,empId);
+			
+			SetttingKeyValue sk=new SetttingKeyValue();
+			sk=setttingKeyValueRepo.findBySettingKeyAndDelStatus("ManualTaskMapId",1);
+			int mapId=sk.getIntValue();
+			
+			servicsList = getTaskListRepo.getAllManualTaskList(stat,empId,mapId);
 		}catch(Exception e) {
 			System.err.println("Exce in getAllTaskList " + e.getMessage());
 		}
@@ -614,28 +626,6 @@ public class TaskApiController {
 		}
 		
 		return info;
-	}
-	
-	@RequestMapping(value = { "/updateStatusByTaskId" }, method = RequestMethod.POST)
-	public Info updateStatusByTaskId(@RequestParam int statusVal, @RequestParam int taskId) {
-		Info info = new Info();
-		try {
-			int res = taskRepo.updateStatus(taskId, statusVal);
-
-			if (res > 0) {
-				info.setError(false);
-				info.setMsg("success");
-
-			} else {
-				info.setError(true);
-				info.setMsg("failed");
-
-			}
-		}catch (Exception e) {
-			System.err.println("Exce in updateStatusByTaskId  " + e.getMessage());
-		}
-		return info;
-		
 	}
 	/********************************System Generated Status********************************/
 	

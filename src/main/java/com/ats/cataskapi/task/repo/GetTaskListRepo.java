@@ -92,8 +92,8 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
-			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1   AND t_tasks.is_active = 1 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.mapping_id=0   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllManualTaskList(@Param("stat") int stat,@Param("empId") int empId);
+			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1   AND t_tasks.is_active = 1 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.mapping_id=:mapId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllManualTaskList(@Param("stat") int stat,@Param("empId") int empId,@Param("mapId") int mapId);
 	
 	
 
