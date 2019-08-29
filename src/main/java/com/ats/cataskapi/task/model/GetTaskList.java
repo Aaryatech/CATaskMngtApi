@@ -1,7 +1,11 @@
 package com.ats.cataskapi.task.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class GetTaskList {
@@ -19,15 +23,15 @@ public class GetTaskList {
 
 	private String taskText;
 
-	private String taskStartDate;
+	private Date taskStartDate;
 
-	private String taskEndDate;
+	private Date taskEndDate;
 
-	private String taskStatutoryDueDate;
+	private Date taskStatutoryDueDate;
 
-	private int mngrBudHr;
+	private String mngrBudHr;
 
-	private int empBudHr;
+	private String empBudHr;
 
 	private int custId;
 
@@ -97,44 +101,46 @@ public class GetTaskList {
 	public void setTaskText(String taskText) {
 		this.taskText = taskText;
 	}
-
-	public String getTaskStartDate() {
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public Date getTaskStartDate() {
 		return taskStartDate;
 	}
 
-	public void setTaskStartDate(String taskStartDate) {
+	public void setTaskStartDate(Date taskStartDate) {
 		this.taskStartDate = taskStartDate;
 	}
 
-	public String getTaskEndDate() {
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public Date getTaskEndDate() {
 		return taskEndDate;
 	}
 
-	public void setTaskEndDate(String taskEndDate) {
+	public void setTaskEndDate(Date taskEndDate) {
 		this.taskEndDate = taskEndDate;
 	}
-
-	public String getTaskStatutoryDueDate() {
+	
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public Date getTaskStatutoryDueDate() {
 		return taskStatutoryDueDate;
 	}
 
-	public void setTaskStatutoryDueDate(String taskStatutoryDueDate) {
+	public void setTaskStatutoryDueDate(Date taskStatutoryDueDate) {
 		this.taskStatutoryDueDate = taskStatutoryDueDate;
 	}
 
-	public int getMngrBudHr() {
+	public String getMngrBudHr() {
 		return mngrBudHr;
 	}
 
-	public void setMngrBudHr(int mngrBudHr) {
+	public void setMngrBudHr(String mngrBudHr) {
 		this.mngrBudHr = mngrBudHr;
 	}
 
-	public int getEmpBudHr() {
+	public String getEmpBudHr() {
 		return empBudHr;
 	}
 
-	public void setEmpBudHr(int empBudHr) {
+	public void setEmpBudHr(String empBudHr) {
 		this.empBudHr = empBudHr;
 	}
 
@@ -239,6 +245,5 @@ public class GetTaskList {
 				+ exInt1 + "]";
 	}
 
-	
 
 }

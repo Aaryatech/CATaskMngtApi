@@ -148,7 +148,7 @@ public class TaskApiController {
 				task.setActvId(custserv.getActvId());
 				task.setCustId(custserv.getCustId());
 				task.setDelStatus(1);
-				task.setEmpBudHr(custserv.getActvEmpBudgHr());
+				task.setEmpBudHr(String.valueOf(custserv.getActvEmpBudgHr()));
 				task.setExInt1(1);
 				task.setExInt2(1);
 				task.setExVar1("NA");
@@ -157,7 +157,7 @@ public class TaskApiController {
 				task.setPeriodicityId(custserv.getPeriodicityId());
 				task.setIsActive(1);
 
-				task.setMngrBudHr(custserv.getActvManBudgHr());
+				task.setMngrBudHr(String.valueOf(custserv.getActvManBudgHr()));
 				task.setServId(actv.getServId());
 				task.setTaskCode("NA");
 				task.setTaskEmpIds("0");
@@ -305,7 +305,7 @@ public class TaskApiController {
 				task.setActvId(custserv.getActvId());
 				task.setCustId(custserv.getCustId());
 				task.setDelStatus(1);
-				task.setEmpBudHr(custserv.getActvEmpBudgHr());
+				task.setEmpBudHr(String.valueOf(custserv.getActvEmpBudgHr()));
 				task.setExInt1(1);
 				task.setExInt2(1);
 				task.setExVar1("NA");
@@ -313,7 +313,7 @@ public class TaskApiController {
 				task.setMappingId(0);
 				task.setPeriodicityId(custserv.getPeriodicityId());
 				task.setIsActive(1);
-				task.setMngrBudHr(custserv.getActvManBudgHr());
+				task.setMngrBudHr(String.valueOf(custserv.getActvManBudgHr()));
 				task.setServId(custserv.getExInt1());
 				task.setTaskCode("NA");
 				task.setTaskEmpIds(custserv.getExVar1());
@@ -486,6 +486,18 @@ public class TaskApiController {
 	}
 	
 	
+	
+	@RequestMapping(value = {"/getTaskByTaskIdForEdit1"}, method = RequestMethod.POST)
+	public @ResponseBody  Task getTaskByTaskIdForEdit(@RequestParam int taskId) {
+		Task empList = new Task();
+		try {
+			empList = taskRepo.findByTaskId(taskId);
+		}catch (Exception e) {
+			System.err.println("Exce in getServiceById" + e.getMessage());
+		}
+		return empList;
+	}
+	
 	@Autowired EmployeeMasterRepo empRepo;
 	
 	@RequestMapping(value = {"/getEmpByEmpTypeId"}, method = RequestMethod.POST)
@@ -551,6 +563,56 @@ public class TaskApiController {
 		return yrList;
 	}
 	 
+	
+	
+	@RequestMapping(value = { "/updateEditTsk" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam String empHr,@RequestParam String mngHr,@RequestParam String dueDate,@RequestParam String workDate, @RequestParam String empId,int updateUserName,String updateDateTime) {
+
+		Info info = new Info();
+		String  endDate = DateConvertor.convertToYMD(workDate);
+		String  dueDateq = DateConvertor.convertToYMD(dueDate);
+	 
+		
+		try {
+			int res = taskRepo.updateEditTask(taskId,empHr,mngHr,endDate,dueDateq,empId,updateUserName,updateDateTime);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+				
+			 
+					Communication comcat=new Communication();
+					comcat.setCommunText("Task Updated");
+					comcat.setDelStatus(1);
+					comcat.setEmpId(updateUserName);
+					comcat.setExInt1(1);
+					comcat.setExInt2(1);
+					comcat.setExVar1("NA");
+					comcat.setExVar2("NA");
+					comcat.setTypeId(2);
+					comcat.setRemark("NA");
+					comcat.setTaskId(taskId);
+					comcat.setUpdateDatetime(updateDateTime);
+					comcat.setUpdateUser(updateUserName);
+					Communication save = communicationRepo.saveAndFlush(comcat);
+					 
+			 
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in updateTaskByTaskId  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+		
+		return info;
+	}
 	
 
 }

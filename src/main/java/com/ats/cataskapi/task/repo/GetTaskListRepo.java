@@ -29,7 +29,17 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
 			"    m_services.serv_name,\n" + 
-			"    m_cust_header.cust_firm_name,\n" + 
+			"    CASE \n" + 
+			"            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name        \n" + 
+			"            ELSE COALESCE(( SELECT\n" + 
+			"                m_cust_group.cust_group_name \n" + 
+			"            FROM\n" + 
+			"                m_cust_group \n" + 
+			"            WHERE\n" + 
+			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id        \n" + 
+			"                AND m_cust_group.del_status=1 ),\n" + 
+			"            0) \n" + 
+			"        END AS cust_firm_name,\n" + 
 			"    dm_fin_year.fin_year_name\n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
@@ -106,7 +116,17 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
 			"    m_services.serv_name,\n" + 
-			"    m_cust_header.cust_firm_name,\n" + 
+			"  CASE \n" + 
+			"            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name        \n" + 
+			"            ELSE COALESCE(( SELECT\n" + 
+			"                m_cust_group.cust_group_name \n" + 
+			"            FROM\n" + 
+			"                m_cust_group \n" + 
+			"            WHERE\n" + 
+			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id        \n" + 
+			"                AND m_cust_group.del_status=1 ),\n" + 
+			"            0) \n" + 
+			"        END AS cust_firm_name,\n" + 
 			"    dm_fin_year.fin_year_name\n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
@@ -143,7 +163,17 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
 			"    m_services.serv_name,\n" + 
-			"    m_cust_header.cust_firm_name,\n" + 
+			"   CASE \n" + 
+			"            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name        \n" + 
+			"            ELSE COALESCE(( SELECT\n" + 
+			"                m_cust_group.cust_group_name \n" + 
+			"            FROM\n" + 
+			"                m_cust_group \n" + 
+			"            WHERE\n" + 
+			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id        \n" + 
+			"                AND m_cust_group.del_status=1 ),\n" + 
+			"            0) \n" + 
+			"        END AS cust_firm_name,\n" + 
 			"    dm_fin_year.fin_year_name\n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
@@ -180,7 +210,17 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
 			"    m_services.serv_name,\n" + 
-			"    m_cust_header.cust_firm_name,\n" + 
+			"   CASE \n" + 
+			"            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name        \n" + 
+			"            ELSE COALESCE(( SELECT\n" + 
+			"                m_cust_group.cust_group_name \n" + 
+			"            FROM\n" + 
+			"                m_cust_group \n" + 
+			"            WHERE\n" + 
+			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id        \n" + 
+			"                AND m_cust_group.del_status=1 ),\n" + 
+			"            0) \n" + 
+			"        END AS cust_firm_name,\n" + 
 			"    dm_fin_year.fin_year_name\n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
@@ -217,7 +257,17 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
 			"    m_services.serv_name,\n" + 
-			"    m_cust_header.cust_firm_name,\n" + 
+			"   CASE \n" + 
+			"            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name        \n" + 
+			"            ELSE COALESCE(( SELECT\n" + 
+			"                m_cust_group.cust_group_name \n" + 
+			"            FROM\n" + 
+			"                m_cust_group \n" + 
+			"            WHERE\n" + 
+			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id        \n" + 
+			"                AND m_cust_group.del_status=1 ),\n" + 
+			"            0) \n" + 
+			"        END AS cust_firm_name,\n" + 
 			"    dm_fin_year.fin_year_name\n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
@@ -254,7 +304,17 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
 			"    m_services.serv_name,\n" + 
-			"    m_cust_header.cust_firm_name,\n" + 
+			"   CASE \n" + 
+			"            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name        \n" + 
+			"            ELSE COALESCE(( SELECT\n" + 
+			"                m_cust_group.cust_group_name \n" + 
+			"            FROM\n" + 
+			"                m_cust_group \n" + 
+			"            WHERE\n" + 
+			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id        \n" + 
+			"                AND m_cust_group.del_status=1 ),\n" + 
+			"            0) \n" + 
+			"        END AS cust_firm_name,\n" + 
 			"    dm_fin_year.fin_year_name\n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
