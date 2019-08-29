@@ -28,12 +28,14 @@ import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.FinancialYear;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
+import com.ats.cataskapi.model.TaskListHome;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.CustmrActivityMapRepo;
 import com.ats.cataskapi.repositories.DevPeriodicityMasterRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 import com.ats.cataskapi.repositories.FinancialYearRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
+import com.ats.cataskapi.repositories.TaskListHomeRepo;
 import com.ats.cataskapi.task.model.GetTaskList;
 import com.ats.cataskapi.task.model.Task;
 import com.ats.cataskapi.task.repo.GetTaskListRepo;
@@ -612,6 +614,134 @@ public class TaskApiController {
 		}
 		
 		return info;
+	}
+	
+	@RequestMapping(value = { "/updateStatusByTaskId" }, method = RequestMethod.POST)
+	public Info updateStatusByTaskId(@RequestParam int statusVal, @RequestParam int taskId) {
+		Info info = new Info();
+		try {
+			int res = taskRepo.updateStatus(taskId, statusVal);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		}catch (Exception e) {
+			System.err.println("Exce in updateStatusByTaskId  " + e.getMessage());
+		}
+		return info;
+		
+	}
+	/********************************System Generated Status********************************/
+	
+	@Autowired TaskListHomeRepo taskListRepo;
+	
+	@RequestMapping(value = {"/getTaskAlloted"}, method = RequestMethod.GET)	
+	public @ResponseBody List<TaskListHome> getTaskAlloted() {
+		List<TaskListHome> taskList = null;
+		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getAllotedTaskList();			
+
+		}catch (Exception e) {
+			System.err.println("Exce in getTaskAlloted  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
+	
+	
+	@RequestMapping(value = {"/getFilteredTaskUnalloted"}, method = RequestMethod.POST)	
+	public @ResponseBody List<TaskListHome> getFilteredTaskUnalloted(@RequestParam int service, @RequestParam int activity, @RequestParam int custId) {
+		List<TaskListHome> taskList = null;
+		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getUnallotedFilterdTaskList(service, activity, custId);			
+
+		}catch (Exception e) {
+			System.err.println("Exce in getTaskAlloted  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
+	
+	@RequestMapping(value = {"/getCriticalTask"}, method = RequestMethod.GET)	
+	public @ResponseBody List<TaskListHome> getCriticalTask() {
+		List<TaskListHome> taskList = null;
+		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getCriticalTaskTaskList();			
+
+		}catch (Exception e) {
+			System.err.println("Exce in getCriticalTask  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
+
+	@RequestMapping(value = {"/getFilteredCriticalTask"}, method = RequestMethod.POST)	
+	public @ResponseBody List<TaskListHome> getFilteredCriticalTask(@RequestParam int service, @RequestParam int activity, @RequestParam int custId) {
+		List<TaskListHome> taskList = null;
+		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getCriticalFilterdTaskList(service, activity, custId);			
+
+		}catch (Exception e) {
+			System.err.println("Exce in getFilteredCriticalTask  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
+	
+	@RequestMapping(value = {"/getOverdueTask"}, method = RequestMethod.GET)	
+	public @ResponseBody List<TaskListHome> getOverdueTask() {
+		List<TaskListHome> taskList = null;
+		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getOverdueTaskTaskList();			
+
+		}catch (Exception e) {
+			System.err.println("Exce in getOverdueTask  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
+	
+	@RequestMapping(value = {"/getFilteredOverdueTask"}, method = RequestMethod.POST)	
+	public @ResponseBody List<TaskListHome> getFilteredOverdueTask(@RequestParam int service, @RequestParam int activity, @RequestParam int custId) {
+		List<TaskListHome> taskList = null;
+		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getFiltredOverdueTaskTaskList(service, activity, custId);			
+
+		}catch (Exception e) {
+			System.err.println("Exce in getFilteredOverdueTask  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
 	}
 	
 
