@@ -57,6 +57,9 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 			"    m_emp.emp_mob =:inputValue OR m_emp.emp_email =:inputValue AND m_emp.is_active = 1 AND m_emp.del_status = 1", nativeQuery = true)
 	EmployeeMaster findUserByEmailOrContactNumber(String inputValue);
 	
-	
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE m_emp SET emp_pass=:password ,ex_int1=1 WHERE emp_id=:userId ", nativeQuery = true)
+	int chagePass(@Param("password") String password, @Param("userId") int userId);
 
 }

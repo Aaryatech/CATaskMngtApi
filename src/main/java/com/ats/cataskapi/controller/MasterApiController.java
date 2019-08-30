@@ -1002,4 +1002,31 @@ public class MasterApiController {
 		return period;
 	}
 	
+	/***********************Change Password*****************/
+	@RequestMapping(value = { "/changePass" }, method = RequestMethod.POST)
+	public @ResponseBody Info changePass(@RequestParam String password, @RequestParam int userId) {
+		Info info = new Info();
+		try {
+			int res = empRepo.chagePass(password, userId);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in changePass" + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+
+		return info;
+
+	}
 }
