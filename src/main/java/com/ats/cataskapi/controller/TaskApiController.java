@@ -2,6 +2,8 @@ package com.ats.cataskapi.controller;
 
 import java.text.DateFormat;
 
+
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.cataskapi.common.DateConvertor;
 import com.ats.cataskapi.common.DateValues;
+import com.ats.cataskapi.common.EmailUtility;
 import com.ats.cataskapi.common.PeriodicityDates;
 import com.ats.cataskapi.communication.Repo.CommunicationRepo;
 import com.ats.cataskapi.communication.model.Communication;
@@ -42,7 +45,7 @@ import com.ats.cataskapi.task.model.GetTaskList;
 import com.ats.cataskapi.task.model.Task;
 import com.ats.cataskapi.task.repo.GetTaskListRepo;
 import com.ats.cataskapi.task.repo.TaskRepo;
-  
+ 
 import ch.qos.logback.classic.pattern.DateConverter;
 
 @RestController
@@ -733,6 +736,47 @@ public class TaskApiController {
 		return taskList;
 	
 	}
+	
+	//*********************forget Password*************************************
+	
+	 
+	
+	
+	@RequestMapping(value = { "/checkUserName" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateTaskByTaskId(@RequestParam String inputValue) {
+
+		Info info = new Info();
+		 
+		EmployeeMaster res=new EmployeeMaster();
+		try {
+			  res = empRepo.findUserByEmailOrContactNumber(inputValue);
+
+			if (res!=null) {
+				info.setError(false);
+				info.setMsg("success");
+				
+				Info emailRes = EmailUtility.sendEmail("atsinfosoft@gmail.com", "atsinfosoft@123", res.getEmpEmail(), " CA Task Management Password Recovery",
+						res.getEmpEmail(), res.getEmpPass());
+				
+				
+				Info msgRes=EmailUtility.sendMsg(res.getEmpName(),  res.getEmpPass(), res.getEmpMob());
+				 
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in updateTaskByTaskId  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+		
+		return info;
+	}
+	
 	
 
 }

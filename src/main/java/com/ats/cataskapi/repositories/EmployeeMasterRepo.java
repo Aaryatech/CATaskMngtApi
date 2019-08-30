@@ -47,5 +47,16 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 			+ "e.ex_int2,\n"
 			+ "e.ex_var1,coalesce((select r.role_name from m_assign_role r where r.role_id=e.emp_role_id),'Not Assigned') as ex_var2 from m_emp e where e.del_status=1 order by emp_role_id,e.emp_name", nativeQuery = true)
 	List<EmployeeMaster> getAllEmployeesWithRoleName();
+	
+	
+	@Query(value = "SELECT\n" + 
+			"    *\n" + 
+			"FROM\n" + 
+			"    `m_emp`\n" + 
+			"WHERE\n" + 
+			"    m_emp.emp_mob =:inputValue OR m_emp.emp_email =:inputValue AND m_emp.is_active = 1 AND m_emp.del_status = 1", nativeQuery = true)
+	EmployeeMaster findUserByEmailOrContactNumber(String inputValue);
+	
+	
 
 }
