@@ -758,8 +758,7 @@ public class TaskApiController {
 				Info emailRes = EmailUtility.sendEmail("atsinfosoft@gmail.com", "atsinfosoft@123", res.getEmpEmail(), " CA Task Management Password Recovery",
 						res.getEmpEmail(), res.getEmpPass());
 				
-				
-				Info msgRes=EmailUtility.sendMsg(res.getEmpName(),  res.getEmpPass(), res.getEmpMob());
+		 
 				 
 			} else {
 				info.setError(true);
