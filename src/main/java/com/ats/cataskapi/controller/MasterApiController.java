@@ -80,6 +80,17 @@ public class MasterApiController {
 		return servicsList;
 	}
 	
+	@RequestMapping(value = {"/getAllEnrolledServices"}, method = RequestMethod.GET)
+	public @ResponseBody List<ServiceMaster> getAllEnrolledServices() {
+		List<ServiceMaster> servicsList = new ArrayList<ServiceMaster>();
+		try {
+			servicsList = srvMstrRepo.findByDelStatusAndExInt1OrderByServIdDesc(1,1);
+		}catch(Exception e) {
+			System.err.println("Exce in getAllServices " + e.getMessage());
+		}
+		return servicsList;
+	}
+	
 	@RequestMapping(value = {"/getServiceById"}, method = RequestMethod.POST)
 	public @ResponseBody ServiceMaster getServiceById(@RequestParam int serviceId) {
 		ServiceMaster servc = null;
@@ -165,6 +176,17 @@ public class MasterApiController {
 			activitsList = actvtMstrRepo.findByServIdAndDelStatus(serviceId, 1);
 		}catch (Exception e) {
 			System.err.println("Exce in getAllActivitesByServiceId  " + e.getMessage());
+		}
+		return activitsList;
+	}
+	
+	@RequestMapping(value = {"/getAllEnrolledActivitesByServiceId"}, method = RequestMethod.POST)
+	public @ResponseBody List<ActivityMaster>  getAllEnrolledActivitesByServiceId(@RequestParam int serviceId){
+		List<ActivityMaster> activitsList = new ArrayList<ActivityMaster>(); 
+		try {
+			activitsList = actvtMstrRepo.findByServIdAndDelStatusAndExInt1(serviceId, 1, 1);
+		}catch (Exception e) {
+			System.err.println("Exce in getAllEnrolledActivitesByServiceId  " + e.getMessage());
 		}
 		return activitsList;
 	}

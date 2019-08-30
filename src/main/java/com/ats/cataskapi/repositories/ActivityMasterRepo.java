@@ -16,6 +16,8 @@ public interface ActivityMasterRepo extends JpaRepository<ActivityMaster, Intege
 	List<ActivityMaster> findByDelStatus(int del);
 
 	List<ActivityMaster> findByServIdAndDelStatus(int serviceid, int del);
+	
+	List<ActivityMaster> findByServIdAndDelStatusAndExInt1(int serviceid, int del, int enrol);
 
 	ActivityMaster findByActiIdAndDelStatus(int activityId, int i);
 

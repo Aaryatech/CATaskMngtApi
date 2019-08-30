@@ -14,6 +14,8 @@ import com.ats.cataskapi.model.ServiceMaster;
 public interface ServiceMasterRepo extends JpaRepository<ServiceMaster, Integer> {
 
 	List<ServiceMaster> findByDelStatusOrderByServIdDesc(int del);
+	
+	List<ServiceMaster> findByDelStatusAndExInt1OrderByServIdDesc(int del, int enrol);
 
 	ServiceMaster findByServIdAndDelStatus(int serviceId, int del);
 
