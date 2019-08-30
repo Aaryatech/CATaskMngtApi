@@ -368,7 +368,7 @@ public class TaskApiController {
 		return inf;
 	}
 	/*************************Update Task*************************/
-	@RequestMapping(value = { "/updateTaskByTaskId" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "/updateStatusByTaskId" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal ) {
 
 		Info info = new Info();
@@ -386,7 +386,7 @@ public class TaskApiController {
 			}
 		} catch (Exception e) {
 
-			System.err.println("Exce in updateTaskByTaskId  " + e.getMessage());
+			System.err.println("Exce in updateStatusByTaskId  " + e.getMessage());
 			e.printStackTrace();
 			info.setError(true);
 			info.setMsg("excep");
