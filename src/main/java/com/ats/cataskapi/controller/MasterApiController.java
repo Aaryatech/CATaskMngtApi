@@ -80,6 +80,7 @@ public class MasterApiController {
 		return servicsList;
 	}
 	
+	//to get services with delStatus=1 and is_active=1
 	@RequestMapping(value = {"/getAllEnrolledServices"}, method = RequestMethod.GET)
 	public @ResponseBody List<ServiceMaster> getAllEnrolledServices() {
 		List<ServiceMaster> servicsList = new ArrayList<ServiceMaster>();

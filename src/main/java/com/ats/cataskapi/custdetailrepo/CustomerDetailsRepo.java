@@ -28,7 +28,7 @@ public interface CustomerDetailsRepo extends JpaRepository<CustomerDetails, Inte
 			"        m_cust_header,\n" + 
 			"        m_emp\n" + 
 			"    WHERE\n" + 
-			"        m_cust_header.del_status=1 \n" + 
+			"        m_cust_header.del_status=1  AND  m_cust_header.is_active=1 \n" + 
 			"        AND    m_cust_header.owner_emp_id=m_emp.emp_id \n" + 			
 			"    ORDER BY\n" + 
 			"        m_cust_header.cust_id DESC",nativeQuery=true)
@@ -63,8 +63,8 @@ public interface CustomerDetailsRepo extends JpaRepository<CustomerDetails, Inte
 			"        m_emp,\n" + 
 			"        m_cust_group  \n" + 
 			"    WHERE\n" + 
-			"    	m_cust_header.cust_id=:custId AND\n" + 
-			"        m_cust_header.del_status=1 AND\n" + 
+			"    	m_cust_header.cust_id=:custId AND  \n" + 
+			"        m_cust_header.del_status=1 AND  m_cust_header.is_active=1 AND\n" + 
 			"        m_cust_header.owner_emp_id=m_emp.emp_id AND\n" + 
 			"        m_cust_header.cust_group_id=m_cust_group.cust_group_id",nativeQuery=true)
 	CustomerDetails findByCustId(@Param("custId") int custId);
