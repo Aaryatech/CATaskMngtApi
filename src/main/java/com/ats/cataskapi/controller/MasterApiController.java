@@ -597,6 +597,20 @@ public class MasterApiController {
 		
 	}
 	
+	@RequestMapping(value = {"/getAllCustomerInfoActiveInactive"}, method = RequestMethod.GET)
+	public @ResponseBody List<CustomerDetails> getAllCustomerInfoActiveInactive(){
+		
+		List<CustomerDetails> custHeadList = new ArrayList<CustomerDetails>();
+		try {
+			custHeadList = custDetlRepo.getAllCustomerDetailsActiveInactive();
+		}catch (Exception e) {
+			System.err.println("Exce in getAllCustomerInfo  " + e.getMessage());
+		}
+		
+		return custHeadList;
+		
+	}
+	
 	@RequestMapping(value = {"/getcustById"}, method=RequestMethod.POST)
 	public @ResponseBody CustomerDetails getcustById(@RequestParam int custId) {
 		CustomerDetails custDetl = null;
