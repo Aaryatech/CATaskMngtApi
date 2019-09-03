@@ -14,6 +14,11 @@ import com.ats.cataskapi.model.EmployeeMaster;
 public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Integer> {
 
 	List<EmployeeMaster> findAllByDelStatusAndIsActiveOrderByEmpIdDesc(int del,int isActive);
+	List<EmployeeMaster> findAllByDelStatusOrderByEmpIdDesc(int del);
+	
+	
+	
+	
 
 	EmployeeMaster findByEmpIdAndDelStatus(int empId, int del);
 

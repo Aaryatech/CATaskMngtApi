@@ -194,22 +194,6 @@ public class PeriodicityDates {
 							|| c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 2) {
 						//System.err.println("Half Yearly   " + dddate.format(j));
 						arryadate.add(dddate.format(j));
-						DateValues dv = new DateValues();
-						dv.setDate(c.getTime());
-						String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
-						int a=Integer.parseInt(result[1])+1;
-						
- 						String n = "FY ".concat(result[1]).concat("-").concat(String.valueOf(a));
-						//System.err.println("Final String is" + n);
-
-						dv.setValue(n);
-						dateList.add(dv);
-
-					}
-				} else {
-					if (c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 2) {
-						//System.out.println("Hello  Yearly   " + dddate.format(j));
-						arryadate.add(dddate.format(j));
 						String text=null;
 
 						if(c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH) == 8) {
@@ -222,7 +206,31 @@ public class PeriodicityDates {
 						dv.setDate(c.getTime());
 						String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
 						int a=Integer.parseInt(result[1])+1;
-						String n = "text".concat(result[1]).concat("-").concat(String.valueOf(a));
+						String n = text.concat(result[1]).concat("-").concat(String.valueOf(a));
+						dv.setValue(n);
+						dateList.add(dv);
+						//System.err.println("Final String is" + n);
+
+						
+
+					}
+				} else {
+					if (c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 2) {
+						//System.out.println("Hello  Yearly   " + dddate.format(j));
+						arryadate.add(dddate.format(j));
+						
+						
+						DateValues dv = new DateValues();
+						dv.setDate(c.getTime());
+						//String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0")[1];
+						String myString= String.valueOf(c.get(Calendar.YEAR));
+								myString = myString.substring(myString.indexOf('0')+1);
+ 						int a=Integer.parseInt(myString)+1;
+						//System.err.println("Final calender is" +c.get(Calendar.YEAR));
+
+ 						String n = "FY ".concat(myString).concat("-").concat(String.valueOf(a));
+						//System.err.println("Final String is" + n);
+
 						dv.setValue(n);
 						dateList.add(dv);
 

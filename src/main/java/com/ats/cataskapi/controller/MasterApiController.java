@@ -313,6 +313,21 @@ public class MasterApiController {
 		
 	}
 	
+	
+	@RequestMapping(value = {"/getAllEmployeesActiveInactive"}, method = RequestMethod.GET)
+	public @ResponseBody List<EmployeeMaster> getAllEmployeesActiveInactive(){
+		
+		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
+		try {
+			empList = empRepo.findAllByDelStatusOrderByEmpIdDesc(1);
+		}catch (Exception e) {
+			System.err.println("Exce in getAllEmployees  " + e.getMessage());
+		}
+		
+		return empList;
+		
+	}
+	
 	@RequestMapping(value = {"/getAllEmployeesWithRoleName"}, method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeMaster> getAllEmployeesWithRoleName(){
 		

@@ -97,7 +97,7 @@ public class TaskApiController {
 	
 	@RequestMapping(value = { "/saveTask1" }, method = RequestMethod.POST)
 	public @ResponseBody List<Task> saveCustSignatory(@RequestBody CustmrActivityMap custserv) {
-
+		taskTempList=new ArrayList<Task>();
 		Date date = Calendar.getInstance().getTime();
 		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
@@ -170,7 +170,7 @@ public class TaskApiController {
 				task.setTaskCode("NA");
 				task.setTaskEmpIds("0");
 				task.setTaskFyId(fin.getFinYearId());
-				task.setTaskEndDate(dateFormat.format(date));
+				//task.setTaskEndDate(dateFormat.format(date));
 				task.setTaskStatus(0);
 				task.setTaskSubline("NA");
 				task.setTaskText(String.valueOf(sb1));
