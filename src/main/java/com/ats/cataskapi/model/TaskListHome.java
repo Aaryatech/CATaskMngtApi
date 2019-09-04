@@ -34,7 +34,17 @@ public class TaskListHome {
 	private String exVar2;
 	private String employees;	
 	
+	private String ownerPartner;
 	
+	
+	
+	
+	public String getOwnerPartner() {
+		return ownerPartner;
+	}
+	public void setOwnerPartner(String ownerPartner) {
+		this.ownerPartner = ownerPartner;
+	}
 	public String getEmployees() {
 		return employees;
 	}
@@ -182,8 +192,9 @@ public class TaskListHome {
 				+ ", empId=" + empId + ", servName=" + servName + ", actiName=" + actiName + ", periodicityName="
 				+ periodicityName + ", custGroupName=" + custGroupName + ", finYearName=" + finYearName
 				+ ", taskStatus=" + taskStatus + ", statusColor=" + statusColor + ", exInt1=" + exInt1 + ", exVar1="
-				+ exVar1 + ", exInt2=" + exInt2 + ", exVar2=" + exVar2 + ", employees=" + employees + "]";
+				+ exVar1 + ", exInt2=" + exInt2 + ", exVar2=" + exVar2 + ", employees=" + employees + ", ownerPartner="
+				+ ownerPartner + "]";
 	}
-	
+	  
 	
 }

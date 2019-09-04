@@ -11,63 +11,69 @@ import com.ats.cataskapi.model.TaskListHome;
 public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 
 	@Query(value="SELECT\n" + 
-			"        t_tasks.task_id,\n" + 
-			"        t_tasks.task_text,\n" + 
-			"        t_tasks.task_start_date,\n" + 
-			"        t_tasks.task_end_date,\n" + 
-			"        t_tasks.task_statutory_due_date,\n" + 
-			"        t_tasks.mngr_bud_hr,\n" + 
-			"        t_tasks.emp_bud_hr,\n" + 
-			"        t_tasks.task_emp_ids,\n" +			
-			"        t_tasks.ex_int1,\n" +
-			"        t_tasks.ex_int2,\n" +
-			"        t_tasks.ex_var1,\n" +
-			"        t_tasks.ex_var2,\n" +
-			"        dm_status_mst.status_text AS task_status, dm_status_mst.status_color,\n" + 
-			"        m_emp.emp_name,\n" + 
-			"        m_emp.emp_id,\n" + 
-			"        m_services.serv_name,\n" + 
-			"        m_activities.acti_name,\n" + 
-			"        dm_periodicity.periodicity_name,\n" + 
-			"        CASE \n" + 
-			"            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name         \n" + 
-			"            ELSE COALESCE(( SELECT\n" + 
-			"                m_cust_group.cust_group_name                               \n" + 
-			"            FROM\n" + 
-			"                m_cust_group                              \n" + 
-			"            WHERE\n" + 
-			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id            \n" + 
-			"                AND m_cust_group.del_status=1 ),\n" + 
-			"            0) \n" + 
-			"        END AS cust_group_name,\n" + 
-			"        dm_fin_year.fin_year_name,\n" + 
-			"		   (SELECT   GROUP_CONCAT(DISTINCT c.emp_name) \n" + 
-			"        	 FROM t_tasks i, \n" + 
-			"         		m_emp c \n" + 
-			"			WHERE FIND_IN_SET(c.emp_id, task_emp_ids) AND\n" + 
-			"         		i.task_id=t_tasks.task_id) as employees	"+				
+			"    t_tasks.task_id,\n" + 
+			"    t_tasks.task_text,\n" + 
+			"    t_tasks.task_start_date,\n" + 
+			"    t_tasks.task_end_date,\n" + 
+			"    t_tasks.task_statutory_due_date,\n" + 
+			"    t_tasks.mngr_bud_hr,\n" + 
+			"    t_tasks.emp_bud_hr,\n" + 
+			"    t_tasks.task_emp_ids,\n" + 
+			"    t_tasks.ex_int1,\n" + 
+			"    t_tasks.ex_int2,\n" + 
+			"    t_tasks.ex_var1,\n" + 
+			"    t_tasks.ex_var2,\n" + 
+			"    dm_status_mst.status_text AS task_status,\n" + 
+			"    dm_status_mst.status_color,\n" + 
+			"    m_emp.emp_name,\n" + 
+			"    m_emp.emp_id,\n" + 
+			"    m_services.serv_name,\n" + 
+			"    m_activities.acti_name,\n" + 
+			"    dm_periodicity.periodicity_name,\n" + 
+			"    CASE WHEN m_cust_header.cust_group_id = 0 THEN m_cust_header.cust_firm_name ELSE COALESCE(\n" + 
+			"        (\n" + 
+			"        SELECT\n" + 
+			"            m_cust_group.cust_group_name\n" + 
+			"        FROM\n" + 
+			"            m_cust_group\n" + 
+			"        WHERE\n" + 
+			"            m_cust_group.cust_group_id = m_cust_header.cust_group_id AND m_cust_group.del_status = 1\n" + 
+			"    ),\n" + 
+			"    0\n" + 
+			"    )\n" + 
+			"END AS cust_group_name,\n" + 
+			"dm_fin_year.fin_year_name,\n" + 
+			"(\n" + 
+			"    SELECT\n" + 
+			"        GROUP_CONCAT(DISTINCT c.emp_name)\n" + 
 			"    FROM\n" + 
-			"        t_tasks,\n" + 
-			"        m_emp,\n" + 
-			"        m_services,\n" + 
-			"        m_activities,\n" + 
-			"        dm_periodicity,\n" + 
-			"        m_cust_header,\n" + 
-			"        dm_fin_year,\n" + 
-			"        dm_status_mst\n" + 
+			"        t_tasks i,\n" + 
+			"        m_emp c\n" + 
 			"    WHERE\n" + 
-			"        t_tasks.del_status=1                   \n" + 
-			"        AND         m_services.ex_int1=1                            \n" + 
-			"        AND         m_activities.ex_int1=1                            \n" + 
-			"        AND         m_emp.emp_id=:empId                   \n" + 
-			"        AND     	 FIND_IN_SET(:empId,t_tasks.task_emp_ids)                   \n" + 
-			"        AND         t_tasks.actv_id=m_activities.acti_id                   \n" + 
-			"        AND         t_tasks.serv_id=m_services.serv_id                   \n" + 
-			"        AND         m_activities.periodicity_id=dm_periodicity.periodicity_id               \n" + 
-			"        AND         t_tasks.cust_id=m_cust_header.cust_id               \n" + 
-			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id\n" + 
-			"        AND		 dm_status_mst.status_value=t_tasks.task_status\n"+
-			"  		 AND		 t_tasks.task_status NOT IN (:statusIds)", nativeQuery=true)
+			"        FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id = t_tasks.task_id\n" + 
+			") AS employees,COALESCE(\n" + 
+			"    (\n" + 
+			"    SELECT\n" + 
+			"        m_emp.emp_name\n" + 
+			"        from m_emp\n" + 
+			"   \n" + 
+			"    WHERE  \n" + 
+			"        m_cust_header.owner_emp_id = m_emp.emp_id\n" + 
+			"),\n" + 
+			" 'NA' \n" + 
+			") AS owner_partner\n" + 
+			"\n" + 
+			"FROM\n" + 
+			"    t_tasks,\n" + 
+			"    m_emp,\n" + 
+			"    m_services,\n" + 
+			"    m_activities,\n" + 
+			"    dm_periodicity,\n" + 
+			"    m_cust_header,\n" + 
+			"    dm_fin_year,\n" + 
+			"    dm_status_mst\n" + 
+			"WHERE\n" + 
+			"    t_tasks.del_status = 1 AND m_services.ex_int1 = 1 AND m_activities.ex_int1 = 1 AND m_emp.emp_id =:empId AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) AND t_tasks.actv_id = m_activities.acti_id AND t_tasks.serv_id = m_services.serv_id AND m_activities.periodicity_id = dm_periodicity.periodicity_id AND t_tasks.cust_id = m_cust_header.cust_id AND dm_fin_year.fin_year_id = t_tasks.task_fy_id AND dm_status_mst.status_value = t_tasks.task_status AND t_tasks.task_status NOT IN(:statusIds)", nativeQuery=true)
 	List<TaskListHome> getTaskList(@Param("empId") int empId,@Param("statusIds") List<String> statusIds);
 
 	/**************************************************************************/
@@ -200,7 +206,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"            m_emp c     \n" + 
 			"        WHERE\n" + 
 			"            FIND_IN_SET(c.emp_id, task_emp_ids) \n" + 
-			"            AND            i.task_id=t_tasks.task_id) as employees     \n" + 
+			"            AND            i.task_id=t_tasks.task_id) as employees  ,'NA'  as owner_partner   \n" + 
 			"       \n" + 
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
@@ -261,7 +267,18 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"                AND m_cust_group.del_status=1 ),\n" + 
 			"            0)          \n" + 
 			"        END AS cust_group_name,\n" + 
-			"        dm_fin_year.fin_year_name, '' as employees                  \n" + 
+			"        dm_fin_year.fin_year_name, '' as employees   ,COALESCE(\n" + 
+			"    (\n" + 
+			"    SELECT\n" + 
+			"        m_emp.emp_name\n" + 
+			"        from m_emp\n" + 
+			"   \n" + 
+			"    WHERE  \n" + 
+			"        m_cust_header.owner_emp_id = m_emp.emp_id\n" + 
+			"),\n" + 
+			"'NA'\n" + 
+			") AS owner_partner \n" + 
+			"            \n" + 
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        m_emp,\n" + 
@@ -326,7 +343,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"            m_emp c     \n" + 
 			"        WHERE\n" + 
 			"            FIND_IN_SET(c.emp_id, task_emp_ids) \n" + 
-			"            AND            i.task_id=t_tasks.task_id) as employees     \n" + 
+			"            AND            i.task_id=t_tasks.task_id) as employees  ,'NA'  as owner_partner    \n" + 
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        \n" + 
@@ -394,7 +411,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"            m_emp c     \n" + 
 			"        WHERE\n" + 
 			"            FIND_IN_SET(c.emp_id, task_emp_ids) \n" + 
-			"            AND            i.task_id=t_tasks.task_id) as employees     \n" + 
+			"            AND            i.task_id=t_tasks.task_id) as employees ,'NA'  as owner_partner     \n" + 
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        \n" + 
@@ -458,7 +475,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"            m_emp c              \n" + 
 			"        WHERE\n" + 
 			"            FIND_IN_SET(c.emp_id, task_emp_ids)              \n" + 
-			"            AND            i.task_id=t_tasks.task_id) as employees          \n" + 
+			"            AND            i.task_id=t_tasks.task_id) as employees ,'NA'  as owner_partner          \n" + 
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        m_services,\n" + 
@@ -521,7 +538,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"            m_emp c              \n" + 
 			"        WHERE\n" + 
 			"            FIND_IN_SET(c.emp_id, task_emp_ids)              \n" + 
-			"            AND            i.task_id=t_tasks.task_id) as employees          \n" + 
+			"            AND            i.task_id=t_tasks.task_id) as employees ,'NA'  as owner_partner         \n" + 
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        m_services,\n" + 
@@ -587,7 +604,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"            m_emp c              \n" + 
 			"        WHERE\n" + 
 			"            FIND_IN_SET(c.emp_id, task_emp_ids)              \n" + 
-			"            AND            i.task_id=t_tasks.task_id) as employees          \n" + 
+			"            AND            i.task_id=t_tasks.task_id) as employees  ,'NA'  as owner_partner         \n" + 
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        m_services,\n" + 
@@ -649,7 +666,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"            m_emp c              \n" + 
 			"        WHERE\n" + 
 			"            FIND_IN_SET(c.emp_id, task_emp_ids)              \n" + 
-			"            AND            i.task_id=t_tasks.task_id) as employees          \n" + 
+			"            AND            i.task_id=t_tasks.task_id) as employees   ,'NA'   as owner_partner        \n" + 
 			"    FROM\n" + 
 			"        t_tasks,\n" + 
 			"        m_services,\n" + 
