@@ -40,7 +40,13 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"                AND m_cust_group.del_status=1 ),\n" + 
 			"            0) \n" + 
 			"        END AS cust_firm_name,\n" + 
-			"    dm_fin_year.fin_year_name\n" + 
+			"    dm_fin_year.fin_year_name,(SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id=t_tasks.task_id) AS employees\n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
 			"    m_activities,\n" + 
@@ -78,7 +84,13 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    m_activities.acti_name,\n" + 
 			"    m_services.serv_name,\n" + 
 			"    m_cust_header.cust_firm_name,\n" + 
-			"    dm_fin_year.fin_year_name\n" + 
+			"    dm_fin_year.fin_year_name,(SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id=t_tasks.task_id) AS employees \n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
 			"    m_activities,\n" + 
@@ -127,7 +139,13 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"                AND m_cust_group.del_status=1 ),\n" + 
 			"            0) \n" + 
 			"        END AS cust_firm_name,\n" + 
-			"    dm_fin_year.fin_year_name\n" + 
+			"    dm_fin_year.fin_year_name,(SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id=t_tasks.task_id) AS employees \n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
 			"    m_activities,\n" + 
@@ -174,7 +192,13 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"                AND m_cust_group.del_status=1 ),\n" + 
 			"            0) \n" + 
 			"        END AS cust_firm_name,\n" + 
-			"    dm_fin_year.fin_year_name\n" + 
+			"    dm_fin_year.fin_year_name,(SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id=t_tasks.task_id) AS employees \n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
 			"    m_activities,\n" + 
@@ -221,7 +245,13 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"                AND m_cust_group.del_status=1 ),\n" + 
 			"            0) \n" + 
 			"        END AS cust_firm_name,\n" + 
-			"    dm_fin_year.fin_year_name\n" + 
+			"    dm_fin_year.fin_year_name,(SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id=t_tasks.task_id) AS employees\n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
 			"    m_activities,\n" + 
@@ -268,7 +298,13 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"                AND m_cust_group.del_status=1 ),\n" + 
 			"            0) \n" + 
 			"        END AS cust_firm_name,\n" + 
-			"    dm_fin_year.fin_year_name\n" + 
+			"    dm_fin_year.fin_year_name,(SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id=t_tasks.task_id) AS employees\n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
 			"    m_activities,\n" + 
@@ -315,7 +351,13 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"                AND m_cust_group.del_status=1 ),\n" + 
 			"            0) \n" + 
 			"        END AS cust_firm_name,\n" + 
-			"    dm_fin_year.fin_year_name\n" + 
+			"    dm_fin_year.fin_year_name,(SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id=t_tasks.task_id) AS employees\n" + 
 			"FROM\n" + 
 			"    m_services,\n" + 
 			"    m_activities,\n" + 

@@ -40,10 +40,13 @@ public class GetTaskList {
 	private int actvId;
 
 	private int servId;
-
+	
+ 
 	private String periodicity_name;
 
 	private String actiName;
+	
+	private String  employees;	;
 
 	private String servName;
 
@@ -233,6 +236,16 @@ public class GetTaskList {
 		this.exInt1 = exInt1;
 	}
 
+	
+	 
+	public String getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(String employees) {
+		this.employees = employees;
+	}
+
 	@Override
 	public String toString() {
 		return "GetTaskList [taskId=" + taskId + ", taskCode=" + taskCode + ", mappingId=" + mappingId
@@ -240,10 +253,12 @@ public class GetTaskList {
 				+ ", taskStartDate=" + taskStartDate + ", taskEndDate=" + taskEndDate + ", taskStatutoryDueDate="
 				+ taskStatutoryDueDate + ", mngrBudHr=" + mngrBudHr + ", empBudHr=" + empBudHr + ", custId=" + custId
 				+ ", periodicityId=" + periodicityId + ", actvId=" + actvId + ", servId=" + servId
-				+ ", periodicity_name=" + periodicity_name + ", actiName=" + actiName + ", servName=" + servName
-				+ ", custFirmName=" + custFirmName + ", finYearName=" + finYearName + ", exVar1=" + exVar1 + ", exInt1="
-				+ exInt1 + "]";
+				+ ", periodicity_name=" + periodicity_name + ", actiName=" + actiName + ", employees=" + employees
+				+ ", servName=" + servName + ", custFirmName=" + custFirmName + ", finYearName=" + finYearName
+				+ ", exVar1=" + exVar1 + ", exInt1=" + exInt1 + "]";
 	}
 
+	 
+	 
 
 }
