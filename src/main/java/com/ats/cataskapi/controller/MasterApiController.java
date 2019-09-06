@@ -673,12 +673,12 @@ public class MasterApiController {
 	
 	
 	@RequestMapping(value = { "/deleteCustomerDetail" }, method = RequestMethod.POST)
-	public @ResponseBody Info deleteCustomerDetail(@RequestParam int custDetailId, @RequestParam int userId ) {
+	public @ResponseBody Info deleteCustomerDetail(@RequestParam int custDetId, @RequestParam int userId,@RequestParam String curDateTime ) {
 
 		Info info = new Info();
 		try
 		{
-			int res = custDetailRepo.deleteCustDetail(custDetailId, userId);
+			int res = custDetailRepo.deleteCustDetail(custDetId, userId,curDateTime);
 
 			if (res > 0) {
 				info.setError(false);

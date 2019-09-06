@@ -21,8 +21,8 @@ public interface CustomerDetailMasterRepo extends JpaRepository<CustomerDetailMa
 
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE  m_cust_detail SET del_status=0, update_username=:userId WHERE cust_detail_id=:custDetailId",nativeQuery=true)
-	int deleteCustDetail(@Param("custDetailId") int custDetailId, @Param("userId") int userId);
+	@Query(value="UPDATE  m_cust_detail SET del_status=0, update_username=:userId,update_datetime=:curDateTime WHERE cust_detail_id=:custDetId",nativeQuery=true)
+	int deleteCustDetail(@Param("custDetId") int custDetId, @Param("userId") int userId,@Param("curDateTime") String curDateTime);
 	
 	//UPDATE m_cust_detail SET del_status=0 WHERE cust_detail_id IN (:custDetailId) 
 }
