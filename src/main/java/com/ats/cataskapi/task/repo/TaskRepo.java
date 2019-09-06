@@ -21,18 +21,18 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 
 	@Transactional
 	@Modifying
-	@Query(value = "UPDATE t_tasks SET t_tasks.task_status=:statusVal WHERE t_tasks.task_id=:taskId", nativeQuery = true)
-	int updateStatus(@Param("taskId") int taskId, @Param("statusVal") int statusVal);
+	@Query(value = "UPDATE t_tasks SET t_tasks.task_status=:statusVal,update_username=:userId,update_datetime=:curDateTime WHERE t_tasks.task_id=:taskId", nativeQuery = true)
+	int updateStatus(@Param("taskId") int taskId, @Param("statusVal") int statusVal,@Param("userId") int userId, @Param("curDateTime") String curDateTime);
 
 	@Transactional
 	@Modifying
-	@Query(value = "UPDATE t_tasks SET t_tasks.del_status=0 WHERE t_tasks.task_id=:taskId", nativeQuery = true)
-	int updateStatus1(@Param("taskId") int taskId);
+	@Query(value = "UPDATE t_tasks SET t_tasks.del_status=0,,update_username=:userId,update_datetime=:curDateTime  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
+	int updateStatus1(@Param("taskId") int taskId,@Param("userId") int userId, @Param("curDateTime") String curDateTime);
 
 	@Transactional
 	@Modifying
-	@Query(value = "UPDATE t_tasks SET t_tasks.is_active=1 WHERE t_tasks.task_id=:taskId", nativeQuery = true)
-	int activateTask(@Param("taskId") int taskId);
+	@Query(value = "UPDATE t_tasks SET t_tasks.is_active=1,,update_username=:userId,update_datetime=:curDateTime  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
+	int activateTask(@Param("taskId") int taskId,@Param("userId") int userId, @Param("curDateTime") String curDateTime);
 
 	@Query(value = "select * from t_tasks where serv_id=:servId  and task_status not in (0,8,9)", nativeQuery = true)
 	List<Task> getTaskListForisactive(@Param("servId") int servId);
@@ -62,5 +62,11 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 	int editTask(int taskId, String items1, String empBudgetHr, String mgBudgetHr, String startDate1,
 			String curDateTime, String endDate1, int customer, int service, int periodicityId, int activity,
 			int userId);
+	
+	
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE t_tasks SET t_tasks.ex_int2=:statusVal,update_username=:userId,update_datetime=:curDateTime WHERE t_tasks.task_id=:taskId", nativeQuery = true)
+	int updateCompStatus(@Param("taskId") int taskId, @Param("statusVal") int statusVal,@Param("userId") int userId, @Param("curDateTime") String curDateTime);
 
 }

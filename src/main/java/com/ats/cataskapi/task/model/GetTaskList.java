@@ -56,6 +56,8 @@ public class GetTaskList {
 	private String exVar1;
 
 	private int exInt1;
+	
+	private int exInt2;
 
 	public int getTaskId() {
 		return taskId;
@@ -238,6 +240,14 @@ public class GetTaskList {
 
 	
 	 
+	public int getExInt2() {
+		return exInt2;
+	}
+
+	public void setExInt2(int exInt2) {
+		this.exInt2 = exInt2;
+	}
+
 	public String getEmployees() {
 		return employees;
 	}
@@ -255,8 +265,21 @@ public class GetTaskList {
 				+ ", periodicityId=" + periodicityId + ", actvId=" + actvId + ", servId=" + servId
 				+ ", periodicity_name=" + periodicity_name + ", actiName=" + actiName + ", employees=" + employees
 				+ ", servName=" + servName + ", custFirmName=" + custFirmName + ", finYearName=" + finYearName
-				+ ", exVar1=" + exVar1 + ", exInt1=" + exInt1 + "]";
+				+ ", exVar1=" + exVar1 + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", getTaskId()=" + getTaskId()
+				+ ", getTaskCode()=" + getTaskCode() + ", getMappingId()=" + getMappingId() + ", getTaskSubline()="
+				+ getTaskSubline() + ", getTaskFyId()=" + getTaskFyId() + ", getTaskText()=" + getTaskText()
+				+ ", getTaskStartDate()=" + getTaskStartDate() + ", getTaskEndDate()=" + getTaskEndDate()
+				+ ", getTaskStatutoryDueDate()=" + getTaskStatutoryDueDate() + ", getMngrBudHr()=" + getMngrBudHr()
+				+ ", getEmpBudHr()=" + getEmpBudHr() + ", getCustId()=" + getCustId() + ", getPeriodicityId()="
+				+ getPeriodicityId() + ", getActvId()=" + getActvId() + ", getServId()=" + getServId()
+				+ ", getPeriodicity_name()=" + getPeriodicity_name() + ", getActiName()=" + getActiName()
+				+ ", getServName()=" + getServName() + ", getCustFirmName()=" + getCustFirmName()
+				+ ", getFinYearName()=" + getFinYearName() + ", getExVar1()=" + getExVar1() + ", getExInt1()="
+				+ getExInt1() + ", getExInt2()=" + getExInt2() + ", getEmployees()=" + getEmployees() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
+
+	 
 
 	 
 	 

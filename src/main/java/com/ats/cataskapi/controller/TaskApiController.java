@@ -348,11 +348,11 @@ public class TaskApiController {
 
 	/************************* Update Task *************************/
 	@RequestMapping(value = { "/updateStatusByTaskId" }, method = RequestMethod.POST)
-	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal) {
+	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal, @RequestParam int userId,@RequestParam String curDateTime) {
 
 		Info info = new Info();
 		try {
-			int res = taskRepo.updateStatus(taskId, statusVal);
+			int res = taskRepo.updateStatus(taskId, statusVal,userId,curDateTime);
 
 			if (res > 0) {
 				info.setError(false);
@@ -375,7 +375,7 @@ public class TaskApiController {
 	}
 
 	@RequestMapping(value = { "/updateManualTaskByTaskId" }, method = RequestMethod.POST)
-	public @ResponseBody Info updateManualTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal) {
+	public @ResponseBody Info updateManualTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal,@RequestParam int userId, @RequestParam String curDateTime) {
 
 		Info info = new Info();
 		int res = 0;
@@ -383,15 +383,46 @@ public class TaskApiController {
 
 			if (statusVal == 1) {
 				// task approval by Manager
-				res = taskRepo.updateStatus(taskId, statusVal);
+				res = taskRepo.updateStatus(taskId, statusVal,userId,curDateTime);
 
 			} else if (statusVal == 0) {
 				// task disapproval by Manager
-				res = taskRepo.updateStatus1(taskId);
+				res = taskRepo.updateStatus1(taskId,userId,curDateTime);
 			} else if (statusVal == 2) {
 				// to activate inactive task
-				res = taskRepo.activateTask(taskId);
+				res = taskRepo.activateTask(taskId,userId,curDateTime);
 			}
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in updateTaskByTaskId  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+
+		return info;
+	}
+	
+	
+	@RequestMapping(value = { "/updateCompletedTaskByTaskId" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateCompletedTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal,@RequestParam String curDateTime, @RequestParam int userId) {
+
+		Info info = new Info();
+		int res = 0;
+		try {
+			// System.out.println("updateCompletedTaskByTaskId");
+ 				// task approval by Manager
+			res = taskRepo.updateCompStatus(taskId, statusVal,userId,curDateTime);
 
 			if (res > 0) {
 				info.setError(false);
@@ -439,6 +470,20 @@ public class TaskApiController {
 			int mapId = sk.getIntValue();
 
 			servicsList = getTaskListRepo.getAllManualTaskList(stat, empId, mapId);
+		} catch (Exception e) {
+			System.err.println("Exce in getAllTaskList " + e.getMessage());
+		}
+		return servicsList;
+	}
+	
+	
+	@RequestMapping(value = { "/getAllCompletedTaskList" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetTaskList> getAllCompletedTaskList(@RequestParam int stat, @RequestParam int empId) {
+		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
+		try {
+
+		 
+			servicsList = getTaskListRepo.getAllCompletedTaskList(stat, empId);
 		} catch (Exception e) {
 			System.err.println("Exce in getAllTaskList " + e.getMessage());
 		}
