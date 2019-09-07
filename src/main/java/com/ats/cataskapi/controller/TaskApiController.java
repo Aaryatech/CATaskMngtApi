@@ -41,6 +41,7 @@ import com.ats.cataskapi.repositories.SetttingKeyValueRepo;
 import com.ats.cataskapi.repositories.TaskListHomeRepo;
 import com.ats.cataskapi.task.model.GetTaskList;
 import com.ats.cataskapi.task.model.Task;
+import com.ats.cataskapi.task.model.TempTaskSave;
 import com.ats.cataskapi.task.repo.GetTaskListRepo;
 import com.ats.cataskapi.task.repo.TaskRepo;
 
@@ -85,138 +86,57 @@ public class TaskApiController {
 	@Autowired
 	CommunicationRepo communicationRepo;
 
-	List<Task> taskTempList = new ArrayList<Task>();
-	CustmrActivityMap cust = new CustmrActivityMap();
-
-	@RequestMapping(value = { "/saveTask1" }, method = RequestMethod.POST)
-	public @ResponseBody List<Task> saveCustSignatory(@RequestBody CustmrActivityMap custserv) {
-		taskTempList = new ArrayList<Task>();
-		Date date = Calendar.getInstance().getTime();
-		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
-		int perId = 0;
-
-		int totdays = 0;
-
-		cust = custserv;
-
-		ActivityMaster actv = new ActivityMaster();
-
-		actv = actvtMstrRepo.findByActiIdAndDelStatus(custserv.getActvId(), 1);
-
-		DevPeriodicityMaster period = new DevPeriodicityMaster();
-		period = devPeriodRepo.findByPeriodicityIdAndDelStatus(custserv.getPeriodicityId(), 1);
-
+	@RequestMapping(value = { "/getFinYearByStatdate" }, method = RequestMethod.POST)
+	public @ResponseBody FinancialYear getFinYearByStatdate(@RequestParam String statDate) {
+		FinancialYear fin = new FinancialYear();
 		try {
-			// cust = actMapRepo.saveAndFlush(custserv);
-			perId = custserv.getPeriodicityId();
 
-			String strDate = dateFormat.format(custserv.getActvStartDate());
-			// System.out.println("Converted String str: " + strDate);
-			String endDate = dateFormat.format(custserv.getActvEndDate());
-			// System.out.println("Converted String end: " + endDate);
-			// System.out.println("perId: " + perId);
-			List<DateValues> listDate = PeriodicityDates.getDates(strDate, endDate, perId);
-			totdays = listDate.size();
-
-			ServiceMaster servc = new ServiceMaster();
-
-			servc = srvMstrRepo.findByServIdAndDelStatus(actv.getServId(), 1);
-
-			for (int i = 0; i < listDate.size(); i++) {
-
-				Task task = new Task();
-				task.setTaskId(i);
-				Date date1 = listDate.get(i).getDate();
-
-				// System.out.println("date bef stat**" +dateFormat.format(date1));
-				task.setTaskStatutoryDueDate(
-						PeriodicityDates.addDaysToGivenDate(dateFormat.format(date1), custserv.getActvStatutoryDays()));
-
-				// System.out.println("stat date **" + task.getTaskStatutoryDueDate());
-				FinancialYear fin = new FinancialYear();
-				fin = financialYearRepo.getFinYearBetDate(String.valueOf(task.getTaskStatutoryDueDate()));
-
-				task.setTaskStartDate(PeriodicityDates.addDaysToGivenDate(task.getTaskStatutoryDueDate(), -30));
-
-				StringBuilder sb1 = new StringBuilder(servc.getServName());
-
-				sb1.append("-").append(actv.getActiName()).append("-").append(listDate.get(i).getValue());
-				// System.out.println("Fin task name" + sb1);
-				task.setTaskId(i);
-				task.setActvId(custserv.getActvId());
-				task.setCustId(custserv.getCustId());
-				task.setDelStatus(1);
-				task.setEmpBudHr(String.valueOf(custserv.getActvEmpBudgHr()));
-				task.setExInt1(1);
-				task.setExInt2(1);
-				task.setExVar1("NA");
-				task.setExVar2("NA");
-				task.setMappingId(custserv.getMappingId());
-				task.setPeriodicityId(custserv.getPeriodicityId());
-				task.setIsActive(1);
-
-				task.setMngrBudHr(String.valueOf(custserv.getActvManBudgHr()));
-				task.setServId(actv.getServId());
-				task.setTaskCode("NA");
-				task.setTaskEmpIds("0");
-				task.setTaskFyId(fin.getFinYearId());
-				// task.setTaskEndDate(dateFormat.format(date));
-				task.setTaskStatus(0);
-				task.setTaskSubline("NA");
-				task.setTaskText(String.valueOf(sb1));
-				task.setUpdateDatetime(dateFormat1.format(date));
-				task.setUpdateUsername(custserv.getUpdateUsername());
-				taskTempList.add(task);
-
-			}
-			System.out.println("Activity Map---------" + taskTempList.toString());
-
+			fin = financialYearRepo.getFinYearBetDate(statDate);
 		} catch (Exception e) {
-
-			System.err.println("Exce in saving saveTask " + e.getMessage());
-			e.printStackTrace();
-
+			System.err.println("Exce in getServiceById" + e.getMessage());
 		}
-		return taskTempList;
+		return fin;
 	}
+ 
 
+	 
 	@RequestMapping(value = { "/saveTaskRes" }, method = RequestMethod.POST)
-	public @ResponseBody Info saveTask(@RequestParam List<Integer> items) {
+	public @ResponseBody Info saveTask(@RequestBody TempTaskSave tsk) {
 		Info inf = new Info();
 		Date date = Calendar.getInstance().getTime();
 		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		CustmrActivityMap tempCust = new CustmrActivityMap();
-		Task serv = new Task();
+
 		try {
-			tempCust = actMapRepo.saveAndFlush(cust);
+			tempCust = actMapRepo.saveAndFlush(tsk.getCmpList());
+			Task serv = new Task();
 
-			for (int i = 0; i < items.size(); i++) {
-				for (int j = 0; j < taskTempList.size(); j++) {
+			for (int j = 0; j < tsk.getTskList().size(); j++) {
+				
+				tsk.getTskList().get(j).setTaskId(0);
+				
+ 				serv = taskRepo.saveAndFlush(tsk.getTskList().get(j));
 
-					if ((items.get(i)) == taskTempList.get(j).getTaskId()) {
+				if (serv != null) {
+					try {
+						Communication comcat = new Communication();
+						comcat.setCommunText("Task Created");
+						comcat.setDelStatus(1);
+						comcat.setEmpId(tempCust.getUpdateUsername());
+						comcat.setExInt1(1);
+						comcat.setExInt2(1);
+						comcat.setExVar1("NA");
+						comcat.setExVar2("NA");
+						comcat.setTypeId(2);
+						comcat.setRemark("NA");
+						comcat.setTaskId(serv.getTaskId());
+						comcat.setUpdateDatetime(dateFormat1.format(date));
+						comcat.setUpdateUser(tempCust.getUpdateUsername());
+						Communication save = communicationRepo.saveAndFlush(comcat);
+					} catch (Exception e) {
+						System.err.println("Exce in saving saveService " + e.getMessage());
+						e.printStackTrace();
 
-						taskTempList.get(j).setTaskId(0);
-
-						serv = taskRepo.saveAndFlush(taskTempList.get(j));
-
-						if (serv != null) {
-							Communication comcat = new Communication();
-							comcat.setCommunText("Task Created");
-							comcat.setDelStatus(1);
-							comcat.setEmpId(tempCust.getUpdateUsername());
-							comcat.setExInt1(1);
-							comcat.setExInt2(1);
-							comcat.setExVar1("NA");
-							comcat.setExVar2("NA");
-							comcat.setTypeId(2);
-							comcat.setRemark("NA");
-							comcat.setTaskId(serv.getTaskId());
-							comcat.setUpdateDatetime(dateFormat1.format(date));
-							comcat.setUpdateUser(tempCust.getUpdateUsername());
-							Communication save = communicationRepo.saveAndFlush(comcat);
-
-						}
 					}
 
 				}
@@ -229,6 +149,9 @@ public class TaskApiController {
 		}
 		return inf;
 	}
+	
+	
+	
 
 	@Autowired
 	SetttingKeyValueRepo setttingKeyValueRepo;
@@ -348,11 +271,12 @@ public class TaskApiController {
 
 	/************************* Update Task *************************/
 	@RequestMapping(value = { "/updateStatusByTaskId" }, method = RequestMethod.POST)
-	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal, @RequestParam int userId,@RequestParam String curDateTime) {
+	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal,
+			@RequestParam int userId, @RequestParam String curDateTime) {
 
 		Info info = new Info();
 		try {
-			int res = taskRepo.updateStatus(taskId, statusVal,userId,curDateTime);
+			int res = taskRepo.updateStatus(taskId, statusVal, userId, curDateTime);
 
 			if (res > 0) {
 				info.setError(false);
@@ -375,7 +299,8 @@ public class TaskApiController {
 	}
 
 	@RequestMapping(value = { "/updateManualTaskByTaskId" }, method = RequestMethod.POST)
-	public @ResponseBody Info updateManualTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal,@RequestParam int userId, @RequestParam String curDateTime) {
+	public @ResponseBody Info updateManualTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal,
+			@RequestParam int userId, @RequestParam String curDateTime) {
 
 		Info info = new Info();
 		int res = 0;
@@ -383,14 +308,14 @@ public class TaskApiController {
 
 			if (statusVal == 1) {
 				// task approval by Manager
-				res = taskRepo.updateStatus(taskId, statusVal,userId,curDateTime);
+				res = taskRepo.updateStatus(taskId, statusVal, userId, curDateTime);
 
 			} else if (statusVal == 0) {
 				// task disapproval by Manager
-				res = taskRepo.updateStatus1(taskId,userId,curDateTime);
+				res = taskRepo.updateStatus1(taskId, userId, curDateTime);
 			} else if (statusVal == 2) {
 				// to activate inactive task
-				res = taskRepo.activateTask(taskId,userId,curDateTime);
+				res = taskRepo.activateTask(taskId, userId, curDateTime);
 			}
 
 			if (res > 0) {
@@ -412,17 +337,48 @@ public class TaskApiController {
 
 		return info;
 	}
-	
-	
+
 	@RequestMapping(value = { "/updateCompletedTaskByTaskId" }, method = RequestMethod.POST)
-	public @ResponseBody Info updateCompletedTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal,@RequestParam String curDateTime, @RequestParam int userId) {
+	public @ResponseBody Info updateCompletedTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal,
+			@RequestParam String curDateTime, @RequestParam int userId) {
 
 		Info info = new Info();
 		int res = 0;
 		try {
 			// System.out.println("updateCompletedTaskByTaskId");
- 				// task approval by Manager
-			res = taskRepo.updateCompStatus(taskId, statusVal,userId,curDateTime);
+			// task approval by Manager
+			res = taskRepo.updateCompStatus(taskId, statusVal, userId, curDateTime);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in updateTaskByTaskId  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+
+		return info;
+	}
+
+	@RequestMapping(value = { "/updateCompletedTask" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateCompletedTask(@RequestParam List<Integer> taskId, @RequestParam int stat,
+			@RequestParam String curDateTime, @RequestParam int userId) {
+
+		Info info = new Info();
+		int res = 0;
+		try {
+			// System.out.println("updateCompletedTaskByTaskId");
+			// task approval by Manager
+			res = taskRepo.updateMulCompStatus(taskId, stat, userId, curDateTime);
 
 			if (res > 0) {
 				info.setError(false);
@@ -475,15 +431,26 @@ public class TaskApiController {
 		}
 		return servicsList;
 	}
-	
-	
+
 	@RequestMapping(value = { "/getAllCompletedTaskList" }, method = RequestMethod.POST)
-	public @ResponseBody List<GetTaskList> getAllCompletedTaskList(@RequestParam int stat, @RequestParam int empId) {
+	public @ResponseBody List<GetTaskList> getAllCompletedTaskList(@RequestParam int stat, @RequestParam int empId, @RequestParam int servId,
+			@RequestParam List<String> itemsAct, @RequestParam int custId) {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
 		try {
 
-		 
 			servicsList = getTaskListRepo.getAllCompletedTaskList(stat, empId);
+			
+			if (custId==0 && itemsAct.contains("0") && servId == 0) {
+				servicsList = getTaskListRepo.getAllCompletedTaskList(stat, empId);
+			}else if(itemsAct.contains("-1")) {
+				
+				servicsList = getTaskListRepo.getAllCustCompletedTaskList(stat, empId,servId,custId);
+				
+			}else {
+				servicsList = getTaskListRepo.getSpecCutCompletedTaskList(stat, empId,servId,custId,itemsAct);
+			}
+			
+			System.err.println("ManualTakList***" + servicsList.toString());
 		} catch (Exception e) {
 			System.err.println("Exce in getAllTaskList " + e.getMessage());
 		}
