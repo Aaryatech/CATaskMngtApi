@@ -953,5 +953,27 @@ public class WeeklyOffApiController {
 		return empListWithDateList;
 
 	}
+	
+	
+	/*@RequestMapping(value = { "/getEmployeeCapacityDetail" }, method = RequestMethod.POST)
+	public @ResponseBody List<> getEmployeeCapacityDetail(
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+
+		List<EmpListWithDateWiseDetail> list = new ArrayList<>();
+		EmpListWithDateList empListWithDateList = new EmpListWithDateList();
+		List<String> dateslist = new ArrayList<>();
+		 
+		try {
+			 
+		 
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return empListWithDateList;
+
+	}*/
 
 }
