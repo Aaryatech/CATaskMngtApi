@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.cataskapi.common.DateConvertor;
+import com.ats.cataskapi.model.CapacityDetailByEmp;
 import com.ats.cataskapi.model.DateWithAttendanceSts;
 import com.ats.cataskapi.model.EmpListWithDateList;
 import com.ats.cataskapi.model.EmpListWithDateWiseDetail;
@@ -27,6 +28,7 @@ import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.LeaveCount;
 import com.ats.cataskapi.model.LeaveDetailWithFreeHours;
 import com.ats.cataskapi.model.WeeklyOff;
+import com.ats.cataskapi.repositories.CapacityDetailByEmpRepo;
 import com.ats.cataskapi.repositories.EmpListWithDateWiseDetailRepo;
 import com.ats.cataskapi.repositories.EmployeeListWithAvailableHoursRepo;
 import com.ats.cataskapi.repositories.GetWeeklyOffRepo;
@@ -50,6 +52,9 @@ public class WeeklyOffApiController {
 
 	@Autowired
 	EmpListWithDateWiseDetailRepo empListWithDateWiseDetailRepo;
+
+	@Autowired
+	CapacityDetailByEmpRepo capacityDetailByEmpRepo;
 
 	@RequestMapping(value = { "/getWeeklyOffList" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetWeeklyOff> getWeeklyOffList(@RequestParam("companyId") int companyId,
@@ -816,13 +821,13 @@ public class WeeklyOffApiController {
 	}
 
 	@RequestMapping(value = { "/daywiseLeaveHistoryofEmployee" }, method = RequestMethod.POST)
-	public @ResponseBody EmpListWithDateList daywiseLeaveHistoryofEmployee(
-			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+	public @ResponseBody EmpListWithDateList daywiseLeaveHistoryofEmployee(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate) {
 
 		List<EmpListWithDateWiseDetail> list = new ArrayList<>();
 		EmpListWithDateList empListWithDateList = new EmpListWithDateList();
 		List<String> dateslist = new ArrayList<>();
-		 
+
 		try {
 			List<Date> dates = new ArrayList<Date>();
 			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -834,12 +839,11 @@ public class WeeklyOffApiController {
 			long curTime = startDate.getTime();
 
 			while (curTime <= endTime) {
-				
+
 				dateslist.add(formatter.format(new Date(curTime)));
 				dates.add(new Date(curTime));
 				curTime += interval;
-				
-				
+
 			}
 			DateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			String holidayArray = new String();
@@ -941,7 +945,7 @@ public class WeeklyOffApiController {
 				list.get(j).setAtndsList(atndsList);
 
 			}
-			
+
 			empListWithDateList.setDateslist(dateslist);
 			empListWithDateList.setEmpListWithDateWiseDetailLst(list);
 
@@ -953,27 +957,28 @@ public class WeeklyOffApiController {
 		return empListWithDateList;
 
 	}
-	
-	
-	/*@RequestMapping(value = { "/getEmployeeCapacityDetail" }, method = RequestMethod.POST)
-	public @ResponseBody List<> getEmployeeCapacityDetail(
-			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
 
-		List<EmpListWithDateWiseDetail> list = new ArrayList<>();
-		EmpListWithDateList empListWithDateList = new EmpListWithDateList();
-		List<String> dateslist = new ArrayList<>();
-		 
+	@RequestMapping(value = { "/getEmployeeCapacityDetail" }, method = RequestMethod.POST)
+	public @ResponseBody List<CapacityDetailByEmp> getEmployeeCapacityDetail(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate, @RequestParam("empId") int empId) {
+
+		List<CapacityDetailByEmp> list = new ArrayList<CapacityDetailByEmp>();
+
 		try {
-			 
-		 
+
+			String empIds = capacityDetailByEmpRepo.getEmployeeList(empId);
+
+			String[] ids = empIds.split(",");
+			list = capacityDetailByEmpRepo.getEmployeeCapacityDetail(DateConvertor.convertToYMD(fromDate),
+					DateConvertor.convertToYMD(toDate),ids);
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
 
-		return empListWithDateList;
+		return list;
 
-	}*/
+	}
 
 }
