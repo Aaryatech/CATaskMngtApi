@@ -793,5 +793,103 @@ public class TaskApiController {
 
 		return info;
 	}
+	
+	//**************************************Dash WS*********************************************
+	
+	@RequestMapping(value = {"/getTaskListByEmpIdAndDashCountOverDue"}, method = RequestMethod.POST)
+	public @ResponseBody List<TaskListHome> getTaskListByEmpIdAndDashCountOverDue(@RequestParam int empId, @RequestParam  int  stat) {
+		List<TaskListHome> taskList = null;
+		Date date=new Date();
+		String endDate= new SimpleDateFormat("yyyy-MM-dd").format(date);
+		//System.out.println("todays date"+endDate);
+				
+		
+ 		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getManualTaskListDashOverDue(stat,empId,endDate);			
+
+		}catch (Exception e) {
+			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
+	
+	
+	
+	@RequestMapping(value = {"/getTaskListByEmpIdAndDashCountDueToday"}, method = RequestMethod.POST)
+	public @ResponseBody List<TaskListHome> getTaskListByEmpIdAndDashCountDueDate(@RequestParam int empId, @RequestParam  int  stat) {
+		List<TaskListHome> taskList = null;
+		Date date=new Date();
+		String endDate= new SimpleDateFormat("yyyy-MM-dd").format(date);	 
+				
+		
+ 		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getManualTaskListDashDueToday(stat,empId,endDate);			
+
+		}catch (Exception e) {
+			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
+	
+	
+
+	@RequestMapping(value = {"/getTaskListByEmpIdAndDashCountDueWeek"}, method = RequestMethod.POST)
+	public @ResponseBody List<TaskListHome> getTaskListByEmpIdAndDashCountDueWeek(@RequestParam int empId, @RequestParam  int  stat) {
+		List<TaskListHome> taskList = null;
+		Date date=new Date();
+		String endDate= new SimpleDateFormat("yyyy-MM-dd").format(date);	 
+				
+		
+ 		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getManualTaskListDashDueWeek(stat,empId,endDate);			
+
+		}catch (Exception e) {
+			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
+	
+
+	@RequestMapping(value = {"/getTaskListByEmpIdAndDashCountDueMonth"}, method = RequestMethod.POST)
+	public @ResponseBody List<TaskListHome> getTaskListByEmpIdAndDashCountDueMonth(@RequestParam int empId, @RequestParam  int  stat) {
+		List<TaskListHome> taskList = null;
+		Date date=new Date();
+		String endDate= new SimpleDateFormat("yyyy-MM-dd").format(date);	 
+		
+ 		try {
+			
+			taskList = new ArrayList<TaskListHome>();
+			taskList = taskListRepo.getManualTaskListDashDueMonth(stat,empId,endDate);			
+
+		}catch (Exception e) {
+			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return taskList;
+	
+	}
+	
+	
+	
+ 
+	
+	
+	
 
 }
