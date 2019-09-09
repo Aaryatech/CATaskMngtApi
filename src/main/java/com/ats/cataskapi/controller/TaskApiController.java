@@ -232,7 +232,7 @@ public class TaskApiController {
 				task.setTaskCode("NA");
 				task.setTaskEmpIds(custserv.getExVar1());
 				task.setTaskFyId(fin.getFinYearId());
-				task.setTaskEndDate(dateFormat.format(date));
+				//task.setTaskEndDate(dateFormat.format(date));
 				task.setTaskStatus(-1);
 				task.setTaskSubline("NA");
 				task.setTaskText(String.valueOf(sb1));
