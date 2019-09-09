@@ -9,10 +9,9 @@ public class CapacityDetailByEmp {
 	@Id	
 	private int empId;
 	private String empName;
-	private int bugetedCap;
-	private int allWork;
-	private int actWork;
-	
+	private float bugetedCap;
+	private float allWork;
+	private float actWork;
 	public int getEmpId() {
 		return empId;
 	}
@@ -25,30 +24,30 @@ public class CapacityDetailByEmp {
 	public void setEmpName(String empName) {
 		this.empName = empName;
 	}
-	public int getBugetedCap() {
+	public float getBugetedCap() {
 		return bugetedCap;
 	}
-	public void setBugetedCap(int bugetedCap) {
+	public void setBugetedCap(float bugetedCap) {
 		this.bugetedCap = bugetedCap;
 	}
-	public int getAllWork() {
+	public float getAllWork() {
 		return allWork;
 	}
-	public void setAllWork(int allWork) {
+	public void setAllWork(float allWork) {
 		this.allWork = allWork;
 	}
-	public int getActWork() {
+	public float getActWork() {
 		return actWork;
 	}
-	public void setActWork(int actWork) {
+	public void setActWork(float actWork) {
 		this.actWork = actWork;
 	}
 	@Override
 	public String toString() {
 		return "CapacityDetailByEmp [empId=" + empId + ", empName=" + empName + ", bugetedCap=" + bugetedCap
 				+ ", allWork=" + allWork + ", actWork=" + actWork + "]";
-	} 
-	
+	}
+	  
 	
 
 }
