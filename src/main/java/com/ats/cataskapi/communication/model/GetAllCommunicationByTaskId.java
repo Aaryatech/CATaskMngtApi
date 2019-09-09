@@ -2,8 +2,12 @@ package com.ats.cataskapi.communication.model;
 
  
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
  
 @Entity
@@ -18,7 +22,7 @@ public class GetAllCommunicationByTaskId {
 
 	private String communText;
 
-	private String updateDatetime;
+	private Date updateDatetime;
 
 	private int exInt1;
 
@@ -71,12 +75,12 @@ public class GetAllCommunicationByTaskId {
 	public void setCommunText(String communText) {
 		this.communText = communText;
 	}
-
-	public String getUpdateDatetime() {
+	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy hh:mm:ss a")// 
+ 	public Date getUpdateDatetime() {
 		return updateDatetime;
 	}
 
-	public void setUpdateDatetime(String updateDatetime) {
+	public void setUpdateDatetime(Date updateDatetime) {
 		this.updateDatetime = updateDatetime;
 	}
 
