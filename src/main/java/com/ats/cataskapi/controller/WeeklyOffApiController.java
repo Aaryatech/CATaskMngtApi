@@ -960,17 +960,28 @@ public class WeeklyOffApiController {
 
 	@RequestMapping(value = { "/getEmployeeCapacityDetail" }, method = RequestMethod.POST)
 	public @ResponseBody List<CapacityDetailByEmp> getEmployeeCapacityDetail(@RequestParam("fromDate") String fromDate,
-			@RequestParam("toDate") String toDate, @RequestParam("empId") int empId) {
+			@RequestParam("toDate") String toDate, @RequestParam("empId") int empId , @RequestParam("empType") int empType) {
 
 		List<CapacityDetailByEmp> empCaplist = new ArrayList<CapacityDetailByEmp>();
 
 		try {
 
-			String empIds = capacityDetailByEmpRepo.getEmployeeList(empId);
-
-			String[] ids = empIds.split(",");
+			String[] ids = {};
+			
+			if(empType==5) {
+				
+				String empIds = String.valueOf(empId);
+				ids = empIds.split(",");
+				 
+				
+			}else {
+				
+				String empIds = capacityDetailByEmpRepo.getEmployeeList(empId); 
+				ids = empIds.split(",");
+				
+			}
+			
 			empCaplist = capacityDetailByEmpRepo.getEmployeeCapacityDetail(fromDate, toDate, ids);
-
 			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
 
 			LeaveCount totalDayCount = calculateHolidayBetweenDate(0, fromDate, toDate);
