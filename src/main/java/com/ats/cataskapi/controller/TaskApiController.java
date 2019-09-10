@@ -415,6 +415,19 @@ public class TaskApiController {
 		}
 		return servicsList;
 	}
+	/****************************Add Emp Hrs********************************/
+	@RequestMapping(value = { "/getTaskListForWorkLog" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetTaskList> getTaskListForWorkLog(@RequestParam int stat, @RequestParam int emp, @RequestParam int service, 
+			@RequestParam int activity, @RequestParam int customer) {
+		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
+		try {
+			servicsList = getTaskListRepo.getTaskListForWorkLog(stat, emp, service, activity, customer);
+		} catch (Exception e) {
+			System.err.println("Exce in getTaskListForWorkLog " + e.getMessage());
+		}
+		return servicsList;
+	}
+	
 
 	@RequestMapping(value = { "/getAllManualTaskList" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetTaskList> getAllManualTaskList(@RequestParam int stat, @RequestParam int empId) {
