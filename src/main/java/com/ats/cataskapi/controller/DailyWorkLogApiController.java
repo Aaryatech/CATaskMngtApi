@@ -45,7 +45,18 @@ public class DailyWorkLogApiController {
 		return log;
 		
 	}
-	
+	@RequestMapping(value = {"/addEmpWorkLogList"}, method=RequestMethod.POST)
+	public @ResponseBody List<DailyWorkLog> addNewWorkLog(@RequestBody List<DailyWorkLog> workLogList){
+		List<DailyWorkLog> log = new ArrayList<DailyWorkLog>();
+		try {
+			log = workLogRepo.saveAll(workLogList);
+			
+		}catch (Exception e) {
+			System.out.println("Excep in addNewWorkLog : "+e.getMessage());
+		}
+		return log;
+		
+	}
 	@RequestMapping(value = {"/getWorkLogById"}, method=RequestMethod.POST)
 	public @ResponseBody DailyWorkLog addNewWorkLog(@RequestParam int logId){
 		DailyWorkLog log = new DailyWorkLog();
