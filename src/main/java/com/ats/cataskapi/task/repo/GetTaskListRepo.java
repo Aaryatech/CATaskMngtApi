@@ -20,12 +20,12 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_start_date,\n" + 
 			"    t_tasks.task_end_date,\n" + 
 			"    t_tasks.task_statutory_due_date,\n" + 
-			"    t_tasks.mngr_bud_hr,\n" + 
+			"    CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr ,\n" + 
 			"    t_tasks.cust_id,\n" + 
 			"    t_tasks.periodicity_id,\n" + 
 			"    t_tasks.actv_id,\n" + 
 			"    t_tasks.serv_id,\n" + 
-			"    t_tasks.emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
+			"    CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
 			"    m_services.serv_name,\n" + 
