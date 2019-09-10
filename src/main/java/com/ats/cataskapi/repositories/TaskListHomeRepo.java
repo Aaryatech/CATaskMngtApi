@@ -16,8 +16,8 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"    t_tasks.task_start_date,\n" + 
 			"    t_tasks.task_end_date,\n" + 
 			"    t_tasks.task_statutory_due_date,\n" + 
-			"    t_tasks.mngr_bud_hr,\n" + 
-			"    t_tasks.emp_bud_hr,\n" + 
+			"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr,\n" + 
+			"         CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr ,\n" + 
 			"    t_tasks.task_emp_ids,\n" + 
 			"    t_tasks.ex_int1,\n" + 
 			"    t_tasks.ex_int2,\n" + 
@@ -773,8 +773,8 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        t_tasks.task_start_date,\n" + 
 			"        t_tasks.task_end_date,\n" + 
 			"        t_tasks.task_statutory_due_date,\n" + 
-			"        t_tasks.mngr_bud_hr,\n" + 
-			"        t_tasks.emp_bud_hr,\n" + 
+			"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr,\n" + 
+			"         CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr ,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
 			"        t_tasks.ex_int1,\n" + 
 			"        t_tasks.ex_int2,\n" + 
@@ -845,8 +845,8 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        t_tasks.task_start_date,\n" + 
 			"        t_tasks.task_end_date,\n" + 
 			"        t_tasks.task_statutory_due_date,\n" + 
-			"        t_tasks.mngr_bud_hr,\n" + 
-			"        t_tasks.emp_bud_hr,\n" + 
+			"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr,\n" + 
+			"         CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr ,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
 			"        t_tasks.ex_int1,\n" + 
 			"        t_tasks.ex_int2,\n" + 
@@ -917,8 +917,8 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        t_tasks.task_start_date,\n" + 
 			"        t_tasks.task_end_date,\n" + 
 			"        t_tasks.task_statutory_due_date,\n" + 
-			"        t_tasks.mngr_bud_hr,\n" + 
-			"        t_tasks.emp_bud_hr,\n" + 
+			"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr,\n" + 
+			"         CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr ,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
 			"        t_tasks.ex_int1,\n" + 
 			"        t_tasks.ex_int2,\n" + 
@@ -991,8 +991,8 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        t_tasks.task_start_date,\n" + 
 			"        t_tasks.task_end_date,\n" + 
 			"        t_tasks.task_statutory_due_date,\n" + 
-			"        t_tasks.mngr_bud_hr,\n" + 
-			"        t_tasks.emp_bud_hr,\n" + 
+			"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr,\n" + 
+			"         CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr ,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
 			"        t_tasks.ex_int1,\n" + 
 			"        t_tasks.ex_int2,\n" + 
