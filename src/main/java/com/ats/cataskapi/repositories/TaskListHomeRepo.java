@@ -824,9 +824,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        dm_fin_year,\n" + 
 			"        dm_status_mst \n" + 
 			"    WHERE\n" + 
-			"        t_tasks.del_status = 1 \n" + 
-			"        AND m_services.ex_int1 = 1 \n" + 
-			"        AND m_activities.ex_int1 = 1 \n" + 
+			"        t_tasks.del_status = 1 AND   t_tasks.is_active=1 \n" + 
 			"        AND m_emp.emp_id =:empId \n" + 
 			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) \n" + 
 			"        AND t_tasks.actv_id = m_activities.acti_id \n" + 
@@ -898,9 +896,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        dm_fin_year,\n" + 
 			"        dm_status_mst \n" + 
 			"    WHERE\n" + 
-			"        t_tasks.del_status = 1 \n" + 
-			"        AND m_services.ex_int1 = 1 \n" + 
-			"        AND m_activities.ex_int1 = 1 \n" + 
+			"           t_tasks.del_status = 1 AND   t_tasks.is_active=1  \n" + 
 			"        AND m_emp.emp_id =:empId \n" + 
 			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) \n" + 
 			"        AND t_tasks.actv_id = m_activities.acti_id \n" + 
@@ -972,9 +968,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        dm_fin_year,\n" + 
 			"        dm_status_mst \n" + 
 			"    WHERE\n" + 
-			"        t_tasks.del_status = 1 \n" + 
-			"        AND m_services.ex_int1 = 1 \n" + 
-			"        AND m_activities.ex_int1 = 1 \n" + 
+			"          t_tasks.del_status = 1 AND   t_tasks.is_active=1  \n" + 
 			"        AND m_emp.emp_id =:empId \n" + 
 			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) \n" + 
 			"        AND t_tasks.actv_id = m_activities.acti_id \n" + 
@@ -1048,9 +1042,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        dm_fin_year,\n" + 
 			"        dm_status_mst \n" + 
 			"    WHERE\n" + 
-			"        t_tasks.del_status = 1 \n" + 
-			"        AND m_services.ex_int1 = 1 \n" + 
-			"        AND m_activities.ex_int1 = 1 \n" + 
+			"       t_tasks.del_status = 1 AND   t_tasks.is_active=1  \n" +
 			"        AND m_emp.emp_id =:empId \n" + 
 			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) \n" + 
 			"        AND t_tasks.actv_id = m_activities.acti_id \n" + 
