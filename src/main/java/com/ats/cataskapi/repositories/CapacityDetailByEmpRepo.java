@@ -13,8 +13,8 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 	@Query(value="select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids)",nativeQuery=true)
 	String getEmployeeList(@Param("empId") int empId);
 
-	@Query(value="select e.emp_id,e.emp_name,0 as bugeted_cap,coalesce((select sum(emp_bud_hr) from t_tasks where task_end_date between :fromDate "
-			+ "and :toDate and FIND_IN_SET(e.emp_id,task_emp_ids)),0) as all_work,coalesce((select sum(wl.work_hours) from t_daily_work_log wl "
+	@Query(value="select e.emp_id,e.emp_name,0 as bugeted_cap,coalesce((select CONCAT(FLOOR(sum(emp_bud_hr)/60),'.',MOD( sum(emp_bud_hr),60)) from t_tasks where task_end_date between :fromDate "
+			+ "and :toDate and FIND_IN_SET(e.emp_id,task_emp_ids)),0) as all_work,coalesce((select CONCAT(FLOOR(sum(wl.work_hours)/60),'.',MOD( sum(wl.work_hours),60)) from t_daily_work_log wl "
 			+ "where wl.work_date between :fromDate and :toDate and wl.emp_id=e.emp_id),0) as act_work from m_emp e where e.del_status=1 and "
 			+ "e.emp_id in (:empId)",nativeQuery=true)
 	List<CapacityDetailByEmp> getEmployeeCapacityDetail(@Param("fromDate")String fromDate,
