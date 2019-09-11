@@ -114,8 +114,9 @@ public class TaskApiController {
 			for (int j = 0; j < tsk.getTskList().size(); j++) {
 				
 				tsk.getTskList().get(j).setTaskId(0);
+				tsk.getTskList().get(j).setMappingId(tempCust.getMappingId());
 				
- 				serv = taskRepo.saveAndFlush(tsk.getTskList().get(j));
+  				serv = taskRepo.saveAndFlush(tsk.getTskList().get(j));
 
 				if (serv != null) {
 					try {
@@ -619,11 +620,10 @@ public class TaskApiController {
 			@RequestParam String empId, int updateUserName, String updateDateTime) {
 
 		Info info = new Info();
-		String endDate = DateConvertor.convertToYMD(workDate);
-		String dueDateq = DateConvertor.convertToYMD(dueDate);
+	 
 
 		try {
-			int res = taskRepo.updateEditTask(taskId, empHr, mngHr, endDate, dueDateq, empId, updateUserName,
+			int res = taskRepo.updateEditTask(taskId, empHr, mngHr, workDate, dueDate, empId, updateUserName,
 					updateDateTime);
 
 			if (res > 0) {
