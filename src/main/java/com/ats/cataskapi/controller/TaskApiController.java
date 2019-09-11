@@ -39,9 +39,11 @@ import com.ats.cataskapi.repositories.FinancialYearRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
 import com.ats.cataskapi.repositories.SetttingKeyValueRepo;
 import com.ats.cataskapi.repositories.TaskListHomeRepo;
+import com.ats.cataskapi.task.model.EmpWorkLogHrs;
 import com.ats.cataskapi.task.model.GetTaskList;
 import com.ats.cataskapi.task.model.Task;
 import com.ats.cataskapi.task.model.TempTaskSave;
+import com.ats.cataskapi.task.repo.EmpWorkLogHrsRepo;
 import com.ats.cataskapi.task.repo.GetTaskListRepo;
 import com.ats.cataskapi.task.repo.TaskRepo;
 
@@ -429,6 +431,20 @@ public class TaskApiController {
 		return servicsList;
 	}
 	
+	@Autowired EmpWorkLogHrsRepo workLogRepo;
+	@RequestMapping(value = { "/getTaskDailyWorkLog" }, method = RequestMethod.POST)
+	public @ResponseBody List<EmpWorkLogHrs> getTaskDailyWorkLog(@RequestParam int stat, @RequestParam int emp, @RequestParam String fromDate, 
+			@RequestParam String toDate) {
+		List<EmpWorkLogHrs> list = new ArrayList<EmpWorkLogHrs>();
+		try {
+			list = workLogRepo.getDailyWorkLogList(stat, emp,fromDate, toDate);
+		} catch (Exception e) {
+			System.err.println("Exce in getTaskDailyWorkLog " + e.getMessage());
+		}
+		System.out.println("Log List-----------"+list.toString());
+		return list;
+	}
+	/************************************************************************/
 
 	@RequestMapping(value = { "/getAllManualTaskList" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetTaskList> getAllManualTaskList(@RequestParam int stat, @RequestParam int empId) {
