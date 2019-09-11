@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ats.cataskapi.model.CustomerHeaderMaster;
+import com.ats.cataskapi.model.EmpListForDashboard;
 
 public interface CustomerHeaderMasterRepo extends JpaRepository<CustomerHeaderMaster, Integer> {
 
@@ -28,5 +29,18 @@ public interface CustomerHeaderMasterRepo extends JpaRepository<CustomerHeaderMa
 	@Query(value = "UPDATE m_cust_header SET is_active=:isActiveStatus WHERE cust_id=:custId",nativeQuery=true)
 	int updateIsActiveStatus(@Param("custId") int cust_id, @Param("isActiveStatus") int isActiveStatus);
 	
-	
+	/*
+	 * @Query(value="SELECT m_cust_header.cust_id, CASE \n" +
+	 * "            WHEN m_cust_header.cust_group_id = 0 THEN m_cust_header.cust_firm_name \n"
+	 * + "            ELSE COALESCE(         (         SELECT\n" +
+	 * "                m_cust_group.cust_group_name         \n" +
+	 * "            FROM\n" + "                m_cust_group      \n" +
+	 * "            WHERE\n" +
+	 * "                m_cust_group.cust_group_id = m_cust_header.cust_group_id \n"
+	 * + "                AND m_cust_group.del_status = 1),\n" +
+	 * "            0     ) \n" +
+	 * "        END AS cust_firm_name FROM m_cust_header  WHERE m_cust_header.cust_id=:custHeadId "
+	 * ,nativeQuery=true) CustomerHeaderMaster getCustHead(@Param("custHeadId") int
+	 * custHeadId);
+	 */
 }
