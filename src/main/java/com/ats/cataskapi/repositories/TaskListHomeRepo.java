@@ -75,6 +75,10 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"WHERE\n" + 
 			"    t_tasks.del_status = 1 AND m_services.ex_int1 = 1 AND m_activities.ex_int1 = 1 AND m_emp.emp_id =:empId AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) AND t_tasks.actv_id = m_activities.acti_id AND t_tasks.serv_id = m_services.serv_id AND m_activities.periodicity_id = dm_periodicity.periodicity_id AND t_tasks.cust_id = m_cust_header.cust_id AND dm_fin_year.fin_year_id = t_tasks.task_fy_id AND dm_status_mst.status_value = t_tasks.task_status AND t_tasks.task_status NOT IN(:statusIds)", nativeQuery=true)
 	List<TaskListHome> getTaskList(@Param("empId") int empId,@Param("statusIds") List<String> statusIds);
+	
+	
+	
+	
 
 	/**************************************************************************/
 	/*@Query(value="SELECT \n" + 
@@ -826,7 +830,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"    WHERE\n" + 
 			"        t_tasks.del_status = 1 AND   t_tasks.is_active=1 \n" + 
 			"        AND m_emp.emp_id =:empId \n" + 
-			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) \n" + 
+			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids)  AND FIND_IN_SET(:userId, t_tasks.task_emp_ids) \n" + 
 			"        AND t_tasks.actv_id = m_activities.acti_id \n" + 
 			"        AND t_tasks.serv_id = m_services.serv_id \n" + 
 			"        AND m_activities.periodicity_id = dm_periodicity.periodicity_id \n" + 
@@ -835,7 +839,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND dm_status_mst.status_value = t_tasks.task_status \n" + 
 			"        AND t_tasks.task_status =:stat AND  task_end_date < :endDate ", nativeQuery=true)
 	
-	List<TaskListHome> getManualTaskListDashOverDue(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate);
+	List<TaskListHome> getManualTaskListDashOverDue(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate,@Param("userId") int userId);
 	
 
 
@@ -898,7 +902,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"    WHERE\n" + 
 			"           t_tasks.del_status = 1 AND   t_tasks.is_active=1  \n" + 
 			"        AND m_emp.emp_id =:empId \n" + 
-			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) \n" + 
+			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) AND FIND_IN_SET(:userId, t_tasks.task_emp_ids) \n" + 
 			"        AND t_tasks.actv_id = m_activities.acti_id \n" + 
 			"        AND t_tasks.serv_id = m_services.serv_id \n" + 
 			"        AND m_activities.periodicity_id = dm_periodicity.periodicity_id \n" + 
@@ -907,7 +911,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND dm_status_mst.status_value = t_tasks.task_status \n" + 
 			"        AND t_tasks.task_status =:stat AND  t_tasks.task_end_date=:endDate ", nativeQuery=true)
 	
-	List<TaskListHome> getManualTaskListDashDueToday(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate);
+	List<TaskListHome> getManualTaskListDashDueToday(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate,@Param("userId") int userId);
 
 
 	
@@ -970,7 +974,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"    WHERE\n" + 
 			"          t_tasks.del_status = 1 AND   t_tasks.is_active=1  \n" + 
 			"        AND m_emp.emp_id =:empId \n" + 
-			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) \n" + 
+			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) AND FIND_IN_SET(:userId, t_tasks.task_emp_ids) \n" + 
 			"        AND t_tasks.actv_id = m_activities.acti_id \n" + 
 			"        AND t_tasks.serv_id = m_services.serv_id \n" + 
 			"        AND m_activities.periodicity_id = dm_periodicity.periodicity_id \n" + 
@@ -980,7 +984,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND t_tasks.task_status =:stat AND   WEEKOFYEAR(t_tasks.task_end_date)=WEEKOFYEAR(:endDate)  \n" + 
 			"            and YEAR(:endDate) = YEAR(t_tasks.task_end_date)", nativeQuery=true)
 	
-	List<TaskListHome> getManualTaskListDashDueWeek(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate);
+	List<TaskListHome> getManualTaskListDashDueWeek(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate,@Param("userId") int userId);
 
 
 
@@ -1044,7 +1048,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"    WHERE\n" + 
 			"       t_tasks.del_status = 1 AND   t_tasks.is_active=1  \n" +
 			"        AND m_emp.emp_id =:empId \n" + 
-			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) \n" + 
+			"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) AND FIND_IN_SET(:userId, t_tasks.task_emp_ids) \n" + 
 			"        AND t_tasks.actv_id = m_activities.acti_id \n" + 
 			"        AND t_tasks.serv_id = m_services.serv_id \n" + 
 			"        AND m_activities.periodicity_id = dm_periodicity.periodicity_id \n" + 
@@ -1054,7 +1058,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND t_tasks.task_status =:stat AND  MONTH(t_tasks.task_end_date)=MONTH(:endDate)\n" + 
 			"            and YEAR(:endDate) = YEAR(t_tasks.task_end_date)", nativeQuery=true)
 	
-	List<TaskListHome> getManualTaskListDashDueMonth(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate);
+	List<TaskListHome> getManualTaskListDashDueMonth(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate,@Param("userId") int userId);
 
 
 

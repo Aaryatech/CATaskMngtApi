@@ -865,6 +865,9 @@ public class MasterApiController {
 	
 	
 	
+	
+	
+	
 	@RequestMapping(value = {"/getTaskListByFilters"}, method = RequestMethod.POST)
 	public @ResponseBody List<TaskListHome> getTaskListByFilters(@RequestParam int empId, @RequestParam String fromDate,
 			@RequestParam String toDate, @RequestParam int service, @RequestParam int activity, @RequestParam int custId,
