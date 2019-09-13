@@ -1091,4 +1091,34 @@ public class MasterApiController {
 		return info;
 
 	}
+	
+	/******************Communication Deliverable Link********************/
+	
+	
+	@RequestMapping(value = { "/updateTaskDeliverLink" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateTaskDeliverLink(@RequestParam String link, @RequestParam int taskId) {
+		Info info = new Info();
+		try {
+			int res = taskRepo.addDeliverLink(link, taskId);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in updateTaskDeliverLink" + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+
+		return info;
+
+	}
 }
