@@ -32,7 +32,8 @@ public class DashboardRestController {
 	EmpListForDashboardRepo empListForDashboardRepo;
 
 	@RequestMapping(value = { "/getTaskCountByStatus" }, method = RequestMethod.POST)
-	public @ResponseBody List<TaskCountByStatus> getTaskCountByStatus(@RequestParam("empId") int empId) {
+	public @ResponseBody List<TaskCountByStatus> getTaskCountByStatus(@RequestParam("empId") int empId,
+			@RequestParam("userId") int userId) {
 
 		List<TaskCountByStatus> list = new ArrayList<TaskCountByStatus>();
 
@@ -41,7 +42,7 @@ public class DashboardRestController {
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-			list = taskCountByStatusRepo.getTaskCountByStatus(sf.format(date), empId);
+			list = taskCountByStatusRepo.getTaskCountByStatus(sf.format(date), empId,userId);
 
 		} catch (Exception e) {
 
