@@ -432,10 +432,35 @@ public class TaskApiController {
 
 	@RequestMapping(value = { "/getTaskDailyWorkLog" }, method = RequestMethod.POST)
 	public @ResponseBody List<EmpWorkLogHrs> getTaskDailyWorkLog(@RequestParam int stat, @RequestParam int emp,
-			@RequestParam String fromDate, @RequestParam String toDate) {
+			@RequestParam String fromDate, @RequestParam String toDate,
+			@RequestParam int service, @RequestParam int activity, @RequestParam int customer) {
 		List<EmpWorkLogHrs> list = new ArrayList<EmpWorkLogHrs>();
 		try {
-			list = workLogRepo.getDailyWorkLogList(stat, emp, fromDate, toDate);
+			
+				if(emp!=0 && fromDate!=null && toDate!=null && customer==0 &&  service==0) {
+				list = workLogRepo.getDailyWorkLogList(stat, emp, fromDate, toDate);
+				//System.out.println("// Query 1----------"+list);
+				}
+				
+				if(emp!=0 && fromDate!=null && toDate!=null && customer!=0 && service==0) {
+					list = workLogRepo.getDailyWorkLogListByCust(stat, emp, customer, fromDate, toDate);
+					//System.out.println("// Query 2----------"+list);
+				}
+				
+				if(emp!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && customer==0) {
+					list = workLogRepo.getDailyWorkLogListBySerAct(stat, emp, fromDate, toDate, 
+							service, activity);
+					
+					//System.out.println("// Query 3----------"+list);
+				}
+				
+				if(emp!=0 && fromDate!=null && toDate!=null && customer!=0 && service!=0 && activity!=0) {
+					
+					list = workLogRepo.getDailyWorkLogListByCustSerAct(stat, emp, customer, fromDate, toDate, 
+							service, activity);
+					//System.out.println("// Query 4----------"+list);
+				}
+					
 		} catch (Exception e) {
 			System.err.println("Exce in getTaskDailyWorkLog " + e.getMessage());
 		}
