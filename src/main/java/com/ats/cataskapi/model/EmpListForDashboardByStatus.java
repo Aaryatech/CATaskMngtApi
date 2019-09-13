@@ -1,32 +1,30 @@
 package com.ats.cataskapi.model;
- 
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class TaskCountByStatus {
-
+public class EmpListForDashboardByStatus {
+	
 	@Id	
-	private String statusMstId;
-	private String statusText;
+	private String empId;
+	private String empName;
 	private int statusValue;
 	private int overdeu;
 	private int duetoday;
 	private int week;
 	private int month;
-	
-	public String getStatusMstId() {
-		return statusMstId;
+	public String getEmpId() {
+		return empId;
 	}
-	public void setStatusMstId(String statusMstId) {
-		this.statusMstId = statusMstId;
+	public void setEmpId(String empId) {
+		this.empId = empId;
 	}
-	public String getStatusText() {
-		return statusText;
+	public String getEmpName() {
+		return empName;
 	}
-	public void setStatusText(String statusText) {
-		this.statusText = statusText;
+	public void setEmpName(String empName) {
+		this.empName = empName;
 	}
 	public int getStatusValue() {
 		return statusValue;
@@ -60,11 +58,9 @@ public class TaskCountByStatus {
 	}
 	@Override
 	public String toString() {
-		return "TaskCountByStatus [statusMstId=" + statusMstId + ", statusText=" + statusText + ", statusValue="
-				+ statusValue + ", overdeu=" + overdeu + ", duetoday=" + duetoday + ", week=" + week + ", month="
-				+ month + "]";
-	} 
-	
-	
+		return "EmpListForDashboardByStatus [empId=" + empId + ", empName=" + empName + ", statusValue=" + statusValue
+				+ ", overdeu=" + overdeu + ", duetoday=" + duetoday + ", week=" + week + ", month=" + month + "]";
+	}
+
 	
 }

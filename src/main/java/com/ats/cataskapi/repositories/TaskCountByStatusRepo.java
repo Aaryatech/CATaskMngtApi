@@ -11,7 +11,7 @@ import com.ats.cataskapi.model.TaskCountByStatus;
 public interface TaskCountByStatusRepo extends JpaRepository<TaskCountByStatus, Integer>{
 
 	@Query(value="select\n" + 
-			"        s.status_mst_id,\n" + 
+			"        UUID() as status_mst_id,\n" + 
 			"        s.status_text,\n" + 
 			"        s.status_value,\n" + 
 			"        coalesce((select\n" + 
