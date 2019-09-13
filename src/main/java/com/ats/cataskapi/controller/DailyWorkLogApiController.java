@@ -70,6 +70,19 @@ public class DailyWorkLogApiController {
 		
 	}
 	
+	@RequestMapping(value = {"/getWorkLogHrsById"}, method=RequestMethod.POST)
+	public @ResponseBody DailyWorkLog getWorkLogHrsById(@RequestParam int logId){
+		DailyWorkLog log = new DailyWorkLog();
+		try {
+			log = workLogRepo.findByWorkHrsLogId(logId);
+			
+		}catch (Exception e) {
+			System.out.println("Excep in getWorkLogHrsById : "+e.getMessage());
+		}
+		return log;
+		
+	}
+	
 	@RequestMapping(value = { "/deleteWorkLogById" }, method = RequestMethod.POST)
 	public @ResponseBody Info deleteWorkLogById(@RequestParam int logId, @RequestParam int userId) {
 

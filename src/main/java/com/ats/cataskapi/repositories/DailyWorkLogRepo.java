@@ -49,4 +49,23 @@ public interface DailyWorkLogRepo extends JpaRepository<DailyWorkLog, Integer> {
 	@Query(value="UPDATE t_daily_work_log SET del_status=0, update_username=:userId  WHERE work_log_id=:logId",nativeQuery=true)
 	int deleteworkLogId(@Param("logId") int logId, @Param("userId") int userId);
 	
+	@Query(value="select\n" + 
+			"        t_daily_work_log.work_log_id,\n" + 
+			"        t_daily_work_log.del_status,\n" + 
+			"        t_daily_work_log.emp_id,\n" + 
+			"        t_daily_work_log.ex_int1,\n" + 
+			"        t_daily_work_log.ex_int2,\n" + 
+			"        t_daily_work_log.ex_var1,\n" + 
+			"        t_daily_work_log.ex_var2,\n" + 
+			"        t_daily_work_log.task_id,\n" + 
+			"        t_daily_work_log.update_datetime,\n" + 
+			"        t_daily_work_log.update_username,\n" + 
+			"        t_daily_work_log.work_date,      \n" + 
+			"        CONCAT(FLOOR( t_daily_work_log.work_hours/60),'.',MOD( t_daily_work_log.work_hours,60)) as work_hours,\n" + 
+			"        t_daily_work_log.work_remark  \n" + 
+			"    from\n" + 
+			"       	t_daily_work_log\n" + 
+			"    where\n" + 
+			"        t_daily_work_log.work_log_id=:logId",nativeQuery=true)
+	DailyWorkLog findByWorkHrsLogId(@Param("logId") int logId);
 }
