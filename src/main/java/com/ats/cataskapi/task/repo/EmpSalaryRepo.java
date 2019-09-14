@@ -79,6 +79,9 @@ public interface EmpSalaryRepo extends JpaRepository<EmpSalary, Integer> {
 	int updateSalRecDece( @Param("curDateTime") String curDateTime,@Param("userId") int userId,@Param("empSalary") float empSalary,@Param("salId") int salId);
 
 	List<EmpSalary> findByFinYearIdAndDelStatus(int year, int i);
+
+	@Query(value="select s.* from t_emp_salary s where fin_year_id=(select fin_year_id from dm_fin_year where :date between fin_start_date and fin_end_date) and emp_id=:empId",nativeQuery=true)
+	EmpSalary getrecordByEmpIdAndDate(@Param("date")String date,@Param("empId") int empId);
 	
 
 }
