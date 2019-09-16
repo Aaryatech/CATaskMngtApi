@@ -66,7 +66,7 @@ public interface TlTaskCompletReportRepo extends JpaRepository<TlTaskCompletRepo
 			" (\n" + 
 			" SELECT\n" + 
 			"     	a.task_id,\n" + 
-			"     	group_concat(CASE a.emp_type WHEN '1' THEN a.emp_name  END) admin,\n" + 
+			"     	 group_concat(CASE a.emp_type WHEN '1' THEN a.emp_name  END) admin,\n" + 
 			"        group_concat(CASE a.emp_type WHEN '2' THEN a.emp_name  END) partner,\n" + 
 			"        group_concat(CASE a.emp_type WHEN '3' THEN a.emp_name  END) manager,\n" + 
 			"        group_concat(CASE a.emp_type WHEN '4' THEN a.emp_name END) team_leader,\n" + 
@@ -86,7 +86,7 @@ public interface TlTaskCompletReportRepo extends JpaRepository<TlTaskCompletRepo
 			"FROM 	\n" + 
 			"	t_daily_work_log\n" + 
 			"WHERE\n" + 
-			"t_daily_work_log.emp_id=m_emp.emp_id and task_id=t_tasks.task_id\n" + 
+			"t_daily_work_log.emp_id=m_emp.emp_id and t_daily_work_log.task_id=t_tasks.task_id\n" + 
 			"GROUP BY\n" + 
 			"		t_daily_work_log.task_id),0) hours\n" + 
 			"     FROM \n" + 
