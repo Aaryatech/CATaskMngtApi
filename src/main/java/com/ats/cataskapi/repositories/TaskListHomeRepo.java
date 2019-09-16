@@ -73,7 +73,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"    dm_fin_year,\n" + 
 			"    dm_status_mst\n" + 
 			"WHERE\n" + 
-			"    t_tasks.del_status = 1 AND m_services.ex_int1 = 1 AND m_activities.ex_int1 = 1 AND m_emp.emp_id =:empId AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) AND t_tasks.actv_id = m_activities.acti_id AND t_tasks.serv_id = m_services.serv_id AND m_activities.periodicity_id = dm_periodicity.periodicity_id AND t_tasks.cust_id = m_cust_header.cust_id AND dm_fin_year.fin_year_id = t_tasks.task_fy_id AND dm_status_mst.status_value = t_tasks.task_status AND t_tasks.task_status NOT IN(:statusIds)", nativeQuery=true)
+			"   t_tasks.del_status = 1 AND t_tasks.is_active=1 AND m_services.ex_int1 = 1 AND m_activities.ex_int1 = 1 AND m_emp.emp_id =:empId AND FIND_IN_SET(:empId, t_tasks.task_emp_ids) AND t_tasks.actv_id = m_activities.acti_id AND t_tasks.serv_id = m_services.serv_id AND m_activities.periodicity_id = dm_periodicity.periodicity_id AND t_tasks.cust_id = m_cust_header.cust_id AND dm_fin_year.fin_year_id = t_tasks.task_fy_id AND dm_status_mst.status_value = t_tasks.task_status AND t_tasks.task_status NOT IN(:statusIds)", nativeQuery=true)
 	List<TaskListHome> getTaskList(@Param("empId") int empId,@Param("statusIds") List<String> statusIds);
 	
 	
