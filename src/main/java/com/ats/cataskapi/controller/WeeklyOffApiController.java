@@ -1286,8 +1286,16 @@ public class WeeklyOffApiController {
 
 					BugetedMinAndWorkedMinByEmpIds bugetedMinAndWorkedMinByEmpIds = bugetedMinAndWorkedMinByEmpIdsRepo
 							.bugetedMinAndWorkedMinByEmpIds(fromDate, toDate, ids);
-					managerListWithEmpIds.get(i).setAllWork(bugetedMinAndWorkedMinByEmpIds.getAllWork());
-					managerListWithEmpIds.get(i).setActlWork(bugetedMinAndWorkedMinByEmpIds.getActWork());
+					int allocatedHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getAllWork()/60);
+					int allocateHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getAllWork()%60);
+					String concateAllocated = allocatedHrs+"."+allocateHrs;
+					
+					int actualdHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getActWork()/60);
+					int actualHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getActWork()%60);
+					String concateActual = actualdHrs+"."+actualHrs;
+					
+					managerListWithEmpIds.get(i).setAllWork(Float.parseFloat(concateAllocated));
+					managerListWithEmpIds.get(i).setActlWork(Float.parseFloat(concateActual));
 
 					float bsyhrs = 0;
 
