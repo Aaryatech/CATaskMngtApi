@@ -17,7 +17,7 @@ public interface CompletedTaskReportRepo extends JpaRepository<CompletedTaskRepo
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    t_tasks.task_statutory_due_date,\n" + 
 			"    t_tasks.task_start_date,\n" + 
-			"    t_tasks.task_end_date,\n" + 
+			"      t_tasks.update_datetime AS task_end_date,\n" + 
 			"    t_tasks.emp_bud_hr,\n" + 
 			"    t_tasks.mngr_bud_hr, CASE WHEN m_cust_header.cust_group_id = 0 THEN m_cust_header.cust_firm_name ELSE COALESCE(\n" + 
 			"        (\n" + 
@@ -49,7 +49,7 @@ public interface CompletedTaskReportRepo extends JpaRepository<CompletedTaskRepo
 			"    dm_periodicity,t_tasks,  m_cust_header,t_daily_work_log\n" + 
 			" \n" + 
 			"WHERE\n" + 
-			"  m_services.serv_id = t_tasks.serv_id AND m_activities.acti_id = t_tasks.actv_id AND dm_periodicity.periodicity_id = t_tasks.periodicity_id AND t_tasks.task_status = 9 AND t_tasks.del_status = 1 AND t_tasks.is_active = 1  AND   t_tasks.cust_id = m_cust_header.cust_id AND t_daily_work_log.task_id=t_tasks.task_id  AND  t_tasks.update_datetime between '2019-09-01 00:00:01' and '2019-09-13 23:59:59' group by t_tasks.task_id) b\n" + 
+			"  m_services.serv_id = t_tasks.serv_id AND m_activities.acti_id = t_tasks.actv_id AND dm_periodicity.periodicity_id = t_tasks.periodicity_id AND t_tasks.task_status = 9 AND t_tasks.del_status = 1 AND t_tasks.is_active = 1  AND   t_tasks.cust_id = m_cust_header.cust_id AND t_daily_work_log.task_id=t_tasks.task_id  AND  t_tasks.update_datetime between :fromDate1 and :toDate1  AND FIND_IN_SET(:empIds,t_tasks.task_emp_ids)  group by t_tasks.task_id) b\n" + 
 			" \n" + 
 			" LEFT JOIN\n" + 
 			" \n" + 
@@ -65,9 +65,9 @@ public interface CompletedTaskReportRepo extends JpaRepository<CompletedTaskRepo
 			"   t_tasks,t_daily_work_log\n" + 
 			" \n" + 
 			"WHERE\n" + 
-			"    t_tasks.task_status = 9 AND t_tasks.del_status = 1 AND t_tasks.is_active = 1  AND    t_daily_work_log.task_id=t_tasks.task_id  AND  t_tasks.update_datetime between :fromDate and :toDate group by t_tasks.task_id\n" + 
+			"    t_tasks.task_status = 9 AND t_tasks.del_status = 1 AND t_tasks.is_active = 1  AND    t_daily_work_log.task_id=t_tasks.task_id  AND  t_tasks.update_datetime between :fromDate1 and :toDate1   AND FIND_IN_SET(:empIds,t_tasks.task_emp_ids) group by t_tasks.task_id\n" + 
 			"    )\n" + 
 			"    ) a group by a.task_id) c ON b.task_id=c.task_id",nativeQuery=true)
-		List<CompletedTaskReport> getAllCompletedTask( @Param("fromDate") String fromDate, @Param("toDate") String toDate);
+		List<CompletedTaskReport> getAllCompletedTask( @Param("fromDate1") String fromDate1, @Param("toDate1") String toDate1,@Param("empIds") String empIds);
 
 }

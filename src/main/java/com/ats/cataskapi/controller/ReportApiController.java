@@ -15,29 +15,28 @@ import com.ats.cataskapi.report.repo.CompletedTaskReportRepo;
 
 @RestController
 public class ReportApiController {
+
+	@Autowired
+	CompletedTaskReportRepo completedTaskReportRepo;
+
+	@RequestMapping(value = { "/getCompletedTaskReport" }, method = RequestMethod.POST)
+	public @ResponseBody List<CompletedTaskReport> getCompletedTaskReport(@RequestParam String fromDate,
+			@RequestParam String toDate,@RequestParam String empIds) {
+		List<CompletedTaskReport> logList = new ArrayList<CompletedTaskReport>();
+		String fromDate1=fromDate.concat("  00:00:01");
+		String toDate1=	toDate.concat("  23:59:59");
 	
-	
-	  @Autowired CompletedTaskReportRepo completedTaskReportRepo;
-	  
-	  @RequestMapping(value = {"/getCompletedTaskReport"},
-	  method=RequestMethod.POST) public @ResponseBody List<CompletedTaskReport>
-	  getCompletedTaskReport(@RequestParam String fromDate,@RequestParam String
-	  toDate ){ List<CompletedTaskReport> logList = new
-	  ArrayList<CompletedTaskReport>(); fromDate.concat("  00:00:01");
-	  toDate.concat("  23:59:59");
-	  
-	  try { logList = completedTaskReportRepo.getAllCompletedTask(fromDate,
-	  toDate);
-	  
-	  }catch (Exception e) {
-	  System.out.println("Excep in getAllDailyWorkLogs : "+e.getMessage()); }
-	  return logList;
-	  
-	  }
-	 
-	
-	
-	
-	
+		
+		//System.out.println("dates"+fromDate+toDate);
+
+		try {
+			logList = completedTaskReportRepo.getAllCompletedTask(fromDate1, toDate1, empIds);
+
+		} catch (Exception e) {
+			System.out.println("Excep in getAllDailyWorkLogs : " + e.getMessage());
+		}
+		return logList;
+
+	}
 
 }
