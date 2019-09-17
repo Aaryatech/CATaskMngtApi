@@ -871,17 +871,20 @@ public class MasterApiController {
 	@RequestMapping(value = {"/getTaskListByFilters"}, method = RequestMethod.POST)
 	public @ResponseBody List<TaskListHome> getTaskListByFilters(@RequestParam int empId, @RequestParam String fromDate,
 			@RequestParam String toDate, @RequestParam int service, @RequestParam int activity, @RequestParam int custId,
-			@RequestParam List<String> statusIds) {
+			@RequestParam List<String> statusIds,@RequestParam int stats ) {
 		List<TaskListHome> taskList = null;
 		try {
 			
 			taskList = new ArrayList<TaskListHome>();
 			
-			if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && custId!=0){
-				
-				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId, statusIds);
+			if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && custId!=0 && stats!=0){
+				System.out.println("Q1");
+				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId, statusIds, stats);
 			}
-			
+			else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && custId!=0 && stats==0) {
+				System.out.println("Q2");
+				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId, statusIds);	
+			}
 			/*else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0) {
 				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity);
 			}
