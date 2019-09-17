@@ -10,8 +10,8 @@ public class CapacityDetailByEmp {
 	private int empId;
 	private String empName;
 	private float bugetedCap;
-	private float allWork;
-	private float actWork;
+	private String allWork;
+	private String actWork;
 	public int getEmpId() {
 		return empId;
 	}
@@ -30,16 +30,16 @@ public class CapacityDetailByEmp {
 	public void setBugetedCap(float bugetedCap) {
 		this.bugetedCap = bugetedCap;
 	}
-	public float getAllWork() {
+	public String getAllWork() {
 		return allWork;
 	}
-	public void setAllWork(float allWork) {
+	public void setAllWork(String allWork) {
 		this.allWork = allWork;
 	}
-	public float getActWork() {
+	public String getActWork() {
 		return actWork;
 	}
-	public void setActWork(float actWork) {
+	public void setActWork(String actWork) {
 		this.actWork = actWork;
 	}
 	@Override

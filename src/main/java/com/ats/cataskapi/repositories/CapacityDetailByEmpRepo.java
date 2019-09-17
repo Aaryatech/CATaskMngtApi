@@ -24,4 +24,15 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 	@Query(value = "select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and FIND_IN_SET(:userId,task_emp_ids) and is_active=1", nativeQuery = true)
 	String getEmployeeListByManagerIdAndUserId(@Param("empId")int empId, @Param("userId") int userId);
 
+	@Query(value = "select\n" + 
+			"        GROUP_CONCAT(DISTINCT task_emp_ids)  \n" + 
+			"    from\n" + 
+			"        t_tasks \n" + 
+			"    where\n" + 
+			"        FIND_IN_SET(:empId,task_emp_ids) \n" + 
+			"        and FIND_IN_SET(:userId,task_emp_ids) \n" + 
+			"        and is_active=1 and task_end_date between :fromDate and :toDate ", nativeQuery = true)
+	String getEmployeeListByManagerIdAndUserIdBetweenDate(@Param("empId")int empId, @Param("userId") int userId,
+			@Param("fromDate")String fromDate,@Param("toDate") String toDate);
+
 }

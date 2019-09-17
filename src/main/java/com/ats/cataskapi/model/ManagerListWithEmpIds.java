@@ -21,10 +21,10 @@ public class ManagerListWithEmpIds {
 	private float bugetedWork;
 	
 	@Transient
-	private float allWork;
+	private String allWork;
 	
 	@Transient
-	private float actlWork;
+	private String actlWork;
 
 	@Transient
 	ArrayList<String> ids;
@@ -61,19 +61,19 @@ public class ManagerListWithEmpIds {
 		this.bugetedWork = bugetedWork;
 	}
 
-	public float getAllWork() {
+	public String getAllWork() {
 		return allWork;
 	}
 
-	public void setAllWork(float allWork) {
+	public void setAllWork(String allWork) {
 		this.allWork = allWork;
 	}
 
-	public float getActlWork() {
+	public String getActlWork() {
 		return actlWork;
 	}
 
-	public void setActlWork(float actlWork) {
+	public void setActlWork(String actlWork) {
 		this.actlWork = actlWork;
 	}
 

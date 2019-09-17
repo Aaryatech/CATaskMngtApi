@@ -1010,10 +1010,132 @@ public class WeeklyOffApiController {
 
 			}
 
-			LinkedHashSet<String> hashSet = new LinkedHashSet<>(
-					Arrays.asList(ids));
+			LinkedHashSet<String> hashSet = new LinkedHashSet<>(Arrays.asList(ids));
 			ArrayList<String> arryids = new ArrayList<>(hashSet);
-			
+
+			empCaplist = capacityDetailByEmpRepo.getEmployeeCapacityDetail(fromDate, toDate, arryids);
+			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
+
+			LeaveCount totalDayCount = calculateHolidayBetweenDate(0, fromDate, toDate);
+			float freeHours = totalDayCount.getLeavecount() * 7;
+
+			List<EmployeeListWithAvailableHours> list = new ArrayList<>();
+			list = employeeListWithAvailableHoursRepo.getLeaveRecord(fromDate, toDate, arryids);
+
+			for (int j = 0; j < empCaplist.size(); j++) {
+
+				float bsyhrs = 0;
+
+				for (int i = 0; i < list.size(); i++) {
+
+					if (empCaplist.get(j).getEmpId() == list.get(i).getEmpId()) {
+
+						String lvfmdt = yy.format(list.get(i).getLeaveFromdt());
+						String lvtodt = yy.format(list.get(i).getLeaveTodt());
+
+						if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvfmdt)) >= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) < 0) {
+
+							System.out.println("in if");
+							if (list.get(i).getLeaveDuration() == 0) {
+
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
+										toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+
+							} else {
+
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
+										toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
+
+						} else if (yy.parse(fromDate).compareTo(yy.parse(lvtodt)) <= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0
+								&& yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) > 0) {
+
+							System.out.println("in if else 2");
+
+							if (list.get(i).getLeaveDuration() == 0) {
+
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate,
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+
+							} else {
+
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate,
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
+
+						} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0) {
+
+							System.out.println("in if else 3");
+
+							if (list.get(i).getLeaveDuration() == 0) {
+
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+
+							} else {
+
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
+
+						} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) >= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) <= 0) {
+
+							System.out.println("in if else 4");
+
+							if (list.get(i).getLeaveDuration() == 0) {
+
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+
+							} else {
+
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
+						}
+					}
+				}
+
+				empCaplist.get(j).setBugetedCap((float) (freeHours - bsyhrs));
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return empCaplist;
+
+	}
+
+	@RequestMapping(value = { "/getEmployeeCapacityDetailForManagerDashboard" }, method = RequestMethod.POST)
+	public @ResponseBody List<CapacityDetailByEmp> getEmployeeCapacityDetailForManagerDashboard(
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
+			@RequestParam("empId") int empId, @RequestParam("userId") int userId) {
+
+		List<CapacityDetailByEmp> empCaplist = new ArrayList<CapacityDetailByEmp>();
+
+		try {
+
+			String[] ids = {};
+
+			String empIds = capacityDetailByEmpRepo.getEmployeeListByManagerIdAndUserIdBetweenDate(empId, userId,
+					fromDate, toDate);
+			ids = empIds.split(",");
+
+			LinkedHashSet<String> hashSet = new LinkedHashSet<>(Arrays.asList(ids));
+			ArrayList<String> arryids = new ArrayList<>(hashSet);
+
 			empCaplist = capacityDetailByEmpRepo.getEmployeeCapacityDetail(fromDate, toDate, arryids);
 			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -1273,7 +1395,7 @@ public class WeeklyOffApiController {
 			LeaveCount totalDayCount = calculateHolidayBetweenDate(0, fromDate, toDate);
 			float freeHours = totalDayCount.getLeavecount() * 7;
 
-			//System.out.println("freeHours " + freeHours);
+			// System.out.println("freeHours " + freeHours);
 			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
 			managerListWithEmpIds = managerListWithEmpIdsRepo.managerListWithEmpIds(fromDate, toDate, empId);
 
@@ -1287,21 +1409,21 @@ public class WeeklyOffApiController {
 
 					List<EmployeeHolidayListForDashbord> list = employeeHolidayListForDashbordRepo
 							.getLeaveRecordForManagerDashboard(fromDate, toDate, ids);
- 
+
 					managerListWithEmpIds.get(i).setIds(ids);
-					
+
 					BugetedMinAndWorkedMinByEmpIds bugetedMinAndWorkedMinByEmpIds = bugetedMinAndWorkedMinByEmpIdsRepo
 							.bugetedMinAndWorkedMinByEmpIds(fromDate, toDate, ids);
-					int allocatedHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getAllWork()/60);
-					int allocateHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getAllWork()%60);
-					String concateAllocated = allocatedHrs+"."+allocateHrs;
-					
-					int actualdHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getActWork()/60);
-					int actualHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getActWork()%60);
-					String concateActual = actualdHrs+"."+actualHrs;
-					
-					managerListWithEmpIds.get(i).setAllWork(Float.parseFloat(concateAllocated));
-					managerListWithEmpIds.get(i).setActlWork(Float.parseFloat(concateActual));
+					int allocatedHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getAllWork() / 60);
+					int allocateHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getAllWork() % 60);
+					String concateAllocated = allocatedHrs + "." + allocateHrs;
+
+					int actualdHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getActWork() / 60);
+					int actualHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getActWork() % 60);
+					String concateActual = actualdHrs + "." + actualHrs;
+
+					managerListWithEmpIds.get(i).setAllWork(concateAllocated);
+					managerListWithEmpIds.get(i).setActlWork(concateActual);
 
 					float bsyhrs = 0;
 
@@ -1376,7 +1498,7 @@ public class WeeklyOffApiController {
 						}
 
 					}
-					float bugetedCap = (ids.size()*freeHours) - bsyhrs;
+					float bugetedCap = (ids.size() * freeHours) - bsyhrs;
 					managerListWithEmpIds.get(i).setBugetedWork(bugetedCap);
 				}
 
