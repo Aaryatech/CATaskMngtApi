@@ -1010,14 +1010,18 @@ public class WeeklyOffApiController {
 
 			}
 
-			empCaplist = capacityDetailByEmpRepo.getEmployeeCapacityDetail(fromDate, toDate, ids);
+			LinkedHashSet<String> hashSet = new LinkedHashSet<>(
+					Arrays.asList(ids));
+			ArrayList<String> arryids = new ArrayList<>(hashSet);
+			
+			empCaplist = capacityDetailByEmpRepo.getEmployeeCapacityDetail(fromDate, toDate, arryids);
 			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
 
 			LeaveCount totalDayCount = calculateHolidayBetweenDate(0, fromDate, toDate);
 			float freeHours = totalDayCount.getLeavecount() * 7;
 
 			List<EmployeeListWithAvailableHours> list = new ArrayList<>();
-			list = employeeListWithAvailableHoursRepo.getLeaveRecord(fromDate, toDate, ids);
+			list = employeeListWithAvailableHoursRepo.getLeaveRecord(fromDate, toDate, arryids);
 
 			for (int j = 0; j < empCaplist.size(); j++) {
 
@@ -1269,7 +1273,7 @@ public class WeeklyOffApiController {
 			LeaveCount totalDayCount = calculateHolidayBetweenDate(0, fromDate, toDate);
 			float freeHours = totalDayCount.getLeavecount() * 7;
 
-			System.out.println("freeHours " + freeHours);
+			//System.out.println("freeHours " + freeHours);
 			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
 			managerListWithEmpIds = managerListWithEmpIdsRepo.managerListWithEmpIds(fromDate, toDate, empId);
 
@@ -1283,7 +1287,9 @@ public class WeeklyOffApiController {
 
 					List<EmployeeHolidayListForDashbord> list = employeeHolidayListForDashbordRepo
 							.getLeaveRecordForManagerDashboard(fromDate, toDate, ids);
-
+ 
+					managerListWithEmpIds.get(i).setIds(ids);
+					
 					BugetedMinAndWorkedMinByEmpIds bugetedMinAndWorkedMinByEmpIds = bugetedMinAndWorkedMinByEmpIdsRepo
 							.bugetedMinAndWorkedMinByEmpIds(fromDate, toDate, ids);
 					int allocatedHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getAllWork()/60);

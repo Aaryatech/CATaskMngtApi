@@ -1,5 +1,6 @@
 package com.ats.cataskapi.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -63,7 +64,7 @@ public interface EmpListForDashboardByStatusRepo extends JpaRepository<EmpListFo
 			"        m_emp e      \n" + 
 			"    where\n" + 
 			"        e.del_status=1 and e.emp_id in (:ids)",nativeQuery=true)
-	List<EmpListForDashboardByStatus> getTaskCountByStatus(@Param("date") String date,@Param("ids") String[] ids,@Param("status") int status
+	List<EmpListForDashboardByStatus> getTaskCountByStatus(@Param("date") String date,@Param("ids") ArrayList<String> ids,@Param("status") int status
 			,@Param("userId") int userId);
 
 }

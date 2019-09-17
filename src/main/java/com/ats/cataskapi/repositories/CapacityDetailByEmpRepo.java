@@ -1,5 +1,6 @@
 package com.ats.cataskapi.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +19,7 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 			+ "where wl.work_date between :fromDate and :toDate and wl.emp_id=e.emp_id),0) as act_work from m_emp e where e.del_status=1 and "
 			+ "e.emp_id in (:empId)", nativeQuery = true)
 	List<CapacityDetailByEmp> getEmployeeCapacityDetail(@Param("fromDate") String fromDate,
-			@Param("toDate") String toDate, @Param("empId") String[] empId);
+			@Param("toDate") String toDate, @Param("empId") ArrayList<String> empId);
 
 	@Query(value = "select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and FIND_IN_SET(:userId,task_emp_ids) and is_active=1", nativeQuery = true)
 	String getEmployeeListByManagerIdAndUserId(@Param("empId")int empId, @Param("userId") int userId);

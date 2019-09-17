@@ -1,5 +1,6 @@
 package com.ats.cataskapi.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -54,7 +55,7 @@ public interface EmployeeListWithAvailableHoursRepo extends JpaRepository<Employ
 			"                and l.leave_todt<=:toDate\n" + 
 			"            )\n" + 
 			"        ) and e.emp_id in (:ids)", nativeQuery = true)
-	List<EmployeeListWithAvailableHours> getLeaveRecord(@Param("fromDate")String fromDate,@Param("toDate") String toDate,@Param("ids")  String[] ids);
+	List<EmployeeListWithAvailableHours> getLeaveRecord(@Param("fromDate")String fromDate,@Param("toDate") String toDate,@Param("ids")  ArrayList<String> ids);
 
 	@Query(value = "select\n" + 
 			"        l.leave_id,\n" + 

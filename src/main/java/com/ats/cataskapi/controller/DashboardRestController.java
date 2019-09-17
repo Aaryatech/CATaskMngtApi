@@ -4,7 +4,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +80,12 @@ public class DashboardRestController {
 		try {
 
 			String empIds = capacityDetailByEmpRepo.getEmployeeList(empId);
-			String[] ids = empIds.split(",");
+			//String[] ids = empIds.split(",");
+			
+			LinkedHashSet<String> hashSet = new LinkedHashSet<>(
+					Arrays.asList(empIds.split(",")));
+			ArrayList<String> ids = new ArrayList<>(hashSet);
+			
 			empList = empListForDashboardRepo.getempList(ids);
 
 		} catch (Exception e) {
@@ -127,8 +134,12 @@ public class DashboardRestController {
 		try {
 
 			String empIds = capacityDetailByEmpRepo.getEmployeeListByManagerIdAndUserId(empId, userId);
-			String[] ids = empIds.split(",");
+			//String[] ids = empIds.split(",");
 
+			LinkedHashSet<String> hashSet = new LinkedHashSet<>(
+					Arrays.asList(empIds.split(",")));
+			ArrayList<String> ids = new ArrayList<>(hashSet);
+			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			empList = empListForDashboardByStatusRepo.getTaskCountByStatus(sf.format(date), ids, status, userId);

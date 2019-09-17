@@ -1,5 +1,7 @@
 package com.ats.cataskapi.model;
  
+import java.util.ArrayList;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +26,9 @@ public class ManagerListWithEmpIds {
 	@Transient
 	private float actlWork;
 
+	@Transient
+	ArrayList<String> ids;
+	
 	public int getEmpId() {
 		return empId;
 	}
@@ -72,10 +77,19 @@ public class ManagerListWithEmpIds {
 		this.actlWork = actlWork;
 	}
 
+	public ArrayList<String> getIds() {
+		return ids;
+	}
+
+	public void setIds(ArrayList<String> ids) {
+		this.ids = ids;
+	}
+
 	@Override
 	public String toString() {
 		return "ManagerListWithEmpIds [empId=" + empId + ", empName=" + empName + ", memberIds=" + memberIds
-				+ ", bugetedWork=" + bugetedWork + ", allWork=" + allWork + ", actlWork=" + actlWork + "]";
+				+ ", bugetedWork=" + bugetedWork + ", allWork=" + allWork + ", actlWork=" + actlWork + ", ids=" + ids
+				+ "]";
 	}
 	
 	 
