@@ -11,7 +11,7 @@ import com.ats.cataskapi.model.BugetedMinAndWorkedMinByEmpIds;
 
 public interface BugetedMinAndWorkedMinByEmpIdsRepo extends JpaRepository<BugetedMinAndWorkedMinByEmpIds, Integer>{
 
-	@Query(value = "select\n" + 
+	/*@Query(value = "select\n" + 
 			"        UUID() as id,\n" + 
 			"        sum(coalesce((select\n" + 
 			"            sum(emp_bud_hr) \n" + 
@@ -35,6 +35,47 @@ public interface BugetedMinAndWorkedMinByEmpIdsRepo extends JpaRepository<Bugete
 			"        m_emp e \n" + 
 			"    where\n" + 
 			"        e.del_status=1 \n" + 
+			"        and e.emp_id in (:ids)", nativeQuery = true)*/
+	
+	@Query(value = "select\n" + 
+			"        UUID() as id, \n" + 
+			"         sum(case when e.emp_type=3\n" + 
+			"            then\n" + 
+			"            coalesce((select\n" + 
+			"            sum(mngr_bud_hr) \n" + 
+			"        from\n" + 
+			"            t_tasks \n" + 
+			"        where\n" + 
+			"            task_end_date between :fromDate and :toDate \n" + 
+			"            and FIND_IN_SET(e.emp_id,task_emp_ids) \n" + 
+			"            and is_active=1 \n" + 
+			"            and del_status=1 ),\n" + 
+			"        0)\n" + 
+			"            else\n" + 
+			"            coalesce((select\n" + 
+			"           sum(emp_bud_hr)\n" + 
+			"        from\n" + 
+			"            t_tasks \n" + 
+			"        where\n" + 
+			"            task_end_date between :fromDate and :toDate \n" + 
+			"            and FIND_IN_SET(e.emp_id,task_emp_ids) \n" + 
+			"            and is_active=1 \n" + 
+			"            and del_status=1 ),\n" + 
+			"        0)\n" + 
+			"        end) as all_work,\n" + 
+			"        \n" + 
+			"        sum(coalesce((select\n" + 
+			"            sum(wl.work_hours)         \n" + 
+			"        from\n" + 
+			"            t_daily_work_log wl          \n" + 
+			"        where\n" + 
+			"            wl.work_date between :fromDate and :toDate                \n" + 
+			"            and wl.emp_id=e.emp_id),\n" + 
+			"        0)) as act_work      \n" + 
+			"    from\n" + 
+			"        m_emp e      \n" + 
+			"    where\n" + 
+			"        e.del_status=1          \n" + 
 			"        and e.emp_id in (:ids)", nativeQuery = true)
 	 BugetedMinAndWorkedMinByEmpIds bugetedMinAndWorkedMinByEmpIds(@Param("fromDate")String fromDate,@Param("toDate") String toDate,
 			@Param("ids") ArrayList<String> ids);
