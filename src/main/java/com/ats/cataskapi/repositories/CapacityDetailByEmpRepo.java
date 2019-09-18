@@ -14,55 +14,52 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 	@Query(value = "select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and is_active=1", nativeQuery = true)
 	String getEmployeeList(@Param("empId") int empId);
 
-	@Query(value = "select\n" + 
-			"        e.emp_id,\n" + 
-			"        e.emp_name,\n" + 
-			"        0 as bugeted_cap,\n" + 
-			"        case when e.emp_type=3\n" + 
-			"            then\n" + 
-			"            coalesce((select\n" + 
-			"            CONCAT(FLOOR(sum(mngr_bud_hr)/60),\n" + 
-			"            '.',\n" + 
-			"            MOD( sum(mngr_bud_hr),\n" + 
-			"            60)) \n" + 
-			"        from\n" + 
-			"            t_tasks \n" + 
-			"        where\n" + 
-			"            task_end_date between :fromDate and :toDate \n" + 
-			"            and FIND_IN_SET(e.emp_id,task_emp_ids) \n" + 
-			"            and is_active=1 \n" + 
-			"            and del_status=1 ),\n" + 
-			"        0)\n" + 
-			"            else\n" + 
-			"            coalesce((select\n" + 
-			"            CONCAT(FLOOR(sum(emp_bud_hr)/60),\n" + 
-			"            '.',\n" + 
-			"            MOD( sum(emp_bud_hr),\n" + 
-			"            60)) \n" + 
-			"        from\n" + 
-			"            t_tasks \n" + 
-			"        where\n" + 
-			"            task_end_date between :fromDate and :toDate \n" + 
-			"            and FIND_IN_SET(e.emp_id,task_emp_ids) \n" + 
-			"            and is_active=1 \n" + 
-			"            and del_status=1 ),\n" + 
-			"        0)\n" + 
+	@Query(value = "select e.emp_id, e.emp_name, 0 as bugeted_cap,\n" + 
+			"        case \n" + 
+			"            when e.emp_type=3             then             coalesce((select\n" + 
+			"                CONCAT(FLOOR(sum(mngr_bud_hr)/60),\n" + 
+			"                '.',\n" + 
+			"                MOD( sum(mngr_bud_hr),\n" + 
+			"                60))          \n" + 
+			"            from\n" + 
+			"                t_tasks          \n" + 
+			"            where\n" + 
+			"                task_end_date between :fromDate and :toDate              \n" + 
+			"                and FIND_IN_SET(e.emp_id,task_emp_ids)              \n" + 
+			"                and is_active=1              \n" + 
+			"                and del_status=1 ),\n" + 
+			"            0)             \n" + 
+			"            when e.emp_type=5             then             coalesce((select\n" + 
+			"                CONCAT(FLOOR(sum(emp_bud_hr)/60),\n" + 
+			"                '.',\n" + 
+			"                MOD( sum(emp_bud_hr),\n" + 
+			"                60))          \n" + 
+			"            from\n" + 
+			"                t_tasks          \n" + 
+			"            where\n" + 
+			"                task_end_date between :fromDate and :toDate              \n" + 
+			"                and FIND_IN_SET(e.emp_id,task_emp_ids)              \n" + 
+			"                and is_active=1              \n" + 
+			"                and del_status=1 ),\n" + 
+			"            0)\n" + 
+			"            else \n" + 
+			"            0\n" + 
 			"        end as all_work ,\n" + 
 			"        coalesce((select\n" + 
 			"            CONCAT(FLOOR(sum(wl.work_hours)/60),\n" + 
 			"            '.',\n" + 
 			"            MOD( sum(wl.work_hours),\n" + 
-			"            60)) \n" + 
+			"            60))          \n" + 
 			"        from\n" + 
-			"            t_daily_work_log wl \n" + 
+			"            t_daily_work_log wl          \n" + 
 			"        where\n" + 
-			"            wl.work_date between :fromDate and :toDate \n" + 
+			"            wl.work_date between :fromDate and :toDate              \n" + 
 			"            and wl.emp_id=e.emp_id),\n" + 
-			"        0) as act_work \n" + 
+			"        0) as act_work      \n" + 
 			"    from\n" + 
-			"        m_emp e \n" + 
+			"        m_emp e      \n" + 
 			"    where\n" + 
-			"        e.del_status=1 \n" + 
+			"        e.del_status=1          \n" + 
 			"        and e.emp_id in (:empId)", nativeQuery = true)
 	List<CapacityDetailByEmp> getEmployeeCapacityDetail(@Param("fromDate") String fromDate,
 			@Param("toDate") String toDate, @Param("empId") ArrayList<String> empId);
