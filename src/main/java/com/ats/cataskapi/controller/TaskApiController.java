@@ -440,27 +440,26 @@ public class TaskApiController {
 				if(emp!=0 && fromDate!=null && toDate!=null && customer==0 &&  service==0) {
 				list = workLogRepo.getDailyWorkLogList(stat, emp, fromDate, toDate);
 				//System.out.println("// Query 1----------"+list);
-				}
-				
+				}				
 				if(emp!=0 && fromDate!=null && toDate!=null && customer!=0 && service==0) {
 					list = workLogRepo.getDailyWorkLogListByCust(stat, emp, customer, fromDate, toDate);
 					//System.out.println("// Query 2----------"+list);
-				}
-				
+				}				
 				if(emp!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && customer==0) {
 					list = workLogRepo.getDailyWorkLogListBySerAct(stat, emp, fromDate, toDate, 
-							service, activity);
-					
+							service, activity);					
 					//System.out.println("// Query 3----------"+list);
-				}
-				
+				}				
 				if(emp!=0 && fromDate!=null && toDate!=null && customer!=0 && service!=0 && activity!=0) {
 					
 					list = workLogRepo.getDailyWorkLogListByCustSerAct(stat, emp, customer, fromDate, toDate, 
 							service, activity);
-				}	//System.out.println("// Query 4----------"+list);
+				}	
 				if(emp==0 && fromDate!=null && toDate!=null && customer==0 &&  service==0) {
 					list = workLogRepo.getDailyWorkLogList(stat, fromDate, toDate);
+				}
+				if(emp==0 && fromDate!=null && toDate!=null && customer!=0 &&  service==0) {
+					list = workLogRepo.getDailyWorkLogList(stat, fromDate, toDate, customer);
 				}
 					
 		} catch (Exception e) {
