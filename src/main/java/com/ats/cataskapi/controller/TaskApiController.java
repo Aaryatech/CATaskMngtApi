@@ -665,8 +665,15 @@ public class TaskApiController {
 		Info info = new Info();
 
 		try {
-			int res = taskRepo.updateEditTask(taskId, empHr, mngHr, workDate, dueDate, empId, updateUserName,
-					updateDateTime);
+			int res = 0;
+			if(workDate.equals("null")) {
+				res = taskRepo.updateEditTaskForNull(taskId, empHr, mngHr, dueDate, empId, updateUserName,
+						updateDateTime);
+			}else
+			{
+				res = taskRepo.updateEditTask(taskId, empHr, mngHr, workDate, dueDate, empId, updateUserName,
+						updateDateTime);
+			}
 
 			if (res > 0) {
 				info.setError(false);
@@ -702,7 +709,6 @@ public class TaskApiController {
 
 		return info;
 	}
-
 	/********************************
 	 * System Generated Status
 	 ********************************/
