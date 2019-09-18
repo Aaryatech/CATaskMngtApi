@@ -886,15 +886,18 @@ public class MasterApiController {
 				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId, statusIds);	
 			}
 			else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0) {
+				 System.out.println("Q3");
 				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity);
 			}
-			/*else if(empId!=0 && fromDate!=null && toDate!=null) {
-				taskList = taskListRepo.getTaskList(empId, fromDate, toDate);
-				System.err.println("getTaskList(empId, fromDate, toDate)");
-			}*/
+			
+			/*
+			 * if(empId!=0 && fromDate!=null && toDate!=null) { System.out.println("Q4");
+			 * taskList = taskListRepo.getTaskList(empId, fromDate, toDate); }
+			 */
+			 
 			else if(empId!=0) {
-				taskList = taskListRepo.getTaskList(empId, statusIds);
-				System.err.println("getTaskList(empId)");
+				 System.out.println("Q5");
+				taskList = taskListRepo.getTaskList(empId, statusIds);				
 			}
 			
 		}catch (Exception e) {
