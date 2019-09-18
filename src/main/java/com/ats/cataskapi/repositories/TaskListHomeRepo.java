@@ -123,7 +123,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 	List<TaskListHome> getTaskList(@Param("empId")int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate);*/
 /*****************************************************************************************/
 	
-	/*@Query(value="SELECT \n" + 
+	@Query(value="SELECT \n" + 
 			"        t_tasks.task_id,\n" + 
 			"        t_tasks.task_text,\n" + 
 			"        t_tasks.task_start_date,\n" + 
@@ -166,7 +166,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        dm_fin_year.fin_year_id=t_tasks.task_fy_id", nativeQuery=true)
 
 	List<TaskListHome> getTaskList(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate, 
-			@Param("service") int service, @Param("activity") int activity);*/
+			@Param("service") int service, @Param("activity") int activity);
 
 /*****************************************************************************************/
 	

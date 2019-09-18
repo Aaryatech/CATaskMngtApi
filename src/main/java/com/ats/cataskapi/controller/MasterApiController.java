@@ -885,10 +885,10 @@ public class MasterApiController {
 				System.out.println("Q2");
 				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId, statusIds);	
 			}
-			/*else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0) {
+			else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0) {
 				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity);
 			}
-			else if(empId!=0 && fromDate!=null && toDate!=null) {
+			/*else if(empId!=0 && fromDate!=null && toDate!=null) {
 				taskList = taskListRepo.getTaskList(empId, fromDate, toDate);
 				System.err.println("getTaskList(empId, fromDate, toDate)");
 			}*/
