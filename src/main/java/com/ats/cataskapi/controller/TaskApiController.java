@@ -458,13 +458,15 @@ public class TaskApiController {
 					
 					list = workLogRepo.getDailyWorkLogListByCustSerAct(stat, emp, customer, fromDate, toDate, 
 							service, activity);
-					//System.out.println("// Query 4----------"+list);
+				}	//System.out.println("// Query 4----------"+list);
+				if(emp==0 && fromDate!=null && toDate!=null && customer==0 &&  service==0) {
+					list = workLogRepo.getDailyWorkLogList(stat, fromDate, toDate);
 				}
 					
 		} catch (Exception e) {
 			System.err.println("Exce in getTaskDailyWorkLog " + e.getMessage());
 		}
-		System.out.println("Log List-----------" + list.toString());
+		System.out.println("Log List-------------"+ list.toString());
 		return list;
 	}
 
