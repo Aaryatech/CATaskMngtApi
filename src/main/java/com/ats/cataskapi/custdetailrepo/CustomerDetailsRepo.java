@@ -74,11 +74,7 @@ public interface CustomerDetailsRepo extends JpaRepository<CustomerDetails, Inte
 	
 	
 	@Query(value="SELECT 0 as cust_group_name,\n" + 
-			" CASE WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name \n" + 
-			"	 \n" + 
-			"	  ELSE COALESCE(( SELECT m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id \n" + 
-			"	 \n" + 
-			"	  AND m_cust_group.del_status=1 ),0) END AS cust_firm_name,\n" + 
+			" 		 m_cust_header.cust_firm_name,\n" + 
 			"        m_cust_header.cust_id,\n" + 
 			"        m_cust_header.cust_assessee_name,\n" + 
 			"        m_cust_header.cust_pan_no,\n" + 
@@ -97,7 +93,27 @@ public interface CustomerDetailsRepo extends JpaRepository<CustomerDetails, Inte
 	List<CustomerDetails> getAllCustomerDetailsActiveInactive();
 	
 	
-
+	/*SELECT 0 as cust_group_name,\n" + 
+	" CASE WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name \n" + 
+	"	 \n" + 
+	"	  ELSE COALESCE(( SELECT m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id \n" + 
+	"	 \n" + 
+	"	  AND m_cust_group.del_status=1 ),0) END AS cust_firm_name,\n" + 
+	"        m_cust_header.cust_id,\n" + 
+	"        m_cust_header.cust_assessee_name,\n" + 
+	"        m_cust_header.cust_pan_no,\n" + 
+	"        m_cust_header.cust_email_id,\n" + 
+	"        m_cust_header.cust_phone_no,\n" + 
+	"        m_cust_header.is_active,\n" + 
+	"        m_emp.emp_name\n" + 
+	"    FROM\n" + 
+	"        m_cust_header,\n" + 
+	"        m_emp\n" + 
+	"    WHERE\n" + 
+	"        m_cust_header.del_status=1   \n" + 
+	"        AND    m_cust_header.owner_emp_id=m_emp.emp_id \n" + 			
+	"    ORDER BY\n" + 
+	"        m_cust_header.cust_id DESC*/
 
 	
 }
