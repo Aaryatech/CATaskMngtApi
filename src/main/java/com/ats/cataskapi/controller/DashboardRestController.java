@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.cataskapi.model.BugetedAmtAndRevenue;
+import com.ats.cataskapi.model.ClientGroupList;
 import com.ats.cataskapi.model.DailyWorkLog;
 import com.ats.cataskapi.model.EmpListForDashboard;
 import com.ats.cataskapi.model.EmpListForDashboardByStatus;
 import com.ats.cataskapi.model.TaskCountByStatus;
 import com.ats.cataskapi.repositories.BugetedAmtAndRevenueRepo;
 import com.ats.cataskapi.repositories.CapacityDetailByEmpRepo;
+import com.ats.cataskapi.repositories.ClientGroupRepo;
 import com.ats.cataskapi.repositories.EmpListForDashboardByStatusRepo;
 import com.ats.cataskapi.repositories.EmpListForDashboardRepo;
 import com.ats.cataskapi.repositories.TaskCountByStatusRepo;
@@ -49,6 +51,9 @@ public class DashboardRestController {
 
 	@Autowired
 	EmpSalaryRepo empSalaryRepo;
+	
+	@Autowired
+	ClientGroupRepo clientGroupRepo;
 
 	@RequestMapping(value = { "/getTaskCountByStatus" }, method = RequestMethod.POST)
 	public @ResponseBody List<TaskCountByStatus> getTaskCountByStatus(@RequestParam("empId") int empId,
@@ -150,6 +155,44 @@ public class DashboardRestController {
 		}
 
 		return empList;
+
+	}
+	
+	@RequestMapping(value = { "/getClientGroupList" }, method = RequestMethod.GET)
+	public @ResponseBody List<ClientGroupList> getClientGroupList() {
+
+		List<ClientGroupList> list = new ArrayList<>();
+
+		try {
+
+			 
+			list = clientGroupRepo.getClientGroupList();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	@RequestMapping(value = { "/getClinetListByGroupId" }, method = RequestMethod.POST)
+	public @ResponseBody List<ClientGroupList> getClinetListByGroupId(@RequestParam("groupId") int groupId) {
+
+		List<ClientGroupList> list = new ArrayList<>();
+
+		try {
+
+			 
+			list = clientGroupRepo.getClinetListByGroupId(groupId);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return list;
 
 	}
 

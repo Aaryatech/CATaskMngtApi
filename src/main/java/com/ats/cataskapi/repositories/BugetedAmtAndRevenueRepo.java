@@ -1,4 +1,6 @@
 package com.ats.cataskapi.repositories;
+ 
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,7 +22,7 @@ public interface BugetedAmtAndRevenueRepo extends JpaRepository<BugetedAmtAndRev
 			+ "and t.task_statutory_due_date between :fromDate and :toDate and is_active=1 and "
 			+ "t.mapping_id=m.mapping_id and t.task_status=9),0) as actul_rev",nativeQuery=true)*/
 	
-	@Query(value="select\n" + 
+	/*@Query(value="select\n" + 
 			"        case \n" + 
 			"            when e.emp_type=3             then             coalesce((select\n" + 
 			"                sum(mngr_bud_hr)          \n" + 
@@ -82,8 +84,74 @@ public interface BugetedAmtAndRevenueRepo extends JpaRepository<BugetedAmtAndRev
 			"    from\n" + 
 			"        m_emp e \n" + 
 			"    where\n" + 
+			"        e.emp_id =:empId",nativeQuery=true)*/
+	
+	@Query(value="select\n" + 
+			"        case              \n" + 
+			"            when e.emp_type=3             then             coalesce((select\n" + 
+			"                sum(mngr_bud_hr)                       \n" + 
+			"            from\n" + 
+			"                t_tasks                       \n" + 
+			"            where\n" + 
+			"                task_end_date between :fromDate and :toDate                               \n" + 
+			"                and FIND_IN_SET(e.emp_id,task_emp_ids)                               \n" + 
+			"                and is_active=1                               \n" + 
+			"                and del_status=1 and  cust_id in (:clntIds)),\n" + 
+			"            0)                          \n" + 
+			"            when e.emp_type=5       then      coalesce((select\n" + 
+			"                sum(emp_bud_hr)                      \n" + 
+			"            from\n" + 
+			"                t_tasks                       \n" + 
+			"            where\n" + 
+			"                task_end_date between :fromDate and :toDate                               \n" + 
+			"                and FIND_IN_SET(e.emp_id,task_emp_ids)                               \n" + 
+			"                and is_active=1                               \n" + 
+			"                and del_status=1 and cust_id in (:clntIds)),\n" + 
+			"            0)             \n" + 
+			"            else             0         \n" + 
+			"        end as bugeted_hrs ,\n" + 
+			"        coalesce((select\n" + 
+			"            sum(wl.work_hours)                   \n" + 
+			"        from\n" + 
+			"            t_daily_work_log wl, t_tasks t                  \n" + 
+			"        where\n" + 
+			"            wl.work_date between :fromDate and :toDate                           \n" + 
+			"            and wl.emp_id=e.emp_id                          \n" + 
+			"            and wl.del_status=1 and t.task_id=wl.task_id and t.cust_id in (:clntIds)),\n" + 
+			"        0) as actual_hrs,\n" + 
+			"        coalesce((select\n" + 
+			"            sum(m.actv_billing_amt)                   \n" + 
+			"        from\n" + 
+			"            m_cust_acti_map m,\n" + 
+			"            t_tasks t                   \n" + 
+			"        where\n" + 
+			"            t.del_status=1                           \n" + 
+			"            and FIND_IN_SET(e.emp_id,t.task_emp_ids)                           \n" + 
+			"            and t.task_end_date between :fromDate and :toDate                           \n" + 
+			"            and is_active=1                           \n" + 
+			"            and t.mapping_id=m.mapping_id),\n" + 
+			"        0) as bugeted_rev,\n" + 
+			"        coalesce((select\n" + 
+			"            sum(m.actv_billing_amt)                   \n" + 
+			"        from\n" + 
+			"            m_cust_acti_map m,\n" + 
+			"            t_tasks t                   \n" + 
+			"        where\n" + 
+			"            t.del_status=1                           \n" + 
+			"            and FIND_IN_SET(e.emp_id,t.task_emp_ids)                           \n" + 
+			"            and t.task_end_date between :fromDate and :toDate                       \n" + 
+			"            and is_active=1                           \n" + 
+			"            and t.mapping_id=m.mapping_id                           \n" + 
+			"            and t.task_status=9),\n" + 
+			"        0) as actul_rev          \n" + 
+			"    from\n" + 
+			"        m_emp e      \n" + 
+			"    where\n" + 
 			"        e.emp_id =:empId",nativeQuery=true)
 	BugetedAmtAndRevenue calculateBugetedAmtAndBugetedRevenue(@Param("empId") int empId,@Param("fromDate") String fromDate, 
-			@Param("toDate") String toDate);
+			@Param("toDate") String toDate,@Param("clntIds") List<Integer> clntIds);
+
+	@Query(value="select cust_id as id  from m_cust_header where del_status=1 and is_active=1 and cust_group_id =:groupId",nativeQuery=true)
+	List<Integer> getclientByGroupId(@Param("groupId") int groupId);
 
 }

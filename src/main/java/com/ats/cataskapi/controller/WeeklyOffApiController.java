@@ -1243,12 +1243,20 @@ public class WeeklyOffApiController {
 
 	@RequestMapping(value = { "/calculateBugetedAmtAndBugetedRevenue" }, method = RequestMethod.POST)
 	public @ResponseBody BugetedAmtAndRevenue calculateBugetedAmtAndBugetedRevenue(@RequestParam("empId") int empId,
-			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,@RequestParam("typeId") int typeId,
+			@RequestParam("groupId") int groupId,@RequestParam("clientId") int clientId) {
 
 		BugetedAmtAndRevenue bugetedAmtAndRevenue = new BugetedAmtAndRevenue();
 
 		try {
 
+			List<Integer> clntIds = new ArrayList<>();
+			
+			if(clientId==0) {
+				clntIds = bugetedAmtAndRevenueRepo.getclientByGroupId(groupId);
+			}else {
+				clntIds.add(clientId);
+			}
 			LeaveCount totalDayCount = calculateHolidayBetweenDate(0, fromDate, toDate);
 			float freeHours = totalDayCount.getLeavecount() * 7;
 
@@ -1335,7 +1343,7 @@ public class WeeklyOffApiController {
 			float sal = 0;
 			EmpSalary empSalary = empSalaryRepo.getrecordByEmpIdAndDate(fromDate, empId);
 			bugetedAmtAndRevenue = bugetedAmtAndRevenueRepo.calculateBugetedAmtAndBugetedRevenue(empId, fromDate,
-					toDate);
+					toDate,clntIds);
 
 			if (month == 1) {
 				sal = (empSalary.getJan() + 6000) / bugetedCap;
