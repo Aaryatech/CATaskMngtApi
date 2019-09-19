@@ -28,6 +28,7 @@ import com.ats.cataskapi.repositories.ClientGroupRepo;
 import com.ats.cataskapi.repositories.EmpListForDashboardByStatusRepo;
 import com.ats.cataskapi.repositories.EmpListForDashboardRepo;
 import com.ats.cataskapi.repositories.TaskCountByStatusRepo;
+import com.ats.cataskapi.service.CommonFunctionService;
 import com.ats.cataskapi.task.model.EmpSalary;
 import com.ats.cataskapi.task.repo.EmpSalaryRepo;
 
@@ -55,6 +56,9 @@ public class DashboardRestController {
 	@Autowired
 	ClientGroupRepo clientGroupRepo;
 
+	@Autowired
+	CommonFunctionService commonFunctionService;
+	
 	@RequestMapping(value = { "/getTaskCountByStatus" }, method = RequestMethod.POST)
 	public @ResponseBody List<TaskCountByStatus> getTaskCountByStatus(@RequestParam("empId") int empId,
 			@RequestParam("userId") int userId) {
@@ -193,6 +197,28 @@ public class DashboardRestController {
 		}
 
 		return list;
+
+	}
+	
+	@RequestMapping(value = { "/availablehrsutility" }, method = RequestMethod.POST)
+	public @ResponseBody float availablehrsutility(@RequestParam("empId") int empId,
+			@RequestParam("fromDate") String fromDate,@RequestParam("toDate") String toDate) {
+
+		float hrs = 0;
+
+		try {
+
+			 
+			 hrs = commonFunctionService.CalculateActualAvailableHrs(empId,fromDate,toDate);
+			
+			System.out.println(hrs);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return hrs;
 
 	}
 
