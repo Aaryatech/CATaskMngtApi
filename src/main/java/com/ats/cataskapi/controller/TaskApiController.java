@@ -236,6 +236,7 @@ public class TaskApiController {
 				task.setTaskText(String.valueOf(sb1));
 				task.setUpdateDatetime(dateFormat1.format(date));
 				task.setUpdateUsername(custserv.getUpdateUsername());
+				task.setBillingAmt(String.valueOf(custserv.getActvBillingAmt()));
 
 				serv = taskRepo.saveAndFlush(task);
 				if (serv != null) {
@@ -612,7 +613,7 @@ public class TaskApiController {
 			@RequestParam String empBudgetHr, @RequestParam String mgBudgetHr, @RequestParam String startDate,
 			@RequestParam String endDate, @RequestParam int customer, @RequestParam int service,
 			@RequestParam int periodicityId, @RequestParam int activity, @RequestParam String curDateTime,
-			@RequestParam int userId,@RequestParam String statDate) {
+			@RequestParam int userId,@RequestParam String statDate,@RequestParam String billAmt) {
 
 		Info info = new Info();
 		try {
@@ -622,7 +623,7 @@ public class TaskApiController {
 			String statDate1 = DateConvertor.convertToYMD(statDate);
 
 			int res = taskRepo.editTask(taskId, items1, empBudgetHr, mgBudgetHr, startDate1, curDateTime, endDate1,
-					customer, service, periodicityId, activity, userId,statDate1);
+					customer, service, periodicityId, activity, userId,statDate1,billAmt);
 
 			if (res > 0) {
 				info.setError(false);
