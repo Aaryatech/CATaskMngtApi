@@ -885,7 +885,7 @@ public class MasterApiController {
 				System.out.println("Q2");
 				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId, statusIds);	
 			}
-			else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0) {
+			else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && custId==0 && stats==0) {
 				 System.out.println("Q3");
 				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity);
 			}
