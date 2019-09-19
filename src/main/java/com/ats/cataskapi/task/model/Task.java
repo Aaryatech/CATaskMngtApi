@@ -32,6 +32,10 @@ public class Task {
 
 	private String taskStatutoryDueDate;
 	
+	private String taskCompletionDate;
+	
+	private String billingAmt;
+	
 
 	private int taskStatus;
 
@@ -264,19 +268,50 @@ public class Task {
 	public void setIsActive(int isActive) {
 		this.isActive = isActive;
 	}
+	
+	
+
+	public String getTaskCompletionDate() {
+		return taskCompletionDate;
+	}
+
+	public void setTaskCompletionDate(String taskCompletionDate) {
+		this.taskCompletionDate = taskCompletionDate;
+	}
+
+	public String getBillingAmt() {
+		return billingAmt;
+	}
+
+	public void setBillingAmt(String billingAmt) {
+		this.billingAmt = billingAmt;
+	}
 
 	@Override
 	public String toString() {
 		return "Task [taskId=" + taskId + ", taskCode=" + taskCode + ", mappingId=" + mappingId + ", taskSubline="
 				+ taskSubline + ", taskFyId=" + taskFyId + ", taskText=" + taskText + ", taskEmpIds=" + taskEmpIds
 				+ ", taskStartDate=" + taskStartDate + ", taskEndDate=" + taskEndDate + ", taskStatutoryDueDate="
-				+ taskStatutoryDueDate + ", taskStatus=" + taskStatus + ", mngrBudHr=" + mngrBudHr + ", empBudHr="
-				+ empBudHr + ", delStatus=" + delStatus + ", updateDatetime=" + updateDatetime + ", updateUsername="
-				+ updateUsername + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2="
-				+ exVar2 + ", custId=" + custId + ", periodicityId=" + periodicityId + ", actvId=" + actvId
-				+ ", servId=" + servId + ", isActive=" + isActive + "]";
+				+ taskStatutoryDueDate + ", taskCompletionDate=" + taskCompletionDate + ", billingAmt=" + billingAmt
+				+ ", taskStatus=" + taskStatus + ", mngrBudHr=" + mngrBudHr + ", empBudHr=" + empBudHr + ", delStatus="
+				+ delStatus + ", updateDatetime=" + updateDatetime + ", updateUsername=" + updateUsername + ", exInt1="
+				+ exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2 + ", custId=" + custId
+				+ ", periodicityId=" + periodicityId + ", actvId=" + actvId + ", servId=" + servId + ", isActive="
+				+ isActive + ", getTaskId()=" + getTaskId() + ", getTaskCode()=" + getTaskCode() + ", getMappingId()="
+				+ getMappingId() + ", getTaskSubline()=" + getTaskSubline() + ", getTaskFyId()=" + getTaskFyId()
+				+ ", getTaskText()=" + getTaskText() + ", getTaskEmpIds()=" + getTaskEmpIds() + ", getTaskStartDate()="
+				+ getTaskStartDate() + ", getTaskEndDate()=" + getTaskEndDate() + ", getTaskStatutoryDueDate()="
+				+ getTaskStatutoryDueDate() + ", getTaskStatus()=" + getTaskStatus() + ", getMngrBudHr()="
+				+ getMngrBudHr() + ", getEmpBudHr()=" + getEmpBudHr() + ", getDelStatus()=" + getDelStatus()
+				+ ", getUpdateDatetime()=" + getUpdateDatetime() + ", getUpdateUsername()=" + getUpdateUsername()
+				+ ", getExInt1()=" + getExInt1() + ", getExInt2()=" + getExInt2() + ", getExVar1()=" + getExVar1()
+				+ ", getExVar2()=" + getExVar2() + ", getCustId()=" + getCustId() + ", getPeriodicityId()="
+				+ getPeriodicityId() + ", getActvId()=" + getActvId() + ", getServId()=" + getServId()
+				+ ", getIsActive()=" + getIsActive() + ", getTaskCompletionDate()=" + getTaskCompletionDate()
+				+ ", getBillingAmt()=" + getBillingAmt() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+				+ ", toString()=" + super.toString() + "]";
 	}
 
-	
+	 
 
 }
