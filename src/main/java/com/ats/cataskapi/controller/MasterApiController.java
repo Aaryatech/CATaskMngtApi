@@ -301,7 +301,7 @@ public class MasterApiController {
 	/************************Employee Master**************************/
 	@Autowired EmployeeMasterRepo empRepo;
 	
-	@RequestMapping(value = {"/getAllEmployees"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/getEmployees"}, method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeMaster> getAllEmployees(){
 		
 		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
@@ -316,7 +316,7 @@ public class MasterApiController {
 		
 	}
 	
-	@RequestMapping(value = {"/getEmployees"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/getAllEmployees"}, method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeMaster> getEmployees(){
 		
 		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
