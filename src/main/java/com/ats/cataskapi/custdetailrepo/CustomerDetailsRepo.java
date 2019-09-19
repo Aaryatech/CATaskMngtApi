@@ -15,11 +15,7 @@ import com.ats.cataskapi.model.CustomerDetails;
 public interface CustomerDetailsRepo extends JpaRepository<CustomerDetails, Integer> {
 	
 	@Query(value="SELECT 0 as cust_group_name,\n" + 
-			" CASE WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name \n" + 
-			"	 \n" + 
-			"	  ELSE COALESCE(( SELECT m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id \n" + 
-			"	 \n" + 
-			"	  AND m_cust_group.del_status=1 ),0) END AS cust_firm_name,\n" + 
+			"  		 m_cust_header.cust_firm_name,\n" + 
 			"        m_cust_header.cust_id,\n" + 
 			"        m_cust_header.cust_assessee_name,\n" + 
 			"        m_cust_header.cust_pan_no,\n" + 
