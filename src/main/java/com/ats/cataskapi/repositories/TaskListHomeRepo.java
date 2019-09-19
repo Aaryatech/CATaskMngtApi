@@ -30,18 +30,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"    m_services.serv_name,\n" + 
 			"    m_activities.acti_name,\n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
-			"    CASE WHEN m_cust_header.cust_group_id = 0 THEN m_cust_header.cust_firm_name ELSE COALESCE(\n" + 
-			"        (\n" + 
-			"        SELECT\n" + 
-			"            m_cust_group.cust_group_name\n" + 
-			"        FROM\n" + 
-			"            m_cust_group\n" + 
-			"        WHERE\n" + 
-			"            m_cust_group.cust_group_id = m_cust_header.cust_group_id AND m_cust_group.del_status = 1\n" + 
-			"    ),\n" + 
-			"    0\n" + 
-			"    )\n" + 
-			"END AS cust_group_name,\n" + 
+			"    m_cust_header.cust_firm_name AS cust_group_name,\n" + 
 			"dm_fin_year.fin_year_name,\n" + 
 			"(\n" + 
 			"    SELECT\n" + 
