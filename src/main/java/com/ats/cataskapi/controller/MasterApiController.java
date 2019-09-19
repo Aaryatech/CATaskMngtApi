@@ -306,9 +306,24 @@ public class MasterApiController {
 		
 		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
 		try {
-			empList = empRepo.findByDelStatusAndIsActiveAndEmpTypeOrderByEmpIdDesc(1,1,2);
+			empList = empRepo.findByDelStatusAndIsActiveAndEmpTypeOrderByEmpIdDesc(1,1,2);		// Fetched those employees 
+																								//which are partner type
 		}catch (Exception e) {
 			System.err.println("Exce in getAllEmployees  " + e.getMessage());
+		}
+		
+		return empList;
+		
+	}
+	
+	@RequestMapping(value = {"/getEmployees"}, method = RequestMethod.GET)
+	public @ResponseBody List<EmployeeMaster> getEmployees(){
+		
+		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
+		try {
+			empList = empRepo.findAllByDelStatusAndIsActiveOrderByEmpIdDesc(1,1);		// Fetched all employees 
+		}catch (Exception e) {
+			System.err.println("Exce in getEmployees  " + e.getMessage());
 		}
 		
 		return empList;
