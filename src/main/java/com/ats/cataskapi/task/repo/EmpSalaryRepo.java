@@ -1,5 +1,6 @@
 package com.ats.cataskapi.task.repo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -83,5 +84,6 @@ public interface EmpSalaryRepo extends JpaRepository<EmpSalary, Integer> {
 	@Query(value="select s.* from t_emp_salary s where fin_year_id=(select fin_year_id from dm_fin_year where :date between fin_start_date and fin_end_date) and emp_id=:empId",nativeQuery=true)
 	EmpSalary getrecordByEmpIdAndDate(@Param("date")String date,@Param("empId") int empId);
 	
-
+	@Query(value="select * from t_emp_salary where emp_id in (:arryids) and fin_year_id=:yearId",nativeQuery=true)
+	List<EmpSalary> getreocrdByempIdAndYearId(@Param("yearId")int yearId,@Param("arryids") ArrayList<String> arryids);
 }

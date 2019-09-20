@@ -16,6 +16,8 @@ import com.ats.cataskapi.model.ClientWiseTaskReport;
 import com.ats.cataskapi.model.MonthWiseRateAndEmpActualHrs;
 import com.ats.cataskapi.repositories.ClientWiseTaskReportRepository;
 import com.ats.cataskapi.repositories.MonthWiseRateAndEmpActualHrsRepository;
+import com.ats.cataskapi.task.model.EmpSalary;
+import com.ats.cataskapi.task.repo.EmpSalaryRepo;
 
 @RestController
 public class ManagerReportRestApi {
@@ -25,6 +27,9 @@ public class ManagerReportRestApi {
 
 	@Autowired
 	MonthWiseRateAndEmpActualHrsRepository monthWiseRateAndEmpActualHrsRepository;
+
+	@Autowired
+	EmpSalaryRepo empSalaryRepo;
 
 	@RequestMapping(value = { "/clientWiseTaskReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<ClientWiseTaskReport> clientWiseTaskReport(@RequestParam("fromDate") String fromDate,
@@ -259,6 +264,35 @@ public class ManagerReportRestApi {
 						}
 
 					} else {
+
+						List<EmpSalary> salList = empSalaryRepo.getreocrdByempIdAndYearId(yearId, arryids);
+
+						/*for (int k = 0; k < employeeds.length; k++) {
+
+							float empBugetedCost = 0;
+
+							try {
+								for (int j = 0; j < salList.size(); j++) {
+
+									if (Integer.parseInt(employeeds[k]) == salList.get(j).getEmpId()) {
+
+										int emptempHrs = (int) (list.get(i).getEmpBudHr());
+										float actualRateMin = (hrsList.get(j).getSal() + 6000)
+												/ list.get(i).getEmpBudHr();
+										float bugetedRate = actualRateMin * 60;
+										float remHrsValue = actualRateMin * (int) (hrsList.get(j).getWorkedMin() % 60);
+
+										empBugetedCost = empBugetedCost + ((emptempHrs * bugetedRate) + remHrsValue);
+
+									}
+
+								}
+							} catch (Exception e) {
+
+							}
+							empTotalBugetedCost = empTotalBugetedCost + empBugetedCost;
+
+						}*/
 
 					}
 
