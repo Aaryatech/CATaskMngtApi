@@ -903,12 +903,12 @@ public class MasterApiController {
 			else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && custId==0 && stats==0) {
 				 System.out.println("Q3");
 				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity);
-			}
-			
-			/*
-			 * if(empId!=0 && fromDate!=null && toDate!=null) { System.out.println("Q4");
-			 * taskList = taskListRepo.getTaskList(empId, fromDate, toDate); }
-			 */
+			}			
+			else if(empId!=0 && fromDate!=null && toDate!=null && stats!=0 && custId==0) { 
+				  System.out.println("Q4");
+			  taskList = taskListRepo.getTaskListByStatus(empId, fromDate, toDate, stats, statusIds	); 
+			 }
+			 
 			 
 			else if(empId!=0) {
 				 System.out.println("Q5");
