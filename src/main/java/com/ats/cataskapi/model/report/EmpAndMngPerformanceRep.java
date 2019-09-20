@@ -9,23 +9,24 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class EmpAndMngPerformanceRep {
-	
-	
+
 	@Id
 	private int empId;
-	
+
 	private String empName;
-	
-	private String noOfTask;
-	
-	private String empWorkHours;
-	
-	private String workHours;
-	
-	private String totAvailHrs;
-	
+
+	private int empType;
+
+	private String taskCount;
+
+	private String allWork;
+
+	private String actWork;
+
+	private String budgetedCap;
+
 	private Date tillDate;
-	
+
 	private String exVar1;
 
 	public int getEmpId() {
@@ -44,39 +45,47 @@ public class EmpAndMngPerformanceRep {
 		this.empName = empName;
 	}
 
-	public String getNoOfTask() {
-		return noOfTask;
+	public int getEmpType() {
+		return empType;
 	}
 
-	public void setNoOfTask(String noOfTask) {
-		this.noOfTask = noOfTask;
+	public void setEmpType(int empType) {
+		this.empType = empType;
 	}
 
-	public String getEmpWorkHours() {
-		return empWorkHours;
+	public String getTaskCount() {
+		return taskCount;
 	}
 
-	public void setEmpWorkHours(String empWorkHours) {
-		this.empWorkHours = empWorkHours;
+	public void setTaskCount(String taskCount) {
+		this.taskCount = taskCount;
 	}
 
-	public String getWorkHours() {
-		return workHours;
+	public String getAllWork() {
+		return allWork;
 	}
 
-	public void setWorkHours(String workHours) {
-		this.workHours = workHours;
+	public void setAllWork(String allWork) {
+		this.allWork = allWork;
 	}
 
-	public String getTotAvailHrs() {
-		return totAvailHrs;
+	public String getActWork() {
+		return actWork;
 	}
 
-	public void setTotAvailHrs(String totAvailHrs) {
-		this.totAvailHrs = totAvailHrs;
+	public void setActWork(String actWork) {
+		this.actWork = actWork;
 	}
-	
-	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+
+	public String getBudgetedCap() {
+		return budgetedCap;
+	}
+
+	public void setBudgetedCap(String budgetedCap) {
+		this.budgetedCap = budgetedCap;
+	}
+
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getTillDate() {
 		return tillDate;
 	}
@@ -95,11 +104,9 @@ public class EmpAndMngPerformanceRep {
 
 	@Override
 	public String toString() {
-		return "EmpAndMngPerformanceRep [empId=" + empId + ", empName=" + empName + ", noOfTask=" + noOfTask
-				+ ", empWorkHours=" + empWorkHours + ", workHours=" + workHours + ", totAvailHrs=" + totAvailHrs
-				+ ", tillDate=" + tillDate + ", exVar1=" + exVar1 + "]";
+		return "EmpAndMngPerformanceRep [empId=" + empId + ", empName=" + empName + ", empType=" + empType
+				+ ", taskCount=" + taskCount + ", allWork=" + allWork + ", actWork=" + actWork + ", budgetedCap="
+				+ budgetedCap + ", tillDate=" + tillDate + ", exVar1=" + exVar1 + "]";
 	}
-	
-	
 
 }

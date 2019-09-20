@@ -12,13 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.report.CompletedTaskReport;
+import com.ats.cataskapi.model.report.EmpAndMangPerfRepDetail;
 import com.ats.cataskapi.model.report.EmpAndMngPerformanceRep;
 import com.ats.cataskapi.model.report.InactiveTaskReport;
 import com.ats.cataskapi.report.repo.CompletedTaskReportRepo;
+import com.ats.cataskapi.report.repo.EmpAndMangPerfRepDetailRepo;
 import com.ats.cataskapi.report.repo.EmpAndMngPerformanceRepRepo;
 import com.ats.cataskapi.report.repo.InactiveTaskReportRepo;
 import com.ats.cataskapi.repositories.CapacityDetailByEmpRepo;
+import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 
 @RestController
 public class ReportApiController {
@@ -28,13 +32,12 @@ public class ReportApiController {
 
 	@RequestMapping(value = { "/getCompletedTaskReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<CompletedTaskReport> getCompletedTaskReport(@RequestParam String fromDate,
-			@RequestParam String toDate,@RequestParam String empIds) {
+			@RequestParam String toDate, @RequestParam String empIds) {
 		List<CompletedTaskReport> logList = new ArrayList<CompletedTaskReport>();
-		String fromDate1=fromDate.concat("  00:00:01");
-		String toDate1=	toDate.concat("  23:59:59");
-	
-		
-		//System.out.println("dates"+fromDate+toDate);
+		String fromDate1 = fromDate.concat("  00:00:01");
+		String toDate1 = toDate.concat("  23:59:59");
+
+		// System.out.println("dates"+fromDate+toDate);
 
 		try {
 			logList = completedTaskReportRepo.getAllCompletedTask(fromDate1, toDate1, empIds);
@@ -45,20 +48,18 @@ public class ReportApiController {
 		return logList;
 
 	}
-	
+
 	@Autowired
 	InactiveTaskReportRepo inactiveTaskReportRepo;
-	
-	
 
 	@RequestMapping(value = { "/getInactiveTaskReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<InactiveTaskReport> getInactiveTaskReport(@RequestParam String fromDate1,
-			@RequestParam String toDate1,@RequestParam String empIds,@RequestParam int  status) {
+			@RequestParam String toDate1, @RequestParam String empIds, @RequestParam int status) {
 		List<InactiveTaskReport> logList = new ArrayList<InactiveTaskReport>();
-	 
+
 		try {
-			logList = inactiveTaskReportRepo.getAllInactiveTask(fromDate1, toDate1, empIds,status);
-			System.err.println("dates"+logList.toString());
+			logList = inactiveTaskReportRepo.getAllInactiveTask(fromDate1, toDate1, empIds, status);
+			System.err.println("dates" + logList.toString());
 
 		} catch (Exception e) {
 			System.out.println("Excep in getAllDailyWorkLogs : " + e.getMessage());
@@ -66,31 +67,22 @@ public class ReportApiController {
 		return logList;
 
 	}
-	
+
 	@Autowired
 	EmpAndMngPerformanceRepRepo empAndMngPerformanceRepRepo;
-	
+
 	@Autowired
 	CapacityDetailByEmpRepo capacityDetailByEmpRepo;
-	
-	
-	@RequestMapping(value = { "/getEmpAndMngPerformanceReport" }, method = RequestMethod.POST)
-	public @ResponseBody List<EmpAndMngPerformanceRep> getEmpAndMngPerformanceReport(@RequestParam String fromDate,
-			@RequestParam String toDate,@RequestParam int  status,@RequestParam int  empId) {
+
+	@RequestMapping(value = { "/getEmpAndMngPerformanceReportHead" }, method = RequestMethod.POST)
+	public @ResponseBody List<EmpAndMngPerformanceRep> getEmpAndMngPerformanceReportHead(@RequestParam String fromDate,
+			@RequestParam String toDate,  @RequestParam List<String> empIdList) {
 		List<EmpAndMngPerformanceRep> logList = new ArrayList<EmpAndMngPerformanceRep>();
-	 
+		System.out.println("a" + empIdList.toString());
 		try {
-			 
-			String empIds = capacityDetailByEmpRepo.getEmployeeList(empId);
-			LinkedHashSet<String> hashSet = new LinkedHashSet<>(Arrays.asList(empIds.split(",")));
-			ArrayList<String> arryids = new ArrayList<>(hashSet);
-			//System.out.println("empIds are***"+arryids);
-			String fromDate1=fromDate.concat("  00:00:01");
-			String toDate1=	toDate.concat("  23:59:59");
-			int userId=empId;
-		
-			logList = empAndMngPerformanceRepRepo.getAllTask(fromDate1, toDate1,fromDate, toDate,status,arryids,userId);
-			///System.err.println("dates"+logList.toString());
+
+			logList = empAndMngPerformanceRepRepo.getAllTask(fromDate, toDate, empIdList);
+			 System.err.println("empAndMngPerformanceRepRepo   "+logList.toString());
 
 		} catch (Exception e) {
 			System.out.println("Excep in getEmpAndMngPerformanceReport : " + e.getMessage());
@@ -98,9 +90,49 @@ public class ReportApiController {
 		return logList;
 
 	}
-	
-	
-	
-	
+
+	@Autowired
+	EmpAndMangPerfRepDetailRepo empAndMangPerfRepDetailRepo;
+
+	@RequestMapping(value = { "/getEmpAndMngPerformanceReportDetail" }, method = RequestMethod.POST)
+	public @ResponseBody List<EmpAndMangPerfRepDetail> getEmpAndMngPerformanceReportDetail(
+			@RequestParam String fromDate, @RequestParam String toDate, @RequestParam int status,
+			@RequestParam int empId) {
+		List<EmpAndMangPerfRepDetail> logList = new ArrayList<EmpAndMangPerfRepDetail>();
+
+		try {
+
+			logList = empAndMangPerfRepDetailRepo.getAllTaskDetail(fromDate, toDate, status, empId);
+			/// System.err.println("dates"+logList.toString());
+
+		} catch (Exception e) {
+			System.out.println("Excep in getEmpAndMngPerformanceReport : " + e.getMessage());
+		}
+		return logList;
+
+	}
+
+	@Autowired
+	EmployeeMasterRepo empRepo;
+
+	@RequestMapping(value = { "/getAllEmployeesByIds" }, method = RequestMethod.POST)
+	public @ResponseBody List<EmployeeMaster> getEmployees(@RequestParam int empId) {
+
+		List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
+		System.out.println("b");
+
+		try {
+			String empIds = capacityDetailByEmpRepo.getEmployeeList(empId);
+
+			LinkedHashSet<String> hashSet = new LinkedHashSet<>(Arrays.asList(empIds.split(",")));
+			ArrayList<String> ids = new ArrayList<>(hashSet);
+			empList = empRepo.findAllByEmpIds(ids); // Fetched all employees
+		} catch (Exception e) {
+			System.err.println("Exce in getEmployees  " + e.getMessage());
+		}
+
+		return empList;
+
+	}
 
 }

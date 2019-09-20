@@ -1,5 +1,6 @@
 package com.ats.cataskapi.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -65,5 +66,11 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 	int chagePass(@Param("password") String password, @Param("userId") int userId);
 
 	List<EmployeeMaster> findAllByDelStatusAndIsActiveOrderByEmpIdDesc(int i, int j);
+	
+	
+	
+	
+	@Query(value = "select m_emp.* from m_emp where m_emp.emp_id IN(:empId)", nativeQuery = true)
+	List<EmployeeMaster> findAllByEmpIds(@Param("empId") ArrayList<String> empId);
 
 }
