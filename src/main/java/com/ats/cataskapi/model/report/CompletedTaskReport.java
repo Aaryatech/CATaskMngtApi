@@ -85,7 +85,7 @@ public class CompletedTaskReport {
 		this.periodicityName = periodicityName;
 	}
 	
- 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy hh:mm:ss a")// 
+ 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
  	public Date getTaskStatutoryDueDate() {
 		return taskStatutoryDueDate;
 	}
@@ -94,7 +94,7 @@ public class CompletedTaskReport {
 		this.taskStatutoryDueDate = taskStatutoryDueDate;
 	}
 
- 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy hh:mm:ss a")// 
+ 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
  	public Date getTaskStartDate() {
 		return taskStartDate;
 	}
@@ -107,7 +107,7 @@ public class CompletedTaskReport {
 		return taskEndDate;
 	}
 
- 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy hh:mm:ss a")// 
+ 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")// 
  	public void setTaskEndDate(Date taskEndDate) {
 		this.taskEndDate = taskEndDate;
 	}

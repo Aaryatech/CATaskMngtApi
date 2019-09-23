@@ -28,8 +28,8 @@ public interface TlTaskCompletReportRepo extends JpaRepository<TlTaskCompletRepo
 			"    		t_tasks.task_statutory_due_date AS due_date,\n" + 
 			"    		t_tasks.task_start_date AS start_date,\n" + 
 			"    		t_tasks.task_end_date as completion_date,\n" + 
-			"    		t_tasks.emp_bud_hr,\n" + 
-			"    		t_tasks.mngr_bud_hr, \n" + 
+			"    		CONCAT( FLOOR(t_tasks.emp_bud_hr / 60),'.', MOD(t_tasks.emp_bud_hr, 60)) as emp_bud_hr,\n" + 
+			"    		CONCAT( FLOOR(t_tasks.mngr_bud_hr / 60),'.', MOD(t_tasks.mngr_bud_hr, 60)) as mngr_bud_hr, \n" + 
 			"     		CASE WHEN m_cust_header.cust_group_id = 0 \n" + 
 			"     		THEN m_cust_header.cust_firm_name \n" + 
 			"     		ELSE COALESCE((SELECT\n" + 
