@@ -23,6 +23,7 @@ import com.ats.cataskapi.report.repo.EmpAndMngPerformanceRepRepo;
 import com.ats.cataskapi.report.repo.InactiveTaskReportRepo;
 import com.ats.cataskapi.repositories.CapacityDetailByEmpRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
+import com.ats.cataskapi.service.CommonFunctionService;
 
 @RestController
 public class ReportApiController {
@@ -73,6 +74,10 @@ public class ReportApiController {
 
 	@Autowired
 	CapacityDetailByEmpRepo capacityDetailByEmpRepo;
+	
+	@Autowired
+	CommonFunctionService commonFunctionService;
+	
 
 	@RequestMapping(value = { "/getEmpAndMngPerformanceReportHead" }, method = RequestMethod.POST)
 	public @ResponseBody List<EmpAndMngPerformanceRep> getEmpAndMngPerformanceReportHead(@RequestParam String fromDate,
@@ -82,7 +87,13 @@ public class ReportApiController {
 		try {
 
 			logList = empAndMngPerformanceRepRepo.getAllTask(fromDate, toDate, empIdList);
-			 System.err.println("empAndMngPerformanceRepRepo   "+logList.toString());
+			// System.err.println("empAndMngPerformanceRepRepo   "+logList.toString());
+			 for(int i=0;i<=logList.size();i++) {
+				
+				 float hrs = 0;
+				 hrs = commonFunctionService.CalculateActualAvailableHrs(logList.get(i).getEmpId(),fromDate,toDate);
+				 logList.get(i).setBudgetedCap(String.valueOf(hrs));
+			 }
 
 		} catch (Exception e) {
 			System.out.println("Excep in getEmpAndMngPerformanceReport : " + e.getMessage());
