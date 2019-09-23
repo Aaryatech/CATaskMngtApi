@@ -287,29 +287,29 @@ public class ManagerReportRestApi {
 										float actualRateMin = 0;
 										
 										if (month == 1) {
-											actualRateMin = (salList.get(j).getJan() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getJan() + 6000) / empBugHrs;
 										} else if (month == 2) {
-											actualRateMin = (salList.get(j).getFeb() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getFeb() + 6000) / empBugHrs;
 										} else if (month == 3) {
-											actualRateMin = (salList.get(j).getMar() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getMar() + 6000) / empBugHrs;
 										} else if (month == 4) {
-											actualRateMin = (salList.get(j).getApr() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getApr() + 6000) / empBugHrs;
 										} else if (month == 5) {
-											actualRateMin = (salList.get(j).getMay() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getMay() + 6000) / empBugHrs;
 										} else if (month == 6) {
-											actualRateMin = (salList.get(j).getJun() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getJun() + 6000) / empBugHrs;
 										} else if (month == 7) {
-											actualRateMin = (salList.get(j).getJul() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getJul() + 6000) / empBugHrs;
 										} else if (month == 8) {
-											actualRateMin = (salList.get(j).getAug() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getAug() + 6000) / empBugHrs;
 										} else if (month == 9) {
-											actualRateMin = (salList.get(j).getSep() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getSep() + 6000) / empBugHrs;
 										} else if (month == 10) {
-											actualRateMin = (salList.get(j).getOct() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getOct() + 6000) / empBugHrs;
 										} else if (month == 11) {
-											actualRateMin = (salList.get(j).getNov() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getNov() + 6000) / empBugHrs;
 										} else if (month == 12) {
-											actualRateMin = (salList.get(j).getDece() + 6000) / list.get(i).getEmpBudHr();
+											actualRateMin = (salList.get(j).getDece() + 6000) / empBugHrs;
 										}
 										
 										
@@ -343,29 +343,29 @@ public class ManagerReportRestApi {
 										float actualRateMin = 0;
 										
 										if (month == 1) {
-											actualRateMin = (salList.get(j).getJan() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getJan() + 6000) / mngrBugHrs;
 										} else if (month == 2) {
-											actualRateMin = (salList.get(j).getFeb() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getFeb() + 6000) / mngrBugHrs;
 										} else if (month == 3) {
-											actualRateMin = (salList.get(j).getMar() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getMar() + 6000) / mngrBugHrs;
 										} else if (month == 4) {
-											actualRateMin = (salList.get(j).getApr() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getApr() + 6000) / mngrBugHrs;
 										} else if (month == 5) {
-											actualRateMin = (salList.get(j).getMay() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getMay() + 6000) / mngrBugHrs;
 										} else if (month == 6) {
-											actualRateMin = (salList.get(j).getJun() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getJun() + 6000) / mngrBugHrs;
 										} else if (month == 7) {
-											actualRateMin = (salList.get(j).getJul() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getJul() + 6000) / mngrBugHrs;
 										} else if (month == 8) {
-											actualRateMin = (salList.get(j).getAug() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getAug() + 6000) / mngrBugHrs;
 										} else if (month == 9) {
-											actualRateMin = (salList.get(j).getSep() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getSep() + 6000) / mngrBugHrs;
 										} else if (month == 10) {
-											actualRateMin = (salList.get(j).getOct() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getOct() + 6000) / mngrBugHrs;
 										} else if (month == 11) {
-											actualRateMin = (salList.get(j).getNov() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getNov() + 6000) / mngrBugHrs;
 										} else if (month == 12) {
-											actualRateMin = (salList.get(j).getDece() + 6000) / list.get(i).getMngrBudHr();
+											actualRateMin = (salList.get(j).getDece() + 6000) / mngrBugHrs;
 										}
 										
 										int emptempHrs = (int) (list.get(i).getMngrBudHr()/60);
