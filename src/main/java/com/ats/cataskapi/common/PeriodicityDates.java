@@ -1,12 +1,15 @@
 package com.ats.cataskapi.common;
 
 import java.text.DateFormat;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+
 
 public class PeriodicityDates {
 
@@ -22,7 +25,7 @@ public class PeriodicityDates {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 		List<DateValues> dateList = new ArrayList<DateValues>();
 		
-	 
+	  
 
 		try {
 			for (Date j = yydate.parse(fromDate); j.compareTo(yydate.parse(toDate)) <= 0;) {
@@ -39,10 +42,12 @@ public class PeriodicityDates {
 
 						DateValues dv = new DateValues();
 						dv.setDate(c.getTime());
-						String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
-						int a=Integer.parseInt(result[1])+1;
-						String n = "WK ".concat(String.valueOf(c.get(Calendar.WEEK_OF_YEAR)).concat(" ").concat(result[1]).concat("-").concat(String.valueOf(a)));
-						//System.err.println("Final String is" + n);
+						
+						//System.err.println("Final String is" + Fyyear);
+						String myString= String.valueOf(c.get(Calendar.YEAR));
+					    myString = myString.substring(myString.indexOf('0')+1);
+
+						String n = "WK ".concat(String.valueOf(c.get(Calendar.WEEK_OF_YEAR)).concat(" ").concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1))));
 
 						dv.setValue(n);
 						dateList.add(dv);
@@ -94,9 +99,9 @@ public class PeriodicityDates {
 
 						DateValues dv = new DateValues();
 						dv.setDate(c.getTime());
-						String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
-						int a=Integer.parseInt(result[1])+1;
-						String n = biweek.concat(monthName).concat(" ").concat(result[1]);
+ 						String myString= String.valueOf(c.get(Calendar.YEAR));
+							myString = myString.substring(myString.indexOf('0')+1);
+						String n = biweek.concat(monthName).concat(" ").concat(myString);
 						dv.setValue(n);
 						dateList.add(dv);
 
@@ -142,9 +147,10 @@ public class PeriodicityDates {
 						} else {
 							monthName = "Dec";
 						}
-						//String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
-
-						String n ="MT ".concat(monthName).concat(" ").concat(result[1]).concat("-").concat(String.valueOf(a));
+						
+						String myString= String.valueOf(c.get(Calendar.YEAR));
+					    myString = myString.substring(myString.indexOf('0')+1);
+						String n ="MT ".concat(monthName).concat(" ").concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1)));
 						//System.err.println("Final String is" + n);
 
 						dv.setValue(n);
@@ -159,7 +165,7 @@ public class PeriodicityDates {
 							|| c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH) == 8
 							|| c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 11
 							|| c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 2) {
-						//System.out.println("Hello Quarterly  " + dddate.format(j));
+						System.out.println("Hello Quarterly  " + dddate.format(j));
 
 						arryadate.add(dddate.format(j));
 
@@ -176,10 +182,12 @@ public class PeriodicityDates {
 						} else {
 							quarNo="Q4"+" "+"FY"+" ";
 						}
-						String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
-						int a=Integer.parseInt(result[1])+1;
-						String n = quarNo.concat(result[1]).concat("-").concat(String.valueOf(a));
-						//System.err.println("Final String is" + n);
+						//String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
+						//int a=Integer.parseInt(result[1])+1;
+						String myString= String.valueOf(c.get(Calendar.YEAR));
+					    myString = myString.substring(myString.indexOf('0')+1);
+						String n = quarNo.concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1)));
+						System.err.println("Final String is" + n);
 
 						dv.setValue(n);
 						 
@@ -204,9 +212,10 @@ public class PeriodicityDates {
 						
 						DateValues dv = new DateValues();
 						dv.setDate(c.getTime());
-						String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
-						int a=Integer.parseInt(result[1])+1;
-						String n = text.concat(result[1]).concat("-").concat(String.valueOf(a));
+						String myString= String.valueOf(c.get(Calendar.YEAR));
+					    myString = myString.substring(myString.indexOf('0')+1);
+					
+						String n = text.concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1)));
 						dv.setValue(n);
 						dateList.add(dv);
 						//System.err.println("Final String is" + n);
@@ -222,13 +231,10 @@ public class PeriodicityDates {
 						
 						DateValues dv = new DateValues();
 						dv.setDate(c.getTime());
-						//String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0")[1];
+						
 						String myString= String.valueOf(c.get(Calendar.YEAR));
-								myString = myString.substring(myString.indexOf('0')+1);
- 						int a=Integer.parseInt(myString)+1;
-						//System.err.println("Final calender is" +c.get(Calendar.YEAR));
-
- 						String n = "FY ".concat(myString).concat("-").concat(String.valueOf(a));
+					    myString = myString.substring(myString.indexOf('0')+1);
+ 						String n = "FY ".concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1)));
 						//System.err.println("Final String is" + n);
 
 						dv.setValue(n);
@@ -273,5 +279,6 @@ public class PeriodicityDates {
 
 		return newDate;
 	}
+
 
 }
