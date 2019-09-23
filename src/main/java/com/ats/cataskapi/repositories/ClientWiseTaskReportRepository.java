@@ -41,7 +41,7 @@ public interface ClientWiseTaskReportRepository extends JpaRepository<ClientWise
 			"        t_tasks.task_end_date,\n" + 
 			"        t_tasks.emp_bud_hr,\n" + 
 			"        t_tasks.mngr_bud_hr,\n" + 
-			"      m_cust_header.cust_firm_name , \n" + 
+			"      m_cust_header.cust_firm_name ,t_tasks.task_status, t_tasks.billing_amt as revenue,t_tasks.ex_int1 as google_drive_link, \n" + 
 			"COALESCE(\n" + 
 			"    (\n" + 
 			"    SELECT\n" + 
@@ -126,11 +126,11 @@ public interface ClientWiseTaskReportRepository extends JpaRepository<ClientWise
 			"ON\n" + 
 			"    b.task_id = c.task_id",nativeQuery=true)
 	List<ClientWiseTaskReport> getclientWiseTaskReport(@Param("fromDate") String fromDate,@Param("toDate") String toDate, 
-			@Param("custId") int custId);
+			@Param("custId") List<Integer> clntIds);
 
 	@Query(value = "select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where task_end_date BETWEEN :fromDate AND :toDate and t_tasks.cust_id in (:custId) "
 			+ "and t_tasks.del_status = 1 AND t_tasks.is_active = 1", nativeQuery = true)
 	String getEmpListByTaskId(@Param("fromDate") String fromDate,@Param("toDate") String toDate, 
-			@Param("custId") int custId);
+			@Param("custId") List<Integer> clntIds);
 
 }

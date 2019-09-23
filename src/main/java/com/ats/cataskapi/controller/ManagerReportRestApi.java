@@ -1,7 +1,11 @@
 package com.ats.cataskapi.controller;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.cataskapi.model.ClientWiseTaskReport;
 import com.ats.cataskapi.model.MonthWiseRateAndEmpActualHrs;
+import com.ats.cataskapi.repositories.BugetedAmtAndRevenueRepo;
 import com.ats.cataskapi.repositories.ClientWiseTaskReportRepository;
 import com.ats.cataskapi.repositories.MonthWiseRateAndEmpActualHrsRepository;
 import com.ats.cataskapi.task.model.EmpSalary;
@@ -31,25 +36,41 @@ public class ManagerReportRestApi {
 	@Autowired
 	EmpSalaryRepo empSalaryRepo;
 
+	@Autowired
+	BugetedAmtAndRevenueRepo bugetedAmtAndRevenueRepo;
+	
 	@RequestMapping(value = { "/clientWiseTaskReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<ClientWiseTaskReport> clientWiseTaskReport(@RequestParam("fromDate") String fromDate,
-			@RequestParam("toDate") String toDate, @RequestParam("custId") int custId,
+			@RequestParam("toDate") String toDate,  @RequestParam("groupId") int groupId,@RequestParam("clientId") int clientId,
 			@RequestParam("yearId") int yearId, @RequestParam("rateType") int rateType) {
 
 		List<ClientWiseTaskReport> list = new ArrayList<>();
 
 		try {
 
-			list = clientWiseTaskReportRepository.getclientWiseTaskReport(fromDate, toDate, custId);
+			List<Integer> clntIds = new ArrayList<>();
+			
+			if(clientId==0) {
+				clntIds = bugetedAmtAndRevenueRepo.getclientByGroupId(groupId);
+			}else {
+				clntIds.add(clientId);
+			}
+			
+			list = clientWiseTaskReportRepository.getclientWiseTaskReport(fromDate, toDate, clntIds);
 
 			String[] ids = {};
-			String totalempIds = clientWiseTaskReportRepository.getEmpListByTaskId(fromDate, toDate, custId);
+			String totalempIds = clientWiseTaskReportRepository.getEmpListByTaskId(fromDate, toDate, clntIds);
 			ids = totalempIds.split(",");
 			LinkedHashSet<String> hashSet = new LinkedHashSet<>(Arrays.asList(ids));
 			ArrayList<String> arryids = new ArrayList<>(hashSet);
 
 			List<MonthWiseRateAndEmpActualHrs> hrsList = monthWiseRateAndEmpActualHrsRepository.gethrsandsal(fromDate,
-					toDate, custId, yearId, arryids);
+					toDate, clntIds, yearId, arryids);
+			List<EmpSalary> salList = new ArrayList<>();
+			
+			if (rateType != 1) {
+				salList = empSalaryRepo.getreocrdByempIdAndYearId(yearId, arryids);
+			}
 
 			System.out.println(hrsList);
 			for (int i = 0; i < list.size(); i++) {
@@ -202,17 +223,7 @@ public class ManagerReportRestApi {
 										float remHrsValue = actualRateMin * (int) (hrsList.get(j).getWorkedMin() % 60);
 
 										empBugetedCost = empBugetedCost + ((emptempHrs * actualRate) + remHrsValue);
-
-										/*
-										 * int emptempHrs = (int) (hrsList.get(j).getWorkedMin() / 60);
-										 * 
-										 * float actualRateMin = (hrsList.get(j).getSal() + 6000) /
-										 * list.get(i).getEmpBudHr(); float bugetedRate = actualRateMin * 60; float
-										 * remHrsValue = actualRateMin (int) (hrsList.get(j).getWorkedMin() % 60);
-										 * 
-										 * empBugetedCost = empBugetedCost + ((emptempHrs * bugetedRate) + remHrsValue);
-										 */
-
+ 
 									}
 
 								}
@@ -242,18 +253,7 @@ public class ManagerReportRestApi {
 										float remHrsValue = actualRateMin * (int) (hrsList.get(j).getWorkedMin() % 60);
 
 										mngrBugetedCost = mngrBugetedCost + ((emptempHrs * actualRate) + remHrsValue);
-
-										/*
-										 * int emptempHrs = (int) (hrsList.get(j).getWorkedMin() / 60);
-										 * 
-										 * float actualRateMin = (hrsList.get(j).getSal() + 6000) /
-										 * list.get(i).getEmpBudHr(); float bugetedRate = actualRateMin * 60; float
-										 * remHrsValue = actualRateMin (int) (hrsList.get(j).getWorkedMin() % 60);
-										 * 
-										 * mngrBugetedCost = mngrBugetedCost + ((emptempHrs * bugetedRate) +
-										 * remHrsValue);
-										 */
-
+ 
 									}
 
 								}
@@ -265,9 +265,17 @@ public class ManagerReportRestApi {
 
 					} else {
 
-						List<EmpSalary> salList = empSalaryRepo.getreocrdByempIdAndYearId(yearId, arryids);
+						SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
+						String sdate = yy.format(list.get(i).getTaskEndDate());
+						Date date = yy.parse(sdate);
+						
+						LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+						int month = localDate.getMonthValue();
 
-						/*for (int k = 0; k < employeeds.length; k++) {
+						
+						
+						
+						for (int k = 0; k < employeeds.length; k++) {
 
 							float empBugetedCost = 0;
 
@@ -276,14 +284,42 @@ public class ManagerReportRestApi {
 
 									if (Integer.parseInt(employeeds[k]) == salList.get(j).getEmpId()) {
 
-										int emptempHrs = (int) (list.get(i).getEmpBudHr());
-										float actualRateMin = (hrsList.get(j).getSal() + 6000)
-												/ list.get(i).getEmpBudHr();
+										float actualRateMin = 0;
+										
+										if (month == 1) {
+											actualRateMin = (salList.get(j).getJan() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 2) {
+											actualRateMin = (salList.get(j).getFeb() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 3) {
+											actualRateMin = (salList.get(j).getMar() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 4) {
+											actualRateMin = (salList.get(j).getApr() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 5) {
+											actualRateMin = (salList.get(j).getMay() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 6) {
+											actualRateMin = (salList.get(j).getJun() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 7) {
+											actualRateMin = (salList.get(j).getJul() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 8) {
+											actualRateMin = (salList.get(j).getAug() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 9) {
+											actualRateMin = (salList.get(j).getSep() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 10) {
+											actualRateMin = (salList.get(j).getOct() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 11) {
+											actualRateMin = (salList.get(j).getNov() + 6000) / list.get(i).getEmpBudHr();
+										} else if (month == 12) {
+											actualRateMin = (salList.get(j).getDece() + 6000) / list.get(i).getEmpBudHr();
+										}
+										
+										
+										int emptempHrs = (int) (list.get(i).getEmpBudHr()/60);
+										
 										float bugetedRate = actualRateMin * 60;
-										float remHrsValue = actualRateMin * (int) (hrsList.get(j).getWorkedMin() % 60);
-
+										float remHrsValue = actualRateMin * (int) (list.get(i).getEmpBudHr() % 60); 
 										empBugetedCost = empBugetedCost + ((emptempHrs * bugetedRate) + remHrsValue);
-
+										
+										
 									}
 
 								}
@@ -291,11 +327,65 @@ public class ManagerReportRestApi {
 
 							}
 							empTotalBugetedCost = empTotalBugetedCost + empBugetedCost;
+							
+						}
+						
+						
+						for (int k = 0; k < managerds.length; k++) {
 
-						}*/
+							float empBugetedCost = 0;
+
+							try {
+								for (int j = 0; j < salList.size(); j++) {
+
+									if (Integer.parseInt(managerds[k]) == salList.get(j).getEmpId()) {
+
+										float actualRateMin = 0;
+										
+										if (month == 1) {
+											actualRateMin = (salList.get(j).getJan() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 2) {
+											actualRateMin = (salList.get(j).getFeb() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 3) {
+											actualRateMin = (salList.get(j).getMar() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 4) {
+											actualRateMin = (salList.get(j).getApr() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 5) {
+											actualRateMin = (salList.get(j).getMay() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 6) {
+											actualRateMin = (salList.get(j).getJun() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 7) {
+											actualRateMin = (salList.get(j).getJul() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 8) {
+											actualRateMin = (salList.get(j).getAug() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 9) {
+											actualRateMin = (salList.get(j).getSep() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 10) {
+											actualRateMin = (salList.get(j).getOct() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 11) {
+											actualRateMin = (salList.get(j).getNov() + 6000) / list.get(i).getMngrBudHr();
+										} else if (month == 12) {
+											actualRateMin = (salList.get(j).getDece() + 6000) / list.get(i).getMngrBudHr();
+										}
+										
+										int emptempHrs = (int) (list.get(i).getMngrBudHr()/60);
+ 
+										float bugetedRate = actualRateMin * 60;
+										float remHrsValue = actualRateMin * (int) (list.get(i).getMngrBudHr() % 60); 
+										empBugetedCost = empBugetedCost + ((emptempHrs * bugetedRate) + remHrsValue);
+										 
+									}
+
+								}
+							} catch (Exception e) {
+
+							}
+							mngrTotalBugetedCost = mngrTotalBugetedCost + empBugetedCost;
+
+						}
 
 					}
-
+					 
 					list.get(i).setEmpBugetedCost(empTotalBugetedCost);
 					list.get(i).setMngrBugetedCost(mngrTotalBugetedCost);
 

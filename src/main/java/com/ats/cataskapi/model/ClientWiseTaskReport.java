@@ -1,11 +1,15 @@
 package com.ats.cataskapi.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class ClientWiseTaskReport {
@@ -31,10 +35,10 @@ public class ClientWiseTaskReport {
 	private String taskStatutoryDueDate;
 	
 	@Column(name="task_start_date")
-	private String taskStartDate;
+	private Date taskStartDate;
 	
 	@Column(name="task_end_date")
-	private String taskEndDate;
+	private Date taskEndDate;
 	
 	@Column(name="emp_bud_hr")
 	private float empBudHr;
@@ -74,6 +78,15 @@ public class ClientWiseTaskReport {
 	
 	@Column(name="partner_ids")
 	private String partnerIds;
+	
+	@Column(name="task_status")
+	private int taskStatus;
+	
+	@Column(name="revenue")
+	private float revenue;
+	
+	@Column(name="google_drive_link")
+	private String googleDriveLink;
 	
 	@Transient
 	String empBugetedHrs;
@@ -152,20 +165,22 @@ public class ClientWiseTaskReport {
 	public void setTaskStatutoryDueDate(String taskStatutoryDueDate) {
 		this.taskStatutoryDueDate = taskStatutoryDueDate;
 	}
-
-	public String getTaskStartDate() {
+	
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy") 
+	public Date getTaskStartDate() {
 		return taskStartDate;
 	}
 
-	public void setTaskStartDate(String taskStartDate) {
+	public void setTaskStartDate(Date taskStartDate) {
 		this.taskStartDate = taskStartDate;
 	}
-
-	public String getTaskEndDate() {
+	
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy") 
+	public Date getTaskEndDate() {
 		return taskEndDate;
 	}
 
-	public void setTaskEndDate(String taskEndDate) {
+	public void setTaskEndDate(Date taskEndDate) {
 		this.taskEndDate = taskEndDate;
 	}
 
@@ -353,6 +368,30 @@ public class ClientWiseTaskReport {
 		this.tlActualCost = tlActualCost;
 	}
 
+	public int getTaskStatus() {
+		return taskStatus;
+	}
+
+	public void setTaskStatus(int taskStatus) {
+		this.taskStatus = taskStatus;
+	} 
+	
+	public float getRevenue() {
+		return revenue;
+	}
+
+	public void setRevenue(float revenue) {
+		this.revenue = revenue;
+	}
+
+	public String getGoogleDriveLink() {
+		return googleDriveLink;
+	}
+
+	public void setGoogleDriveLink(String googleDriveLink) {
+		this.googleDriveLink = googleDriveLink;
+	}
+
 	@Override
 	public String toString() {
 		return "ClientWiseTaskReport [tasId=" + tasId + ", taskText=" + taskText + ", servName=" + servName
@@ -362,6 +401,7 @@ public class ClientWiseTaskReport {
 				+ ", ownerPartner=" + ownerPartner + ", taskEmpIds=" + taskEmpIds + ", partner=" + partner
 				+ ", manager=" + manager + ", teamLeader=" + teamLeader + ", employee=" + employee + ", employeeIds="
 				+ employeeIds + ", tlIds=" + tlIds + ", mangerIds=" + mangerIds + ", partnerIds=" + partnerIds
+				+ ", taskStatus=" + taskStatus + ", revenue=" + revenue + ", googleDriveLink=" + googleDriveLink
 				+ ", empBugetedHrs=" + empBugetedHrs + ", empBugetedCost=" + empBugetedCost + ", empActualHrs="
 				+ empActualHrs + ", empActualCost=" + empActualCost + ", mngrBugetedHrs=" + mngrBugetedHrs
 				+ ", mngrBugetedCost=" + mngrBugetedCost + ", mngrActualHrs=" + mngrActualHrs + ", mngrActualCost="

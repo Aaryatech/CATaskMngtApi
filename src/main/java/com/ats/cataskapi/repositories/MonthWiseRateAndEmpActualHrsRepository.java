@@ -101,6 +101,6 @@ public interface MonthWiseRateAndEmpActualHrsRepository extends JpaRepository<Mo
 			"        and e.emp_id in (:empIds) and  wl.emp_id=e.emp_id   \n" + 
 			"    group by e.emp_id,month(wl.work_date)) b ON a.emp_id=b.emp_id and a.month=b.month",nativeQuery=true)
 	List<MonthWiseRateAndEmpActualHrs> gethrsandsal(@Param("fromDate")String fromDate,@Param("toDate") String toDate,
-			@Param("custId") int custId,@Param("yearId") int yearId,@Param("empIds") ArrayList<String> arryids);
+			@Param("custId") List<Integer> clntIds,@Param("yearId") int yearId,@Param("empIds") ArrayList<String> arryids);
 
 }
