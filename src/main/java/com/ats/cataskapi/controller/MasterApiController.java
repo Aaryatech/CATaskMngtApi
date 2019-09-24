@@ -331,6 +331,8 @@ public class MasterApiController {
 	}
 	
 	
+	
+	
 	@RequestMapping(value = {"/getAllEmployeesActiveInactive"}, method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeMaster> getAllEmployeesActiveInactive(){
 		
@@ -378,6 +380,20 @@ public class MasterApiController {
 		EmployeeMaster emp = null;
 		try {
 				emp = empRepo.findByEmpIdAndDelStatus(empId, 1);
+			
+		}catch (Exception e) {
+			System.err.println("Exce in getEmployeeById  " + e.getMessage());
+		}
+		
+		return emp;
+		
+	}
+	
+	@RequestMapping(value = {"/getExecutionPartner"}, method = RequestMethod.GET)
+	public @ResponseBody List<EmployeeMaster> getExecutionPartner(@RequestParam int empId) {
+		List<EmployeeMaster> emp = null;
+		try {
+				emp = empRepo.getExecutionartner();
 			
 		}catch (Exception e) {
 			System.err.println("Exce in getEmployeeById  " + e.getMessage());
