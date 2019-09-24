@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.cataskapi.model.CapacityDetailByEmp;
 import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.report.CompletedTaskReport;
 import com.ats.cataskapi.model.report.EmpAndMangPerfRepDetail;
@@ -74,28 +75,43 @@ public class ReportApiController {
 
 	@Autowired
 	CapacityDetailByEmpRepo capacityDetailByEmpRepo;
-	
+
 	@Autowired
 	CommonFunctionService commonFunctionService;
-	
 
 	@RequestMapping(value = { "/getEmpAndMngPerformanceReportHead" }, method = RequestMethod.POST)
 	public @ResponseBody List<EmpAndMngPerformanceRep> getEmpAndMngPerformanceReportHead(@RequestParam String fromDate,
-			@RequestParam String toDate,  @RequestParam List<String> empIdList) {
+			@RequestParam String toDate, @RequestParam List<String> empIdList) {
 		List<EmpAndMngPerformanceRep> logList = new ArrayList<EmpAndMngPerformanceRep>();
-		System.out.println("a" + empIdList.toString());
+		List<Integer> empIdsList = new ArrayList<Integer>();
+		List<CapacityDetailByEmp> caplogList = new ArrayList<CapacityDetailByEmp>();
+		// System.out.println("a" + empIdList.toString());
 		try {
 
 			logList = empAndMngPerformanceRepRepo.getAllTask(fromDate, toDate, empIdList);
-			// System.err.println("empAndMngPerformanceRepRepo   "+logList.toString());
-			 for(int i=0;i<=logList.size();i++) {
-				
-				 float hrs = 0;
-				 hrs = commonFunctionService.CalculateActualAvailableHrs(logList.get(i).getEmpId(),fromDate,toDate);
-				 logList.get(i).setBudgetedCap(String.valueOf(hrs));
-			 }
+			// System.err.println("empAndMngPerformanceRepRepo "+logList.toString());
+			for (int i = 0; i < logList.size(); i++) {
+				empIdsList.add(logList.get(i).getEmpId());
+
+			}
+
+			caplogList = commonFunctionService.CalculateActualAvailableHrs(empIdsList, fromDate, toDate);
+			for (int i = 0; i < logList.size(); i++) {
+
+				for (int j = 0; j < caplogList.size(); j++) {
+
+					if (logList.get(i).getEmpId() == caplogList.get(j).getEmpId()) {
+						logList.get(i).setBudgetedCap(String.valueOf(caplogList.get(j).getBugetedCap()));
+
+						break;
+					}
+
+				}
+
+			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Excep in getEmpAndMngPerformanceReport : " + e.getMessage());
 		}
 		return logList;
