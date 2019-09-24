@@ -477,7 +477,13 @@ public class ManagerReportRestApi {
 
 				int hrs = (int) (totalMin / 60);
 				int min = (int) (totalMin % 60);
-				empwithPartnerList.setWorkedHrs(hrs + "." + min);
+
+				if (String.valueOf(min).length() == 1) {
+					empwithPartnerList.setWorkedHrs(hrs + "." + 0 + min );
+				} else {
+					empwithPartnerList.setWorkedHrs(hrs + "." + min);
+				}
+
 				empwithPartnerList.setWorkedMin(totalMin);
 
 				empwithPartnerList.setList(partnerHrsList);
@@ -500,9 +506,9 @@ public class ManagerReportRestApi {
 						}
 						finalList.get(i).setBugetedHrs(String.valueOf(totalfreehrs) + 0);
 
-						String[] strValues = String.valueOf(finalList.get(i).getBugetedHrs()).split("\\."); 
+						String[] strValues = String.valueOf(finalList.get(i).getBugetedHrs()).split("\\.");
 
-						long totalMin =   ((((int) (totalfreehrs)) * 60) + Integer.parseInt(strValues[1]));
+						long totalMin = ((((int) (totalfreehrs)) * 60) + Integer.parseInt(strValues[1]));
 
 						finalList.get(i).setBugetedMin(totalMin);
 
