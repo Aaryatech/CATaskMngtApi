@@ -86,4 +86,9 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 	@Query(value = "UPDATE t_tasks set ex_var1 = :link WHERE task_id=:taskId",nativeQuery=true)
 	int addDeliverLink(@Param("link") String link,@Param("taskId") int taskId);
 
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE t_tasks SET t_tasks.task_status=:statusVal,update_username=:userId, update_datetime=:curDateTime, task_completion_date=:compltnDate WHERE t_tasks.task_id=:taskId", nativeQuery = true)
+	int updateStatusComplete(@Param("taskId") int taskId, @Param("statusVal") int statusVal,@Param("userId") int userId, @Param("curDateTime") String curDateTime, @Param("compltnDate") String compltnDate);
+
 }

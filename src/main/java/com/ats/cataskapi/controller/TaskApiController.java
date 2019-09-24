@@ -271,11 +271,11 @@ public class TaskApiController {
 	/************************* Update Task *************************/
 	@RequestMapping(value = { "/updateStatusByTaskId" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam int statusVal,
-			@RequestParam int userId, @RequestParam String curDateTime) {
+			@RequestParam int userId, @RequestParam String curDateTime, @RequestParam String compltnDate) {
 
 		Info info = new Info();
 		try {
-			int res = taskRepo.updateStatus(taskId, statusVal, userId, curDateTime);
+			int res = taskRepo.updateStatusComplete(taskId, statusVal, userId, curDateTime, compltnDate);
 
 			if (res > 0) {
 				info.setError(false);
