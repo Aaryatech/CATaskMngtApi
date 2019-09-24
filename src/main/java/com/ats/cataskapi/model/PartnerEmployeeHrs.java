@@ -15,6 +15,7 @@ public class PartnerEmployeeHrs {
 	private String partnerName;
 	private int empId; 
 	private String empName; 
+	private long totalMin; 
 	private String totalHrs;
 	public String getId() {
 		return id;
@@ -52,10 +53,16 @@ public class PartnerEmployeeHrs {
 	public void setTotalHrs(String totalHrs) {
 		this.totalHrs = totalHrs;
 	}
+	public long getTotalMin() {
+		return totalMin;
+	}
+	public void setTotalMin(long totalMin) {
+		this.totalMin = totalMin;
+	}
 	@Override
 	public String toString() {
 		return "PartnerEmployeeHrs [id=" + id + ", partnerId=" + partnerId + ", partnerName=" + partnerName + ", empId="
-				+ empId + ", empName=" + empName + ", totalHrs=" + totalHrs + "]";
+				+ empId + ", empName=" + empName + ", totalMin=" + totalMin + ", totalHrs=" + totalHrs + "]";
 	}
 	
 	 

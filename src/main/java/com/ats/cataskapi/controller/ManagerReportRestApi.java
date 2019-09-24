@@ -449,6 +449,8 @@ public class ManagerReportRestApi {
 				empwithPartnerList.setEmpId(empList.get(i).getEmpId());
 				empwithPartnerList.setEmpName(empList.get(i).getEmpName());
 
+				long totalMin = 0;
+
 				List<PartnerListWithHrs> partnerHrsList = new ArrayList<>();
 
 				for (int j = 0; j < partnerList.size(); j++) {
@@ -463,6 +465,7 @@ public class ManagerReportRestApi {
 						if (list.get(k).getPartnerId() == partnerList.get(j).getEmpId()
 								&& list.get(k).getEmpId() == empList.get(i).getEmpId()) {
 							partnerListWithHrs.setTotalHrs(list.get(k).getTotalHrs());
+							totalMin = totalMin + list.get(k).getTotalMin();
 							break;
 						}
 
@@ -471,6 +474,11 @@ public class ManagerReportRestApi {
 					partnerHrsList.add(partnerListWithHrs);
 
 				}
+
+				int hrs = (int) (totalMin / 60);
+				int min = (int) (totalMin % 60);
+				empwithPartnerList.setWorkedHrs(hrs + "." + min);
+				empwithPartnerList.setWorkedMin(totalMin);
 
 				empwithPartnerList.setList(partnerHrsList);
 				finalList.add(empwithPartnerList);
@@ -482,7 +490,40 @@ public class ManagerReportRestApi {
 
 					if (bugetedCapList.get(j).getEmpId() == finalList.get(i).getEmpId()) {
 
-						finalList.get(i).setBugetedHrs(bugetedCapList.get(j).getBugetedCap());
+						// finalList.get(i).setBugetedHrs(bugetedCapList.get(j).getBugetedCap());
+
+						float totalfreehrs = bugetedCapList.get(j).getBugetedCap();
+
+						if ((int) totalfreehrs < totalfreehrs && (int) totalfreehrs + 1 > totalfreehrs) {
+
+							totalfreehrs = (float) (totalfreehrs - 0.20);
+						}
+						finalList.get(i).setBugetedHrs(String.valueOf(totalfreehrs) + 0);
+
+						String[] strValues = String.valueOf(finalList.get(i).getBugetedHrs()).split("\\."); 
+
+						long totalMin =   ((((int) (totalfreehrs)) * 60) + Integer.parseInt(strValues[1]));
+
+						finalList.get(i).setBugetedMin(totalMin);
+
+						long dif = totalMin - finalList.get(i).getWorkedMin();
+
+						if (dif > 0) {
+
+							int hrs = (int) (dif / 60);
+							int min = (int) (dif % 60);
+							finalList.get(i).setIdealtime(hrs + "." + min);
+							finalList.get(i).setOvertime("-");
+						} else {
+
+							dif = finalList.get(i).getWorkedMin() - totalMin;
+
+							int hrs = (int) (dif / 60);
+							int min = (int) (dif % 60);
+							finalList.get(i).setIdealtime("-");
+							finalList.get(i).setOvertime(hrs + "." + min);
+						}
+
 						break;
 					}
 
@@ -491,9 +532,27 @@ public class ManagerReportRestApi {
 
 		} catch (Exception e) {
 
+			e.printStackTrace();
 		}
 
 		return finalList;
+
+	}
+
+	@RequestMapping(value = { "/getPartnerList" }, method = RequestMethod.GET)
+	public @ResponseBody List<EmpIdNameList> getPartnerList() {
+
+		List<EmpIdNameList> partnerList = new ArrayList<>();
+
+		try {
+
+			partnerList = empIdNameListRepository.getpartnerList();
+
+		} catch (Exception e) {
+
+		}
+
+		return partnerList;
 
 	}
 
