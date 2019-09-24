@@ -10,10 +10,12 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ats.cataskapi.model.CapacityDetailByEmp;
 import com.ats.cataskapi.model.EmployeeListWithAvailableHours;
 import com.ats.cataskapi.model.Holiday;
 import com.ats.cataskapi.model.LeaveCount;
 import com.ats.cataskapi.model.WeeklyOff;
+import com.ats.cataskapi.repositories.CapacityDetailByEmpRepo;
 import com.ats.cataskapi.repositories.EmployeeListWithAvailableHoursRepo;
 import com.ats.cataskapi.repositories.GetWeeklyOffRepo;
 import com.ats.cataskapi.repositories.HolidayRepo;
@@ -38,7 +40,136 @@ public class CommonFunctionServiceImpl implements CommonFunctionService{
 	@Autowired
 	EmployeeListWithAvailableHoursRepo employeeListWithAvailableHoursRepo;
 	
-	 
+	@Autowired
+	CapacityDetailByEmpRepo capacityDetailByEmpRepo;
+	
+	@Override
+	public List<CapacityDetailByEmp> CalculateActualAvailableHrs(List<Integer> arryids, String fromDate, String toDate) {
+		 
+		float totalfreehrs = 0;
+
+		List<CapacityDetailByEmp> empCaplist = new ArrayList<CapacityDetailByEmp>();
+		
+		
+		try {
+  
+			//following code is for remove leave day 
+			
+			 
+			empCaplist = capacityDetailByEmpRepo.getempIdOnly(arryids);
+			
+			List<EmployeeListWithAvailableHours> list = new ArrayList<>();
+			list = employeeListWithAvailableHoursRepo.getLeaveRecordCommon(fromDate, toDate, arryids);
+			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
+			
+			LeaveCount totalDayCount = CalculateDayConsideringHolidayAndWeekend(0, fromDate, toDate);
+			float freeHours = totalDayCount.getLeavecount() * 7;
+			 
+			
+			for (int j = 0; j < empCaplist.size(); j++) {
+
+				float bsyhrs = 0;
+
+				for (int i = 0; i < list.size(); i++) {
+
+					if (empCaplist.get(j).getEmpId() == list.get(i).getEmpId()) {
+
+						String lvfmdt = yy.format(list.get(i).getLeaveFromdt());
+						String lvtodt = yy.format(list.get(i).getLeaveTodt());
+
+						if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvfmdt)) >= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) < 0) {
+
+							System.out.println("in if");
+							if (list.get(i).getLeaveDuration() == 0) {
+
+								LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, yy.format(yy.parse(lvfmdt)),
+										toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+
+							} else {
+
+								LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, yy.format(yy.parse(lvfmdt)),
+										toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
+
+						} else if (yy.parse(fromDate).compareTo(yy.parse(lvtodt)) <= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0
+								&& yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) > 0) {
+
+							System.out.println("in if else 2");
+
+							if (list.get(i).getLeaveDuration() == 0) {
+
+								LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, fromDate,
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+
+							} else {
+
+								LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, fromDate,
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
+
+						} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0) {
+
+							System.out.println("in if else 3");
+
+							if (list.get(i).getLeaveDuration() == 0) {
+
+								LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, yy.format(yy.parse(lvfmdt)),
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+
+							} else {
+
+								LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, yy.format(yy.parse(lvfmdt)),
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
+
+						} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) >= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) <= 0) {
+
+							System.out.println("in if else 4");
+
+							if (list.get(i).getLeaveDuration() == 0) {
+
+								LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, fromDate, toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+
+							} else {
+
+								LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, fromDate, toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
+						}
+					}
+				}
+
+				empCaplist.get(j).setBugetedCap((float) (freeHours - bsyhrs));
+			}
+			
+			 //totalfreehrs = (float) (freeHours - bsyhrs) ;
+			 
+			 /*if((int)totalfreehrs<totalfreehrs && (int)totalfreehrs+1>totalfreehrs) {
+				 
+				 totalfreehrs=(float) (totalfreehrs-0.20);
+			 }
+			 String.valueOf(totalfreehrs)+0 ;*/
+			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return empCaplist ;
+	}
+	
 	public LeaveCount CalculateDayConsideringHolidayAndWeekend(int empId,String fromDate, String toDate) {
 		List<Holiday> holidayList = new ArrayList<Holiday>();
 		List<WeeklyOff> weeklyList = new ArrayList<WeeklyOff>();
@@ -479,121 +610,7 @@ public class CommonFunctionServiceImpl implements CommonFunctionService{
 		return leaveCount;
 	}
 	
-	@Override
-	public float CalculateActualAvailableHrs(int empId, String fromDate, String toDate) {
-		 
-		float totalfreehrs = 0;
-
-		try {
-  
-			//following code is for remove leave day 
-			
-			ArrayList<String> arryids = new ArrayList<>();
-			arryids.add(String.valueOf(empId));
-			List<EmployeeListWithAvailableHours> list = new ArrayList<>();
-			list = employeeListWithAvailableHoursRepo.getLeaveRecord(fromDate, toDate, arryids);
-			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
-			
-			LeaveCount totalDayCount = CalculateDayConsideringHolidayAndWeekend(0, fromDate, toDate);
-			float freeHours = totalDayCount.getLeavecount() * 7;
-			float bsyhrs = 0;
-			
-			for (int i = 0; i < list.size(); i++) {
-
-				 
-
-					String lvfmdt = yy.format(list.get(i).getLeaveFromdt());
-					String lvtodt = yy.format(list.get(i).getLeaveTodt());
-
-					if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
-							&& yy.parse(toDate).compareTo(yy.parse(lvfmdt)) >= 0
-							&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) < 0) {
-
-						//System.out.println("in if");
-						if (list.get(i).getLeaveDuration() == 0) {
-
-							LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, yy.format(yy.parse(lvfmdt)),
-									toDate);
-							bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.50));
-
-						} else {
-
-							LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, yy.format(yy.parse(lvfmdt)),
-									toDate);
-							bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
-						}
-
-					} else if (yy.parse(fromDate).compareTo(yy.parse(lvtodt)) <= 0
-							&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0
-							&& yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) > 0) {
-
-						//System.out.println("in if else 2");
-
-						if (list.get(i).getLeaveDuration() == 0) {
-
-							LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, fromDate,
-									yy.format(yy.parse(lvtodt)));
-							bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.50));
-
-						} else {
-
-							LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, fromDate,
-									yy.format(yy.parse(lvtodt)));
-							bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
-						}
-
-					} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
-							&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0) {
-
-						//System.out.println("in if else 3");
-
-						if (list.get(i).getLeaveDuration() == 0) {
-
-							LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, yy.format(yy.parse(lvfmdt)),
-									yy.format(yy.parse(lvtodt)));
-							bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.50));
-
-						} else {
-
-							LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, yy.format(yy.parse(lvfmdt)),
-									yy.format(yy.parse(lvtodt)));
-							bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
-						}
-
-					} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) >= 0
-							&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) <= 0) {
-
-						//System.out.println("in if else 4");
-
-						if (list.get(i).getLeaveDuration() == 0) {
-
-							LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, fromDate, toDate);
-							bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.50));
-
-						} else {
-
-							LeaveCount bsyDaycount = CalculateDayConsideringHolidayAndWeekend(0, fromDate, toDate);
-							bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
-						}
-					}
-				 
-			}
-			
-			 totalfreehrs = (float) (freeHours - bsyhrs) ;
-			 
-			 /*if((int)totalfreehrs<totalfreehrs && (int)totalfreehrs+1>totalfreehrs) {
-				 
-				 totalfreehrs=(float) (totalfreehrs-0.20);
-			 }
-			 String.valueOf(totalfreehrs)+0 ;*/
-			
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-
-		return totalfreehrs ;
-	}
+	
 	
 	public int difffun(String date1, String date2) {
 

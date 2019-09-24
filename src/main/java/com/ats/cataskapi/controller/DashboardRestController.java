@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.cataskapi.model.BugetedAmtAndRevenue;
+import com.ats.cataskapi.model.CapacityDetailByEmp;
 import com.ats.cataskapi.model.ClientGroupList;
 import com.ats.cataskapi.model.DailyWorkLog;
 import com.ats.cataskapi.model.EmpListForDashboard;
@@ -208,10 +209,15 @@ public class DashboardRestController {
 
 		try {
 
-			 
-			 hrs = commonFunctionService.CalculateActualAvailableHrs(empId,fromDate,toDate);
+			ArrayList<Integer> arryids = new ArrayList<>();
+			arryids.add(empId);
+			arryids.add(14);
+			arryids.add(16);
 			
-			System.out.println(hrs);
+			List<CapacityDetailByEmp> list = commonFunctionService.CalculateActualAvailableHrs(arryids,fromDate,toDate);
+			hrs=list.get(0).getBugetedCap();
+			
+			System.out.println(list);
 
 		} catch (Exception e) {
 

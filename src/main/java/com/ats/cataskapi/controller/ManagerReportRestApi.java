@@ -16,11 +16,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.cataskapi.model.CapacityDetailByEmp;
 import com.ats.cataskapi.model.ClientWiseTaskReport;
+import com.ats.cataskapi.model.EmpIdNameList;
+import com.ats.cataskapi.model.EmpwithPartnerList;
 import com.ats.cataskapi.model.MonthWiseRateAndEmpActualHrs;
+import com.ats.cataskapi.model.PartnerEmployeeHrs;
+import com.ats.cataskapi.model.PartnerListWithHrs;
 import com.ats.cataskapi.repositories.BugetedAmtAndRevenueRepo;
 import com.ats.cataskapi.repositories.ClientWiseTaskReportRepository;
+import com.ats.cataskapi.repositories.EmpIdNameListRepository;
 import com.ats.cataskapi.repositories.MonthWiseRateAndEmpActualHrsRepository;
+import com.ats.cataskapi.repositories.PartnerEmployeeHrsRepository;
+import com.ats.cataskapi.service.CommonFunctionService;
 import com.ats.cataskapi.task.model.EmpSalary;
 import com.ats.cataskapi.task.repo.EmpSalaryRepo;
 
@@ -38,24 +46,34 @@ public class ManagerReportRestApi {
 
 	@Autowired
 	BugetedAmtAndRevenueRepo bugetedAmtAndRevenueRepo;
-	
+
+	@Autowired
+	PartnerEmployeeHrsRepository partnerEmployeeHrsRepository;
+
+	@Autowired
+	EmpIdNameListRepository empIdNameListRepository;
+
+	@Autowired
+	CommonFunctionService commonFunctionService;
+
 	@RequestMapping(value = { "/clientWiseTaskReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<ClientWiseTaskReport> clientWiseTaskReport(@RequestParam("fromDate") String fromDate,
-			@RequestParam("toDate") String toDate,  @RequestParam("groupId") int groupId,@RequestParam("clientId") int clientId,
-			@RequestParam("yearId") int yearId, @RequestParam("rateType") int rateType) {
+			@RequestParam("toDate") String toDate, @RequestParam("groupId") int groupId,
+			@RequestParam("clientId") int clientId, @RequestParam("yearId") int yearId,
+			@RequestParam("rateType") int rateType) {
 
 		List<ClientWiseTaskReport> list = new ArrayList<>();
 
 		try {
 
 			List<Integer> clntIds = new ArrayList<>();
-			
-			if(clientId==0) {
+
+			if (clientId == 0) {
 				clntIds = bugetedAmtAndRevenueRepo.getclientByGroupId(groupId);
-			}else {
+			} else {
 				clntIds.add(clientId);
 			}
-			
+
 			list = clientWiseTaskReportRepository.getclientWiseTaskReport(fromDate, toDate, clntIds);
 
 			String[] ids = {};
@@ -67,7 +85,7 @@ public class ManagerReportRestApi {
 			List<MonthWiseRateAndEmpActualHrs> hrsList = monthWiseRateAndEmpActualHrsRepository.gethrsandsal(fromDate,
 					toDate, clntIds, yearId, arryids);
 			List<EmpSalary> salList = new ArrayList<>();
-			
+
 			if (rateType != 1) {
 				salList = empSalaryRepo.getreocrdByempIdAndYearId(yearId, arryids);
 			}
@@ -223,7 +241,7 @@ public class ManagerReportRestApi {
 										float remHrsValue = actualRateMin * (int) (hrsList.get(j).getWorkedMin() % 60);
 
 										empBugetedCost = empBugetedCost + ((emptempHrs * actualRate) + remHrsValue);
- 
+
 									}
 
 								}
@@ -253,7 +271,7 @@ public class ManagerReportRestApi {
 										float remHrsValue = actualRateMin * (int) (hrsList.get(j).getWorkedMin() % 60);
 
 										mngrBugetedCost = mngrBugetedCost + ((emptempHrs * actualRate) + remHrsValue);
- 
+
 									}
 
 								}
@@ -268,13 +286,10 @@ public class ManagerReportRestApi {
 						SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
 						String sdate = yy.format(list.get(i).getTaskEndDate());
 						Date date = yy.parse(sdate);
-						
+
 						LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 						int month = localDate.getMonthValue();
 
-						
-						
-						
 						for (int k = 0; k < employeeds.length; k++) {
 
 							float empBugetedCost = 0;
@@ -285,7 +300,7 @@ public class ManagerReportRestApi {
 									if (Integer.parseInt(employeeds[k]) == salList.get(j).getEmpId()) {
 
 										float actualRateMin = 0;
-										
+
 										if (month == 1) {
 											actualRateMin = (salList.get(j).getJan() + 6000) / empBugHrs;
 										} else if (month == 2) {
@@ -311,15 +326,13 @@ public class ManagerReportRestApi {
 										} else if (month == 12) {
 											actualRateMin = (salList.get(j).getDece() + 6000) / empBugHrs;
 										}
-										
-										
-										int emptempHrs = (int) (list.get(i).getEmpBudHr()/60);
-										
+
+										int emptempHrs = (int) (list.get(i).getEmpBudHr() / 60);
+
 										float bugetedRate = actualRateMin * 60;
-										float remHrsValue = actualRateMin * (int) (list.get(i).getEmpBudHr() % 60); 
+										float remHrsValue = actualRateMin * (int) (list.get(i).getEmpBudHr() % 60);
 										empBugetedCost = empBugetedCost + ((emptempHrs * bugetedRate) + remHrsValue);
-										
-										
+
 									}
 
 								}
@@ -327,10 +340,9 @@ public class ManagerReportRestApi {
 
 							}
 							empTotalBugetedCost = empTotalBugetedCost + empBugetedCost;
-							
+
 						}
-						
-						
+
 						for (int k = 0; k < managerds.length; k++) {
 
 							float empBugetedCost = 0;
@@ -341,7 +353,7 @@ public class ManagerReportRestApi {
 									if (Integer.parseInt(managerds[k]) == salList.get(j).getEmpId()) {
 
 										float actualRateMin = 0;
-										
+
 										if (month == 1) {
 											actualRateMin = (salList.get(j).getJan() + 6000) / mngrBugHrs;
 										} else if (month == 2) {
@@ -367,13 +379,13 @@ public class ManagerReportRestApi {
 										} else if (month == 12) {
 											actualRateMin = (salList.get(j).getDece() + 6000) / mngrBugHrs;
 										}
-										
-										int emptempHrs = (int) (list.get(i).getMngrBudHr()/60);
- 
+
+										int emptempHrs = (int) (list.get(i).getMngrBudHr() / 60);
+
 										float bugetedRate = actualRateMin * 60;
-										float remHrsValue = actualRateMin * (int) (list.get(i).getMngrBudHr() % 60); 
+										float remHrsValue = actualRateMin * (int) (list.get(i).getMngrBudHr() % 60);
 										empBugetedCost = empBugetedCost + ((emptempHrs * bugetedRate) + remHrsValue);
-										 
+
 									}
 
 								}
@@ -385,7 +397,7 @@ public class ManagerReportRestApi {
 						}
 
 					}
-					 
+
 					list.get(i).setEmpBugetedCost(empTotalBugetedCost);
 					list.get(i).setMngrBugetedCost(mngrTotalBugetedCost);
 
@@ -400,6 +412,88 @@ public class ManagerReportRestApi {
 		}
 
 		return list;
+
+	}
+
+	@RequestMapping(value = { "/employeepartnerwiseworkreport" }, method = RequestMethod.POST)
+	public @ResponseBody List<EmpwithPartnerList> employeepartnerwiseworkreport(
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
+			@RequestParam("partnerType") int partnerType) {
+
+		List<EmpwithPartnerList> finalList = new ArrayList<>();
+
+		try {
+
+			List<PartnerEmployeeHrs> list = new ArrayList<>();
+
+			List<Integer> empIds = partnerEmployeeHrsRepository.getempList();
+
+			List<EmpIdNameList> partnerList = empIdNameListRepository.getpartnerList();
+			List<EmpIdNameList> empList = empIdNameListRepository.getempList();
+
+			List<CapacityDetailByEmp> bugetedCapList = commonFunctionService.CalculateActualAvailableHrs(empIds,
+					fromDate, toDate);
+
+			if (partnerType == 0) {
+
+				list = partnerEmployeeHrsRepository.employeeexcutionpartnerwiseworkreport(fromDate, toDate);
+
+			} else {
+
+				list = partnerEmployeeHrsRepository.employeepartnerwiseworkreport(fromDate, toDate);
+			}
+
+			for (int i = 0; i < empList.size(); i++) {
+
+				EmpwithPartnerList empwithPartnerList = new EmpwithPartnerList();
+				empwithPartnerList.setEmpId(empList.get(i).getEmpId());
+				empwithPartnerList.setEmpName(empList.get(i).getEmpName());
+
+				List<PartnerListWithHrs> partnerHrsList = new ArrayList<>();
+
+				for (int j = 0; j < partnerList.size(); j++) {
+
+					PartnerListWithHrs partnerListWithHrs = new PartnerListWithHrs();
+					partnerListWithHrs.setPartnerId(partnerList.get(j).getEmpId());
+					partnerListWithHrs.setPartnerName(partnerList.get(j).getEmpName());
+					partnerListWithHrs.setTotalHrs("0");
+
+					for (int k = 0; k < list.size(); k++) {
+
+						if (list.get(k).getPartnerId() == partnerList.get(j).getEmpId()
+								&& list.get(k).getEmpId() == empList.get(i).getEmpId()) {
+							partnerListWithHrs.setTotalHrs(list.get(k).getTotalHrs());
+							break;
+						}
+
+					}
+
+					partnerHrsList.add(partnerListWithHrs);
+
+				}
+
+				empwithPartnerList.setList(partnerHrsList);
+				finalList.add(empwithPartnerList);
+			}
+
+			for (int i = 0; i < finalList.size(); i++) {
+
+				for (int j = 0; j < bugetedCapList.size(); j++) {
+
+					if (bugetedCapList.get(j).getEmpId() == finalList.get(i).getEmpId()) {
+
+						finalList.get(i).setBugetedHrs(bugetedCapList.get(j).getBugetedCap());
+						break;
+					}
+
+				}
+			}
+
+		} catch (Exception e) {
+
+		}
+
+		return finalList;
 
 	}
 

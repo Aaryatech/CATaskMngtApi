@@ -80,4 +80,7 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 	String getEmployeeListByManagerIdAndUserIdBetweenDate(@Param("empId")int empId, @Param("userId") int userId,
 			@Param("fromDate")String fromDate,@Param("toDate") String toDate);
 
+	@Query(value = "select e.emp_id, e.emp_name, 0 as bugeted_cap,0 as all_work ,0 as act_work from m_emp e where e.del_status=1 and e.emp_id in (:empId)", nativeQuery = true)
+	List<CapacityDetailByEmp> getempIdOnly(@Param("empId") List<Integer> empId);
+
 }
