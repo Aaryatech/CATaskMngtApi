@@ -17,8 +17,9 @@ public interface CompletedTaskReportRepo extends JpaRepository<CompletedTaskRepo
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    t_tasks.task_statutory_due_date,\n" + 
 			"    t_tasks.task_start_date,\n" + 
-			"      t_tasks.update_datetime AS task_end_date,CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD(  t_tasks.emp_bud_hr,60)) as emp_bud_hr,\n" + 
-			"   CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr,\n" + 
+			"      t_tasks.update_datetime AS task_end_date,CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',LPAD(MOD(t_tasks.emp_bud_hr, 60), 2, '0'))  as emp_bud_hr, \n" + 
+			" \n" + 
+			"  CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',LPAD(MOD(t_tasks.mngr_bud_hr, 60), 2, '0')) as mngr_bud_hr,\n" + 
 			"   CASE WHEN m_cust_header.cust_group_id = 0 THEN m_cust_header.cust_firm_name ELSE COALESCE(\n" + 
 			"        (\n" + 
 			"        SELECT\n" + 
@@ -37,10 +38,10 @@ public interface CompletedTaskReportRepo extends JpaRepository<CompletedTaskRepo
 			"            SUM(t_daily_work_log.work_hours) / 60\n" + 
 			"        ),\n" + 
 			"        '.',\n" + 
-			"        MOD(\n" + 
+			"      LPAD(  MOD(\n" + 
 			"            SUM(t_daily_work_log.work_hours),\n" + 
-			"            60\n" + 
-			"        )\n" + 
+			"            60), 2, '0') \n" + 
+			"           \n" + 
 			"    )),0) AS work_hours\n" + 
 			"   \n" + 
 			"FROM\n" + 
