@@ -38,7 +38,7 @@ public interface DailyWorkLogRepo extends JpaRepository<DailyWorkLog, Integer> {
 			"        AND   t_daily_work_log.del_status=1 \n" + 
 			"        AND         t_daily_work_log.task_id=t_tasks.task_id \n" + 
 			"        AND         t_daily_work_log.emp_id=m_emp.emp_id         \n" + 
-			"    GROUP BY t_daily_work_log.emp_id ORDER BY ex_int1", nativeQuery=true)
+			"    GROUP BY t_daily_work_log.emp_id", nativeQuery=true)
 	List<DailyWorkLog> findByDelStatusAndTaskId(@Param("taskId") int taskId);
 
 	DailyWorkLog findByWorkLogId(int logId);
