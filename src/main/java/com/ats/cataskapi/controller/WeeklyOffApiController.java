@@ -1243,18 +1243,19 @@ public class WeeklyOffApiController {
 
 	@RequestMapping(value = { "/calculateBugetedAmtAndBugetedRevenue" }, method = RequestMethod.POST)
 	public @ResponseBody BugetedAmtAndRevenue calculateBugetedAmtAndBugetedRevenue(@RequestParam("empId") int empId,
-			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,@RequestParam("typeId") int typeId,
-			@RequestParam("groupId") int groupId,@RequestParam("clientId") int clientId) {
+			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
+			@RequestParam("typeId") int typeId, @RequestParam("groupId") int groupId,
+			@RequestParam("clientId") int clientId) {
 
 		BugetedAmtAndRevenue bugetedAmtAndRevenue = new BugetedAmtAndRevenue();
 
 		try {
 
 			List<Integer> clntIds = new ArrayList<>();
-			
-			if(clientId==0) {
+
+			if (clientId == 0) {
 				clntIds = bugetedAmtAndRevenueRepo.getclientByGroupId(groupId);
-			}else {
+			} else {
 				clntIds.add(clientId);
 			}
 			LeaveCount totalDayCount = calculateHolidayBetweenDate(0, fromDate, toDate);
@@ -1343,7 +1344,7 @@ public class WeeklyOffApiController {
 			float sal = 0;
 			EmpSalary empSalary = empSalaryRepo.getrecordByEmpIdAndDate(fromDate, empId);
 			bugetedAmtAndRevenue = bugetedAmtAndRevenueRepo.calculateBugetedAmtAndBugetedRevenue(empId, fromDate,
-					toDate,clntIds);
+					toDate, clntIds);
 
 			if (month == 1) {
 				sal = (empSalary.getJan() + 6000) / bugetedCap;
@@ -1424,14 +1425,25 @@ public class WeeklyOffApiController {
 							.bugetedMinAndWorkedMinByEmpIds(fromDate, toDate, ids);
 					int allocatedHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getAllWork() / 60);
 					int allocateHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getAllWork() % 60);
-					String concateAllocated = allocatedHrs + "." + allocateHrs;
+
+					if (String.valueOf(allocateHrs).length() == 1) {
+						String concateAllocated = allocatedHrs + "." + 0 + allocateHrs;
+						managerListWithEmpIds.get(i).setAllWork(concateAllocated);
+					} else {
+						String concateAllocated = allocatedHrs + "." + allocateHrs;
+						managerListWithEmpIds.get(i).setAllWork(concateAllocated);
+					}
 
 					int actualdHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getActWork() / 60);
 					int actualHrs = (int) (bugetedMinAndWorkedMinByEmpIds.getActWork() % 60);
-					String concateActual = actualdHrs + "." + actualHrs;
 
-					managerListWithEmpIds.get(i).setAllWork(concateAllocated);
-					managerListWithEmpIds.get(i).setActlWork(concateActual);
+					if (String.valueOf(actualHrs).length() == 1) {
+						String concateActual = actualdHrs + "." + 0 + actualHrs;
+						managerListWithEmpIds.get(i).setActlWork(concateActual);
+					} else {
+						String concateActual = actualdHrs + "." + actualHrs;
+						managerListWithEmpIds.get(i).setActlWork(concateActual);
+					}
 
 					float bsyhrs = 0;
 

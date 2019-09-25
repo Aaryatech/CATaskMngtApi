@@ -479,7 +479,7 @@ public class ManagerReportRestApi {
 				int min = (int) (totalMin % 60);
 
 				if (String.valueOf(min).length() == 1) {
-					empwithPartnerList.setWorkedHrs(hrs + "." + 0 + min );
+					empwithPartnerList.setWorkedHrs(hrs + "." + 0 + min);
 				} else {
 					empwithPartnerList.setWorkedHrs(hrs + "." + min);
 				}
@@ -518,7 +518,12 @@ public class ManagerReportRestApi {
 
 							int hrs = (int) (dif / 60);
 							int min = (int) (dif % 60);
-							finalList.get(i).setIdealtime(hrs + "." + min);
+							if (String.valueOf(min).length() == 1) {
+								finalList.get(i).setIdealtime(hrs + "." + 0 + min);
+							} else {
+								finalList.get(i).setIdealtime(hrs + "." + min);
+							}
+
 							finalList.get(i).setOvertime("-");
 						} else {
 
@@ -527,7 +532,12 @@ public class ManagerReportRestApi {
 							int hrs = (int) (dif / 60);
 							int min = (int) (dif % 60);
 							finalList.get(i).setIdealtime("-");
-							finalList.get(i).setOvertime(hrs + "." + min);
+
+							if (String.valueOf(min).length() == 1) {
+								finalList.get(i).setOvertime(hrs + "." + 0 + min);
+							} else {
+								finalList.get(i).setOvertime(hrs + "." + min);
+							}
 						}
 
 						break;

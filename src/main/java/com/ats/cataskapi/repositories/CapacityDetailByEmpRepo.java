@@ -19,8 +19,7 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 			"            when e.emp_type=3             then             coalesce((select\n" + 
 			"                CONCAT(FLOOR(sum(mngr_bud_hr)/60),\n" + 
 			"                '.',\n" + 
-			"                MOD( sum(mngr_bud_hr),\n" + 
-			"                60))          \n" + 
+			"                LPAD(MOD(sum(mngr_bud_hr), 60), 2, '0'))          \n" + 
 			"            from\n" + 
 			"                t_tasks          \n" + 
 			"            where\n" + 
@@ -32,8 +31,7 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 			"            when e.emp_type=5             then             coalesce((select\n" + 
 			"                CONCAT(FLOOR(sum(emp_bud_hr)/60),\n" + 
 			"                '.',\n" + 
-			"                MOD( sum(emp_bud_hr),\n" + 
-			"                60))          \n" + 
+			"                 LPAD(MOD(sum(emp_bud_hr), 60), 2, '0'))          \n" + 
 			"            from\n" + 
 			"                t_tasks          \n" + 
 			"            where\n" + 
@@ -48,8 +46,7 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 			"        coalesce((select\n" + 
 			"            CONCAT(FLOOR(sum(wl.work_hours)/60),\n" + 
 			"            '.',\n" + 
-			"            MOD( sum(wl.work_hours),\n" + 
-			"            60))          \n" + 
+			"            LPAD(MOD(sum(wl.work_hours), 60), 2, '0'))          \n" + 
 			"        from\n" + 
 			"            t_daily_work_log wl          \n" + 
 			"        where\n" + 
