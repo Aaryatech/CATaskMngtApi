@@ -28,8 +28,8 @@ public interface TlTaskCompletReportRepo extends JpaRepository<TlTaskCompletRepo
 			"    		t_tasks.task_statutory_due_date AS due_date,\n" + 
 			"    		t_tasks.task_start_date AS start_date,\n" + 
 			"    		t_tasks.task_completion_date as completion_date,\n" + 
-			"    		CONCAT( FLOOR(t_tasks.emp_bud_hr / 60),'.', MOD(t_tasks.emp_bud_hr, 60)) as emp_bud_hr,\n" + 
-			"    		CONCAT( FLOOR(t_tasks.mngr_bud_hr / 60),'.', MOD(t_tasks.mngr_bud_hr, 60)) as mngr_bud_hr, \n" + 
+			"    		CONCAT( FLOOR(t_tasks.emp_bud_hr / 60),'.', LPAD(MOD(t_tasks.emp_bud_hr, 60), 2, '0')) as emp_bud_hr,\n" + 
+			"    		CONCAT( FLOOR(t_tasks.mngr_bud_hr / 60),'.', LPAD(MOD(t_tasks.mngr_bud_hr, 60), 2, '0')) as mngr_bud_hr, \n" + 
 			"     		CASE WHEN m_cust_header.cust_group_id = 0 \n" + 
 			"     		THEN m_cust_header.cust_firm_name \n" + 
 			"     		ELSE COALESCE((SELECT\n" + 
@@ -39,7 +39,7 @@ public interface TlTaskCompletReportRepo extends JpaRepository<TlTaskCompletRepo
 			"                           WHERE\n" + 
 			"                                m_cust_group.cust_group_id = m_cust_header.cust_group_id AND m_cust_group.del_status = 1), 0) END AS client_name, \n" + 
 			"        \n" + 
-			"         	CONCAT( FLOOR( SUM(t_daily_work_log.work_hours) / 60),'.', MOD(SUM(t_daily_work_log.work_hours), 60)) AS work_hours\n" + 
+			"         	CONCAT( FLOOR( SUM(t_daily_work_log.work_hours) / 60),'.', LPAD(MOD(SUM(t_daily_work_log.work_hours), 60), 2, '0')) AS work_hours\n" + 
 			"   \n" + 
 			"	FROM\n" + 
 			"        m_services,\n" + 
@@ -82,7 +82,7 @@ public interface TlTaskCompletReportRepo extends JpaRepository<TlTaskCompletRepo
 			"            m_emp.emp_name,\n" + 
 			"            coalesce((SELECT \n" + 
 			"		\n" + 
-			"		CONCAT( FLOOR( SUM(t_daily_work_log.work_hours) / 60),'.', MOD(SUM(t_daily_work_log.work_hours), 60)) \n" + 
+			"		CONCAT( FLOOR( SUM(t_daily_work_log.work_hours) / 60),'.', LPAD(MOD(SUM(t_daily_work_log.work_hours), 60), 2, '0')) \n" + 
 			"FROM 	\n" + 
 			"	t_daily_work_log\n" + 
 			"WHERE\n" + 
