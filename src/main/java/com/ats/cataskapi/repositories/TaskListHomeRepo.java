@@ -16,8 +16,8 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"    t_tasks.task_start_date,\n" + 
 			"    t_tasks.task_end_date,\n" + 
 			"    t_tasks.task_statutory_due_date,\n" + 
-			"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr,\n" + 
-			"         CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr ,\n" + 
+			"    CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',LPAD(MOD( t_tasks.mngr_bud_hr,60), 2, '0')) as mngr_bud_hr,\n" + 
+			"    CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',LPAD(MOD( t_tasks.emp_bud_hr,60), 2, '0')) as emp_bud_hr ,\n" + 
 			"    t_tasks.task_emp_ids,\n" + 
 			"    t_tasks.task_status AS ex_int1,\n" + 
 			"    t_tasks.ex_int2,\n" + 
@@ -115,22 +115,27 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        t_tasks.task_start_date,\n" + 
 			"        t_tasks.task_end_date,\n" + 
 			"        t_tasks.task_statutory_due_date,\n" + 
-			"        t_tasks.mngr_bud_hr,\n" + 
-			"        t_tasks.emp_bud_hr,\n" + 
+			"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',LPAD(MOD( t_tasks.mngr_bud_hr,60), 2, '0')) as mngr_bud_hr,\n" + 
+			"        CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',LPAD(MOD( t_tasks.emp_bud_hr,60), 2, '0')) as emp_bud_hr ,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
-			"        t_tasks.task_status,\n" + 
+			"        t_tasks.ex_int1, \n" +
+			"        t_tasks.ex_int2, \n" +
+			"    	 t_tasks.ex_var1,\n" + 
+			"    	 t_tasks.ex_var2,\n" + 
+			"        dm_status_mst.status_color,\n" + 
+			"        dm_status_mst.status_text AS task_status,\n" + 
 			"        m_emp.emp_id,\n" + 
 			"        m_emp.emp_name,\n" + 
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
 			"        m_cust_group.cust_group_name,\n" + 
-			"        dm_fin_year.fin_year_name\n" + 
+			"        dm_fin_year.fin_year_name,\n" + 
 			"         (SELECT\n" + 
-			"            GROUP_CONCAT(DISTINCT c.emp_name)            \n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name) \n" + 
 			"        FROM\n" + 
 			"            t_tasks i,\n" + 
-			"            m_emp c     \n" + 
+			"            m_emp c \n" + 
 			"        WHERE\n" + 
 			"            FIND_IN_SET(c.emp_id, task_emp_ids) \n" + 
 			"            AND            i.task_id=t_tasks.task_id) as employees  ,'NA'  as owner_partner \n" + 
@@ -142,13 +147,13 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        dm_periodicity,\n" + 
 			"        m_cust_group,\n" + 
 			"        m_cust_header,\n" + 
-			"        dm_fin_year\n" + 
-			"       \n" + 
+			"        dm_fin_year,\n" + 
+			"        dm_status_mst \n" + 
 			"WHERE \n" + 
 			"        t_tasks.del_status=1 AND\n" + 
 			"        m_emp.emp_id=:empId AND\n" +
 			"		 FIND_IN_SET(:empId,t_tasks.task_emp_ids) AND\n" + 
-			"        t_tasks.task_start_date BETWEEN :fromDate AND :toDate AND\n" + 
+			"        t_tasks.task_statutory_due_date BETWEEN :fromDate AND :toDate AND\n" + 
 			"        m_services.serv_id=:service AND\n" +  
 			"        m_activities.acti_id=:activity AND\n" +  
 			"        t_tasks.actv_id=m_activities.acti_id AND\n" + 
@@ -156,10 +161,11 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        m_activities.periodicity_id=dm_periodicity.periodicity_id AND\n" + 
 			"        t_tasks.cust_id=m_cust_header.cust_id AND\n" + 
 			"        m_cust_header.cust_group_id=m_cust_group.cust_group_id AND\n" + 
-			"        dm_fin_year.fin_year_id=t_tasks.task_fy_id", nativeQuery=true)
+			"        dm_status_mst.status_value = t_tasks.task_status AND\n"+
+			"        dm_fin_year.fin_year_id=t_tasks.task_fy_id AND t_tasks.task_status NOT IN(:statusIds)", nativeQuery=true)
 
-	List<TaskListHome> getTaskList(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate, 
-			@Param("service") int service, @Param("activity") int activity);
+	List<TaskListHome> getTaskList3(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate, 
+			@Param("service") int service, @Param("activity") int activity, @Param("statusIds") List<String> statusIds);
 
 /*****************************************************************************************/
 	
@@ -169,8 +175,8 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        t_tasks.task_start_date,\n" + 
 			"        t_tasks.task_end_date,\n" + 
 			"        t_tasks.task_statutory_due_date,\n" + 
-			"        t_tasks.mngr_bud_hr,\n" + 
-			"        t_tasks.emp_bud_hr,\n" + 
+			"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',LPAD(MOD( t_tasks.mngr_bud_hr,60), 2, '0')) as mngr_bud_hr,\n" + 
+			"        CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',LPAD(MOD( t_tasks.emp_bud_hr,60), 2, '0')) as emp_bud_hr ,\n" + 
 			"        t_tasks.task_emp_ids,\n" + 
 			"        t_tasks.ex_int1,\n" + 
 			"        t_tasks.ex_int2,\n" + 
@@ -221,7 +227,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        AND         t_tasks.cust_id=m_cust_header.cust_id                                      \n" + 
 			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id              \n" + 
 			"        AND    t_tasks.task_status NOT IN(:statusIds)", nativeQuery=true)
-	List<TaskListHome> getTaskList(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
+	List<TaskListHome> getTaskList1(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
 			@Param("service") int service, @Param("activity") int activity, @Param("custId") int custId, @Param("statusIds") List<String> statusIds,
 			@Param("stats") int stats);
 
@@ -952,8 +958,8 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 		"        t_tasks.task_start_date,\n" + 
 		"        t_tasks.task_end_date,\n" + 
 		"        t_tasks.task_statutory_due_date,\n" + 
-		"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr,\n" + 
-		"         CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr ,\n" + 
+		"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',LPAD(MOD( t_tasks.mngr_bud_hr,60), 2, '0')) as mngr_bud_hr,\n" + 
+		"        CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',LPAD(MOD( t_tasks.emp_bud_hr,60), 2, '0')) as emp_bud_hr ,\n" + 
 		"        t_tasks.task_emp_ids,\n" + 
 		"        t_tasks.ex_int1,\n" + 
 		"        t_tasks.ex_int2,\n" + 
@@ -1003,7 +1009,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 		"        AND         t_tasks.cust_id=m_cust_header.cust_id                                      \n" + 
 		"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id              \n" + 
 		"        AND    t_tasks.task_status NOT IN(:statusIds)",nativeQuery=true)
-	List<TaskListHome> getTaskList(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
+	List<TaskListHome> getTaskList2(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
 			@Param("service") int service, @Param("activity") int activity, @Param("custId") int custId, @Param("statusIds") List<String> statusIds);
 
 @Query(value="SELECT\n" + 
@@ -1012,14 +1018,8 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 		"        t_tasks.task_start_date,\n" + 
 		"        t_tasks.task_end_date,\n" + 
 		"        t_tasks.task_statutory_due_date,\n" + 
-		"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),\n" + 
-		"        ':',\n" + 
-		"        MOD( t_tasks.mngr_bud_hr,\n" + 
-		"        60)) as mngr_bud_hr,\n" + 
-		"        CONCAT(FLOOR( t_tasks.emp_bud_hr/60),\n" + 
-		"        ':',\n" + 
-		"        MOD( t_tasks.emp_bud_hr,\n" + 
-		"        60)) as emp_bud_hr ,\n" + 
+		"        CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',LPAD(MOD( t_tasks.mngr_bud_hr,60), 2, '0')) as mngr_bud_hr,\n" + 
+		"        CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',LPAD(MOD( t_tasks.emp_bud_hr,60), 2, '0')) as emp_bud_hr ,\n" + 
 		"        t_tasks.task_emp_ids,\n" + 
 		"        t_tasks.task_status AS ex_int1,\n" + 
 		"        t_tasks.ex_int2,\n" + 
@@ -1074,7 +1074,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 		"        AND dm_status_mst.status_value = t_tasks.task_status \n" + 
 		"        AND t_tasks.task_status =:stats\n" + 
 		"        AND t_tasks.task_status NOT IN(:statusIds)",nativeQuery=true)
-List<TaskListHome> getTaskListByStatus(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
+List<TaskListHome> getTaskListByStatus4(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
 		@Param("stats") int stats,@Param("statusIds") List<String> statusIds);
 
 

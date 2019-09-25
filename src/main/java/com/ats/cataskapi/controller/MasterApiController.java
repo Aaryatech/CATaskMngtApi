@@ -910,21 +910,20 @@ public class MasterApiController {
 			
 			if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && custId!=0 && stats!=0){
 				System.out.println("Q1");
-				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId, statusIds, stats);
+				taskList = taskListRepo.getTaskList1(empId, fromDate, toDate, service, activity, custId, statusIds, stats);
 			}
 			else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && custId!=0 && stats==0) {
 				System.out.println("Q2");
-				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity, custId, statusIds);	
+				taskList = taskListRepo.getTaskList2(empId, fromDate, toDate, service, activity, custId, statusIds);	
 			}
 			else if(empId!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && custId==0 && stats==0) {
 				 System.out.println("Q3");
-				taskList = taskListRepo.getTaskList(empId, fromDate, toDate, service, activity);
+				taskList = taskListRepo.getTaskList3(empId, fromDate, toDate, service, activity, statusIds);
 			}			
 			else if(empId!=0 && fromDate!=null && toDate!=null && stats!=0 && custId==0) { 
 				  System.out.println("Q4");
-			  taskList = taskListRepo.getTaskListByStatus(empId, fromDate, toDate, stats, statusIds	); 
+			  taskList = taskListRepo.getTaskListByStatus4(empId, fromDate, toDate, stats, statusIds); 
 			 }
-			 
 			 
 			else if(empId!=0) {
 				 System.out.println("Q5");
