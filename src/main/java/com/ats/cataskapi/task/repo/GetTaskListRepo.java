@@ -18,7 +18,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
-			"    t_tasks.task_end_date,\n" + 
+			"    t_tasks.task_end_date, t_tasks.task_completion_date ,\n" + 
 			"    t_tasks.task_statutory_due_date,\n" + 
 			"    CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr ,\n" + 
 			"    t_tasks.cust_id,\n" + 
@@ -61,7 +61,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
-			"    t_tasks.task_end_date,\n" + 
+			"    t_tasks.task_end_date,t_tasks.task_completion_date , \n" + 
 			"    t_tasks.task_statutory_due_date,\n" + 
 			"    t_tasks.mngr_bud_hr,\n" + 
 			"    t_tasks.cust_id,\n" + 
@@ -105,7 +105,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
-			"    t_tasks.task_end_date,\n" + 
+			"    t_tasks.task_end_date,t_tasks.task_completion_date ,\n" + 
 			"    t_tasks.task_statutory_due_date,\n" + 
 			"    t_tasks.mngr_bud_hr,\n" + 
 			"    t_tasks.cust_id,\n" + 
@@ -147,7 +147,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
-			"    t_tasks.task_end_date,\n" + 
+			"    t_tasks.task_end_date,t_tasks.task_completion_date ,\n" + 
 			"    t_tasks.task_statutory_due_date,\n" + 
 			"    t_tasks.mngr_bud_hr,\n" + 
 			"    t_tasks.cust_id,\n" + 
@@ -190,7 +190,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
 			"    t_tasks.task_end_date,\n" + 
-			"    t_tasks.task_statutory_due_date,\n" + 
+			"    t_tasks.task_statutory_due_date,t_tasks.task_completion_date ,\n" + 
 			"    t_tasks.mngr_bud_hr,\n" + 
 			"    t_tasks.cust_id,\n" + 
 			"    t_tasks.periodicity_id,\n" + 
@@ -232,7 +232,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
 			"    t_tasks.task_end_date,\n" + 
-			"    t_tasks.task_statutory_due_date,\n" + 
+			"    t_tasks.task_statutory_due_date,t_tasks.task_completion_date ,\n" + 
 			"    t_tasks.mngr_bud_hr,\n" + 
 			"    t_tasks.cust_id,\n" + 
 			"    t_tasks.periodicity_id,\n" + 
@@ -274,7 +274,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
 			"    t_tasks.task_end_date,\n" + 
-			"    t_tasks.task_statutory_due_date,\n" + 
+			"    t_tasks.task_statutory_due_date,t_tasks.task_completion_date , \n" + 
 			"    t_tasks.mngr_bud_hr,\n" + 
 			"    t_tasks.cust_id,\n" + 
 			"    t_tasks.periodicity_id,\n" + 
@@ -319,7 +319,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
-			"    t_tasks.task_end_date,\n" + 
+			"    t_tasks.task_end_date,t_tasks.task_completion_date , \n" + 
 			"    t_tasks.task_statutory_due_date,\n" + 
 			"    t_tasks.mngr_bud_hr,\n" + 
 			"    t_tasks.cust_id,\n" + 
@@ -364,7 +364,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
 			"    t_tasks.task_end_date,\n" + 
-			"    t_tasks.task_statutory_due_date,\n" + 
+			"    t_tasks.task_statutory_due_date,t_tasks.task_completion_date , \n" + 
 			"    t_tasks.mngr_bud_hr,\n" + 
 			"    t_tasks.cust_id,\n" + 
 			"    t_tasks.periodicity_id,\n" + 
@@ -408,7 +408,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
 			"    t_tasks.task_end_date,\n" + 
-			"    t_tasks.task_statutory_due_date,\n" + 
+			"    t_tasks.task_statutory_due_date,t_tasks.task_completion_date , \n" + 
 			"    t_tasks.mngr_bud_hr,\n" + 
 			"    t_tasks.cust_id,\n" + 
 			"    t_tasks.periodicity_id,\n" + 
@@ -451,7 +451,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"        t_tasks.task_text,\n" + 
 			"        t_tasks.task_start_date,\n" + 
 			"        t_tasks.task_end_date,\n" + 
-			"        t_tasks.task_statutory_due_date,\n" + 
+			"        t_tasks.task_statutory_due_date,t_tasks.task_completion_date , \n" + 
 			"        t_tasks.mngr_bud_hr,\n" + 
 			"        t_tasks.cust_id,\n" + 
 			"        t_tasks.periodicity_id,\n" + 
