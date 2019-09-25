@@ -16,7 +16,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 	@Query(value="SELECT	\n" + 
 			"		 t_daily_work_log.work_log_id,\n" + 
 			"        t_daily_work_log.work_date,\n" + 
-			"        t_daily_work_log.work_hours,\n" + 
+			"        CONCAT(FLOOR(t_daily_work_log.work_hours/60),':',LPAD(MOD(t_daily_work_log.work_hours,60), 2, '0')) as work_hours,\n" +    
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
@@ -64,12 +64,12 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 	
 	List<EmpWorkLogHrs> getDailyWorkLogList(@Param("stat") int stat, @Param("emp") int emp, @Param("fromDate") String fromDate, @Param("toDate") String toDate);
 
-	/************Date Emp Customer*************/
+	/***********************Date Emp Customer*******************************/
 //	Query 2
 	@Query(value="SELECT\n" + 
 			"        t_daily_work_log.work_log_id,\n" + 
 			"        t_daily_work_log.work_date,\n" + 
-			"        t_daily_work_log.work_hours,\n" + 
+			"        CONCAT(FLOOR(t_daily_work_log.work_hours/60),':',LPAD(MOD(t_daily_work_log.work_hours,60), 2, '0')) as work_hours,\n" +   
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
@@ -125,7 +125,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 	@Query(value = "SELECT\n" + 
 			"        t_daily_work_log.work_log_id,\n" + 
 			"        t_daily_work_log.work_date,\n" + 
-			"        t_daily_work_log.work_hours,\n" + 
+			"        CONCAT(FLOOR(t_daily_work_log.work_hours/60),':',LPAD(MOD(t_daily_work_log.work_hours,60), 2, '0')) as work_hours,\n" +   
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
@@ -184,7 +184,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 	@Query(value="SELECT\n" + 
 			"        t_daily_work_log.work_log_id,\n" + 
 			"        t_daily_work_log.work_date,\n" + 
-			"        t_daily_work_log.work_hours,\n" + 
+			"        CONCAT(FLOOR(t_daily_work_log.work_hours/60),':',LPAD(MOD(t_daily_work_log.work_hours,60), 2, '0')) as work_hours,\n" +    
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
@@ -238,7 +238,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 	@Query(value="SELECT\n" + 
 			"        t_daily_work_log.work_log_id,\n" + 
 			"        t_daily_work_log.work_date,\n" + 
-			"        t_daily_work_log.work_hours,\n" + 
+			"        CONCAT(FLOOR(t_daily_work_log.work_hours/60),':',LPAD(MOD(t_daily_work_log.work_hours,60), 2, '0')) as work_hours,\n" +    
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
@@ -287,7 +287,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 	@Query(value="SELECT\n" + 
 			"        t_daily_work_log.work_log_id,\n" + 
 			"        t_daily_work_log.work_date,\n" + 
-			"        t_daily_work_log.work_hours,\n" + 
+			"        CONCAT(FLOOR(t_daily_work_log.work_hours/60),':',LPAD(MOD(t_daily_work_log.work_hours,60), 2, '0')) as work_hours,\n" +   
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
