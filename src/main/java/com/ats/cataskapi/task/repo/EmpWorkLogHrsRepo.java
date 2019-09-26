@@ -20,7 +20,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
-			"        t_daily_work_log.ex_int1,\n" + 
+			"        t_daily_work_log.emp_id AS ex_int1,\n" + 
 			"        t_daily_work_log.ex_int2,        \n" + 
 			"        t_tasks.task_id,  \n" +
 			"        t_tasks.task_text,  \n" + 
@@ -73,7 +73,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
-			"        t_daily_work_log.ex_int1,\n" + 
+			"        t_daily_work_log.emp_id AS ex_int1,\n" +  
 			"        t_daily_work_log.ex_int2,\n" + 
 			"        t_tasks.task_id,\n" + 
 			"        t_tasks.task_text,\n" + 
@@ -129,7 +129,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
-			"        t_daily_work_log.ex_int1,\n" + 
+			"        t_daily_work_log.emp_id AS ex_int1,\n" +  
 			"        t_daily_work_log.ex_int2,\n" + 
 			"        t_tasks.task_id,\n" + 
 			"        t_tasks.task_text,\n" + 
@@ -188,7 +188,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
-			"        t_daily_work_log.ex_int1,\n" + 
+			"        t_daily_work_log.emp_id AS ex_int1,\n" +  
 			"        t_daily_work_log.ex_int2,\n" + 
 			"        t_tasks.task_id,\n" + 
 			"        t_tasks.task_text,\n" + 
@@ -242,7 +242,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
-			"        t_daily_work_log.ex_int1,\n" + 
+			"        t_daily_work_log.emp_id AS ex_int1,\n" +  
 			"        t_daily_work_log.ex_int2,\n" + 
 			"        t_tasks.task_id,\n" + 
 			"        t_tasks.task_text,\n" + 
@@ -291,7 +291,7 @@ public interface EmpWorkLogHrsRepo extends JpaRepository<EmpWorkLogHrs, Integer>
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.ex_var1,\n" + 
 			"        t_daily_work_log.ex_var2,\n" + 
-			"        t_daily_work_log.ex_int1,\n" + 
+			"        t_daily_work_log.emp_id AS ex_int1,\n" + 
 			"        t_daily_work_log.ex_int2,\n" + 
 			"        t_tasks.task_id,\n" + 
 			"        t_tasks.task_text,\n" + 
