@@ -46,7 +46,7 @@ public interface EmpAndMangPerfRepDetailRepo extends JpaRepository<EmpAndMangPer
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
 			"        t_tasks.task_statutory_due_date,\n" + 
-			"        t_tasks.task_start_date,\n" + 
+			"        t_tasks.task_completion_date as task_start_date,\n" + 
 			"        t_tasks.update_datetime AS task_end_date,\n" + 
 			"       t_tasks.ex_var1,t_tasks.task_completion_date,\n" + 
 			"      m_cust_header.cust_firm_name ,dm_status_mst.status_text,\n" + 

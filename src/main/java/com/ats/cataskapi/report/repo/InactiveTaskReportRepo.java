@@ -37,7 +37,7 @@ public interface InactiveTaskReportRepo extends JpaRepository<InactiveTaskReport
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
 			"        t_tasks.task_statutory_due_date,\n" + 
-			"        t_tasks.task_start_date,\n" + 
+			"        t_tasks.task_completion_date as task_start_date ,\n" + 
 			"        t_tasks.update_datetime AS task_end_date,\n" + 
 			"         CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',LPAD(MOD(t_tasks.emp_bud_hr, 60), 2, '0'))  as emp_bud_hr,  \n" + 
 			"       CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',LPAD(MOD(t_tasks.mngr_bud_hr, 60), 2, '0')) as mngr_bud_hr, t_tasks.ex_var1,\n" + 

@@ -270,12 +270,14 @@ public class EmpAndMangPerfRepDetail {
 		this.ownerPartner = ownerPartner;
 	}
 
-	public String getExvar1() {
+	
+
+	public String getExVar1() {
 		return exVar1;
 	}
 
-	public void setExvar1(String exvar1) {
-		this.exVar1 = exvar1;
+	public void setExVar1(String exVar1) {
+		this.exVar1 = exVar1;
 	}
 
 	@Override
