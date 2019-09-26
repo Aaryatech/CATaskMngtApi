@@ -31,7 +31,7 @@ public interface StatusMasterRepo extends JpaRepository<StatusMaster, Integer> {
 	  		"        dm_status_mst \n" + 
 	  		"    WHERE\n" + 
 	  		"        dm_status_mst.del_status=1 \n" + 
-	  		"        AND    FIND_IN_SET(0, dm_status_mst.type_ids) OR FIND_IN_SET(:empType, dm_status_mst.type_ids)", nativeQuery=true) public
+	  		"        AND    (FIND_IN_SET(0, dm_status_mst.type_ids) OR FIND_IN_SET(:empType, dm_status_mst.type_ids))", nativeQuery=true) public
 	  List<StatusMaster> getStatusByEmpType(@Param("empType") int empType);
 
 	@Query(value="SELECT MAX(status_value) FROM dm_status_mst",nativeQuery=true) 
