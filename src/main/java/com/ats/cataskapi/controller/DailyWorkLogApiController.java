@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.cataskapi.model.DailyWorkLog;
 import com.ats.cataskapi.model.Info;
+import com.ats.cataskapi.model.PerDayWorkLog;
 import com.ats.cataskapi.repositories.DailyWorkLogRepo;
+import com.ats.cataskapi.repositories.PerDayWorkLogRepo;
 
 @RestController
 public class DailyWorkLogApiController {
@@ -25,7 +27,7 @@ public class DailyWorkLogApiController {
 		List<DailyWorkLog> logList = new ArrayList<DailyWorkLog>();
 		try {
 			logList = workLogRepo.findByDelStatusAndTaskId(taskId);
-			
+			System.err.println("logList---------"+logList);
 		}catch (Exception e) {
 			System.out.println("Excep in getAllDailyWorkLogs : "+e.getMessage());
 		}
@@ -112,4 +114,17 @@ public class DailyWorkLogApiController {
 
 	}
 	
+	@Autowired PerDayWorkLogRepo perDayWrkLogRepo;
+	@RequestMapping(value = {"/getPerDayWorkLogs"}, method=RequestMethod.POST)
+	public @ResponseBody List<PerDayWorkLog> getPerDayWorkLogs(@RequestParam int taskId ){
+		List<PerDayWorkLog> dayLog = new ArrayList<PerDayWorkLog>();
+		try {
+			dayLog = perDayWrkLogRepo.getPerDayLogByTaskId(taskId);
+			System.err.println("dayLog---------"+dayLog);
+		}catch (Exception e) {
+			System.out.println("Excep in getPerDayWorkLogs : "+e.getMessage());
+		}
+		return dayLog;
+		
+	}
 }

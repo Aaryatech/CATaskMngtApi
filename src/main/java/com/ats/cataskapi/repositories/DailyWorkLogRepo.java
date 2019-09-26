@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.ats.cataskapi.model.DailyWorkLog;
+import com.ats.cataskapi.model.PerDayWorkLog;
 
 @Repository
 public interface DailyWorkLogRepo extends JpaRepository<DailyWorkLog, Integer> {
@@ -67,4 +68,6 @@ public interface DailyWorkLogRepo extends JpaRepository<DailyWorkLog, Integer> {
 			"    where\n" + 
 			"        t_daily_work_log.work_log_id=:logId",nativeQuery=true)
 	DailyWorkLog findByWorkHrsLogId(@Param("logId") int logId);
+
+	
 }
