@@ -20,7 +20,7 @@ public interface DailyWorkLogRepo extends JpaRepository<DailyWorkLog, Integer> {
 			"        t_daily_work_log.work_date,\n" + 
 			"        t_daily_work_log.emp_id,\n" + 
 			"        t_daily_work_log.task_id,\n" + 
-			"      CONCAT(FLOOR(sum(t_daily_work_log.work_hours)/60),'.',LPAD(MOD( sum(t_daily_work_log.work_hours),60), 2, '0')) AS work_hours,\n" + 
+			"      CONCAT(FLOOR(sum(t_daily_work_log.work_hours)/60),':',LPAD(MOD( sum(t_daily_work_log.work_hours),60), 2, '0')) AS work_hours,\n" + 
 			"        t_daily_work_log.work_remark,\n" + 
 			"        t_daily_work_log.del_status,\n" + 
 			"        t_daily_work_log.update_datetime,\n" + 
@@ -60,7 +60,7 @@ public interface DailyWorkLogRepo extends JpaRepository<DailyWorkLog, Integer> {
 			"        t_daily_work_log.update_datetime,\n" + 
 			"        t_daily_work_log.update_username,\n" + 
 			"        t_daily_work_log.work_date,      \n" + 
-			"        CONCAT(FLOOR( t_daily_work_log.work_hours/60),'.',MOD( t_daily_work_log.work_hours,60)) as work_hours,\n" + 
+			"        CONCAT(FLOOR( t_daily_work_log.work_hours/60),':',LPAD(MOD(t_daily_work_log.work_hours,60), 2, '0')) as work_hours,\n" + 
 			"        t_daily_work_log.work_remark  \n" + 
 			"    from\n" + 
 			"       	t_daily_work_log\n" + 
