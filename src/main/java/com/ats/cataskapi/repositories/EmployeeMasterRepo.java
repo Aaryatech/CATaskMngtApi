@@ -82,4 +82,6 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 	@Query(value = "select m_emp.* from m_emp where m_emp.emp_id IN(:empId)", nativeQuery = true)
 	List<EmployeeMaster> findAllByEmpIds(@Param("empId") ArrayList<String> empId);
 
+	EmployeeMaster findByEmpEmail(@Param("email") String email);
+
 }
