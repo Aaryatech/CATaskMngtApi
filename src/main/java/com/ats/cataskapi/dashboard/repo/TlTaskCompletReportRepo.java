@@ -58,7 +58,7 @@ public interface TlTaskCompletReportRepo extends JpaRepository<TlTaskCompletRepo
 			"         t_tasks.is_active = 1  AND  \n" + 
 			"         t_tasks.cust_id = m_cust_header.cust_id AND 							\n" + 
 			"         t_daily_work_log.task_id=t_tasks.task_id  AND \n" + 
-			"         t_tasks.update_datetime between :fromDate AND :toDate \n" + 
+			"         t_tasks.task_completion_date between :fromDate AND :toDate \n" + 
 			"         group by t_tasks.task_id) b\n" + 
 			"\n" + 
 			" LEFT JOIN\n" + 
@@ -104,7 +104,7 @@ public interface TlTaskCompletReportRepo extends JpaRepository<TlTaskCompletRepo
 			"                                    t_tasks.del_status = 1 AND \n" + 
 			"                                    t_tasks.is_active = 1  AND    \n" + 
 			"                                    t_daily_work_log.task_id=t_tasks.task_id  AND  \n" + 
-			"                                    t_tasks.update_datetime between :fromDate AND :toDate \n" + 
+			"                                    t_tasks.task_completion_date between :fromDate AND :toDate \n" + 
 			"                                    group by t_tasks.task_id)\n" + 
 			"    ) a group by a.task_id) c ON b.task_id=c.task_id", nativeQuery=true)
 	List<TlTaskCompletReport> getTlCompleteTaskReport(@Param("fromDate") String fromDate, @Param("toDate") String toDate); 
