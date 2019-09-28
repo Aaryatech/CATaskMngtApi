@@ -95,7 +95,7 @@ public class InactiveTaskReport {
 		this.periodicityName = periodicityName;
 	}
 
- 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy hh:mm:ss a")// 
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
  	public Date getTaskStatutoryDueDate() {
 		return taskStatutoryDueDate;
 	}
@@ -104,7 +104,7 @@ public class InactiveTaskReport {
 		this.taskStatutoryDueDate = taskStatutoryDueDate;
 	}
 
- 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy hh:mm:ss a")// 
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getTaskStartDate() {
 		return taskStartDate;
 	}
@@ -113,7 +113,7 @@ public class InactiveTaskReport {
 		this.taskStartDate = taskStartDate;
 	}
 
- 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy hh:mm:ss a")// 
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getTaskEndDate() {
 		return taskEndDate;
 	}

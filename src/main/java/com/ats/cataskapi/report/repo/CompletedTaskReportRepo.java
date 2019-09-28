@@ -20,18 +20,7 @@ public interface CompletedTaskReportRepo extends JpaRepository<CompletedTaskRepo
 			"      t_tasks.update_datetime AS task_end_date,CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',LPAD(MOD(t_tasks.emp_bud_hr, 60), 2, '0'))  as emp_bud_hr, \n" + 
 			" \n" + 
 			"  CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',LPAD(MOD(t_tasks.mngr_bud_hr, 60), 2, '0')) as mngr_bud_hr,\n" + 
-			"   CASE WHEN m_cust_header.cust_group_id = 0 THEN m_cust_header.cust_firm_name ELSE COALESCE(\n" + 
-			"        (\n" + 
-			"        SELECT\n" + 
-			"            m_cust_group.cust_group_name\n" + 
-			"        FROM\n" + 
-			"            m_cust_group\n" + 
-			"        WHERE\n" + 
-			"            m_cust_group.cust_group_id = m_cust_header.cust_group_id AND m_cust_group.del_status = 1\n" + 
-			"    ),\n" + 
-			"    0\n" + 
-			"    )\n" + 
-			"END AS cust_firm_name,\n" + 
+			"   m_cust_header.cust_firm_name ,\n" + 
 			"       \n" + 
 			"        COALESCE( (CONCAT(\n" + 
 			"        FLOOR(\n" + 

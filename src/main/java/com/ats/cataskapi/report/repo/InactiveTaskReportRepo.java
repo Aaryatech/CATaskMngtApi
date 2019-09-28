@@ -41,18 +41,8 @@ public interface InactiveTaskReportRepo extends JpaRepository<InactiveTaskReport
 			"        t_tasks.update_datetime AS task_end_date,\n" + 
 			"         CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',LPAD(MOD(t_tasks.emp_bud_hr, 60), 2, '0'))  as emp_bud_hr,  \n" + 
 			"       CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',LPAD(MOD(t_tasks.mngr_bud_hr, 60), 2, '0')) as mngr_bud_hr, t_tasks.ex_var1,\n" + 
-			"        CASE WHEN m_cust_header.cust_group_id = 0 THEN m_cust_header.cust_firm_name ELSE COALESCE(\n" + 
-			"            (\n" + 
-			"            SELECT\n" + 
-			"                m_cust_group.cust_group_name\n" + 
-			"            FROM\n" + 
-			"                m_cust_group\n" + 
-			"            WHERE\n" + 
-			"                m_cust_group.cust_group_id = m_cust_header.cust_group_id AND m_cust_group.del_status = 1\n" + 
-			"        ),\n" + 
-			"        0\n" + 
-			"        )\n" + 
-			"END AS cust_firm_name,\n" + 
+			"         m_cust_header.cust_firm_name, \n" + 
+		
 			"       \n" + 
 			"        COALESCE( (CONCAT(\n" + 
 			"        FLOOR(\n" + 
@@ -151,10 +141,10 @@ public interface InactiveTaskReportRepo extends JpaRepository<InactiveTaskReport
 			"                SUM(t_daily_work_log.work_hours) / 60\n" + 
 			"            ),\n" + 
 			"            '.',\n" + 
-			"            MOD(\n" + 
+			"           LPAD( MOD(\n" + 
 			"                SUM(t_daily_work_log.work_hours),\n" + 
 			"                60\n" + 
-			"            )) as mgr_hrs\n" + 
+			"            ), 2, '0')) as mgr_hrs\n" + 
 			"                \n" + 
 			"        FROM\n" + 
 			"            t_tasks,\n" + 

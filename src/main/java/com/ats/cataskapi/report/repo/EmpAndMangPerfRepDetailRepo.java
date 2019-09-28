@@ -58,19 +58,19 @@ public interface EmpAndMangPerfRepDetailRepo extends JpaRepository<EmpAndMangPer
 			"                t_tasks.emp_bud_hr   / 60\n" + 
 			"            ),\n" + 
 			"            '.',\n" + 
-			"            MOD(\n" + 
+			"            LPAD(MOD(\n" + 
 			"                t_tasks.emp_bud_hr ,\n" + 
 			"                60\n" + 
-			"            )\n" + 
+			"            ), 2, '0')\n" + 
 			"        ) as emp_bud_hr,CONCAT(\n" + 
 			"            FLOOR(\n" + 
 			"                 t_tasks.mngr_bud_hr   / 60\n" + 
 			"            ),\n" + 
 			"            '.',\n" + 
-			"            MOD(\n" + 
+			"           LPAD( MOD(\n" + 
 			"                t_tasks.mngr_bud_hr ,\n" + 
 			"                60\n" + 
-			"            )\n" + 
+			"            ), 2, '0')\n" + 
 			"        ) as  mngr_bud_hr,\n" + 
 			"COALESCE(\n" + 
 			"    (select\n" + 
@@ -79,10 +79,10 @@ public interface EmpAndMangPerfRepDetailRepo extends JpaRepository<EmpAndMangPer
 			"                SUM(t_daily_work_log.work_hours) / 60\n" + 
 			"            ),\n" + 
 			"            '.',\n" + 
-			"            MOD(\n" + 
+			"            LPAD(MOD(\n" + 
 			"                SUM(t_daily_work_log.work_hours),\n" + 
 			"                60\n" + 
-			"            )\n" + 
+			"            ), 2, '0')\n" + 
 			"        ) from t_daily_work_log where t_daily_work_log.task_id = t_tasks.task_id \n" + 
 			"    ),\n" + 
 			"    0\n" + 
@@ -186,10 +186,10 @@ public interface EmpAndMangPerfRepDetailRepo extends JpaRepository<EmpAndMangPer
 			"                SUM(t_daily_work_log.work_hours) / 60\n" + 
 			"            ),\n" + 
 			"            '.',\n" + 
-			"            MOD(\n" + 
+			"            LPAD(MOD(\n" + 
 			"                SUM(t_daily_work_log.work_hours),\n" + 
 			"                60\n" + 
-			"            )) as mgr_hrs\n" + 
+			"            ), 2, '0')) as mgr_hrs\n" + 
 			"               \n" + 
 			"        FROM\n" + 
 			"            t_tasks,\n" + 
@@ -211,10 +211,10 @@ public interface EmpAndMangPerfRepDetailRepo extends JpaRepository<EmpAndMangPer
 			"                SUM(t_daily_work_log.work_hours) / 60\n" + 
 			"            ),\n" + 
 			"            '.',\n" + 
-			"            MOD(\n" + 
+			"           LPAD( MOD(\n" + 
 			"                SUM(t_daily_work_log.work_hours),\n" + 
 			"                60\n" + 
-			"            )) as mgr_hrs_bet\n" + 
+			"            ), 2, '0')) as mgr_hrs_bet\n" + 
 			"               \n" + 
 			"        FROM\n" + 
 			"            t_tasks,\n" + 

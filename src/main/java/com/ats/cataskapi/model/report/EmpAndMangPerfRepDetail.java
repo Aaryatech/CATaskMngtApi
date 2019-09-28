@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class EmpAndMangPerfRepDetail {
 	@Id
@@ -102,6 +104,7 @@ public class EmpAndMangPerfRepDetail {
 		this.periodicityName = periodicityName;
 	}
 
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getTaskStartDate() {
 		return taskStartDate;
 	}
@@ -110,6 +113,7 @@ public class EmpAndMangPerfRepDetail {
 		this.taskStartDate = taskStartDate;
 	}
 
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getTaskEndDate() {
 		return taskEndDate;
 	}
@@ -118,6 +122,7 @@ public class EmpAndMangPerfRepDetail {
 		this.taskEndDate = taskEndDate;
 	}
 
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getTaskStatutoryDueDate() {
 		return taskStatutoryDueDate;
 	}
@@ -126,6 +131,7 @@ public class EmpAndMangPerfRepDetail {
 		this.taskStatutoryDueDate = taskStatutoryDueDate;
 	}
 
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getTaskCompletionDate() {
 		return taskCompletionDate;
 	}

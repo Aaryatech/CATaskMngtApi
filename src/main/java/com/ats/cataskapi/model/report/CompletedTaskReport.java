@@ -102,12 +102,11 @@ public class CompletedTaskReport {
 	public void setTaskStartDate(Date taskStartDate) {
 		this.taskStartDate = taskStartDate;
 	}
-
+ 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")// 
 	public Date getTaskEndDate() {
 		return taskEndDate;
 	}
 
- 	@JsonFormat(locale = "Locale.ENGLISH", timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")// 
  	public void setTaskEndDate(Date taskEndDate) {
 		this.taskEndDate = taskEndDate;
 	}
