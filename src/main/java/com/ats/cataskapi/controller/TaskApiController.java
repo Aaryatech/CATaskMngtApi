@@ -100,8 +100,6 @@ public class TaskApiController {
 		return fin;
 	}
 
-	
-
 	@RequestMapping(value = { "/getCurrentFinYear" }, method = RequestMethod.GET)
 	public @ResponseBody FinancialYear getCurrentFinYear() {
 		FinancialYear fin = new FinancialYear();
@@ -419,10 +417,25 @@ public class TaskApiController {
 	GetTaskListRepo getTaskListRepo;
 
 	@RequestMapping(value = { "/getAllTaskList" }, method = RequestMethod.POST)
-	public @ResponseBody List<GetTaskList> getAllTaskList(@RequestParam int stat) {
+	public @ResponseBody List<GetTaskList> getAllTaskList(@RequestParam int stat, @RequestParam int servId,
+			@RequestParam int custId) {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
+		
+		System.out.println("prm are"+servId+custId);
 		try {
-			servicsList = getTaskListRepo.getAllTaskList(stat);
+
+			if (servId != 0 && custId != 0) {
+				servicsList = getTaskListRepo.getAllTaskListSpec(stat,servId,custId);
+			} else if (servId != 0 && custId == 0) {
+				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat,servId);
+			} else if (servId == 0 && custId != 0) {
+				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat,custId);
+			} else if((servId == -1 && custId == -1)) {
+				servicsList = getTaskListRepo.getAllTaskListAll(stat);
+			}else {
+				servicsList = getTaskListRepo.getAllTaskListAll(stat);
+			}
+
 		} catch (Exception e) {
 			System.err.println("Exce in getAllTaskList " + e.getMessage());
 		}
@@ -447,40 +460,39 @@ public class TaskApiController {
 
 	@RequestMapping(value = { "/getTaskDailyWorkLog" }, method = RequestMethod.POST)
 	public @ResponseBody List<EmpWorkLogHrs> getTaskDailyWorkLog(@RequestParam int stat, @RequestParam int emp,
-			@RequestParam String fromDate, @RequestParam String toDate,
-			@RequestParam int service, @RequestParam int activity, @RequestParam int customer) {
+			@RequestParam String fromDate, @RequestParam String toDate, @RequestParam int service,
+			@RequestParam int activity, @RequestParam int customer) {
 		List<EmpWorkLogHrs> list = new ArrayList<EmpWorkLogHrs>();
 		try {
-			
-				if(emp!=0 && fromDate!=null && toDate!=null && customer==0 &&  service==0) {
+
+			if (emp != 0 && fromDate != null && toDate != null && customer == 0 && service == 0) {
 				list = workLogRepo.getDailyWorkLogList(stat, emp, fromDate, toDate);
-				//System.out.println("// Query 1----------"+list);
-				}				
-				if(emp!=0 && fromDate!=null && toDate!=null && customer!=0 && service==0) {
-					list = workLogRepo.getDailyWorkLogListByCust(stat, emp, customer, fromDate, toDate);
-					//System.out.println("// Query 2----------"+list);
-				}				
-				if(emp!=0 && fromDate!=null && toDate!=null && service!=0 && activity!=0 && customer==0) {
-					list = workLogRepo.getDailyWorkLogListBySerAct(stat, emp, fromDate, toDate, 
-							service, activity);					
-					//System.out.println("// Query 3----------"+list);
-				}				
-				if(emp!=0 && fromDate!=null && toDate!=null && customer!=0 && service!=0 && activity!=0) {
-					
-					list = workLogRepo.getDailyWorkLogListByCustSerAct(stat, emp, customer, fromDate, toDate, 
-							service, activity);
-				}	
-				if(emp==0 && fromDate!=null && toDate!=null && customer==0 &&  service==0) {
-					list = workLogRepo.getDailyWorkLogList(stat, fromDate, toDate);
-				}
-				if(emp==0 && fromDate!=null && toDate!=null && customer!=0 &&  service==0) {
-					list = workLogRepo.getDailyWorkLogList(stat, fromDate, toDate, customer);
-				}
-					
+				// System.out.println("// Query 1----------"+list);
+			}
+			if (emp != 0 && fromDate != null && toDate != null && customer != 0 && service == 0) {
+				list = workLogRepo.getDailyWorkLogListByCust(stat, emp, customer, fromDate, toDate);
+				// System.out.println("// Query 2----------"+list);
+			}
+			if (emp != 0 && fromDate != null && toDate != null && service != 0 && activity != 0 && customer == 0) {
+				list = workLogRepo.getDailyWorkLogListBySerAct(stat, emp, fromDate, toDate, service, activity);
+				// System.out.println("// Query 3----------"+list);
+			}
+			if (emp != 0 && fromDate != null && toDate != null && customer != 0 && service != 0 && activity != 0) {
+
+				list = workLogRepo.getDailyWorkLogListByCustSerAct(stat, emp, customer, fromDate, toDate, service,
+						activity);
+			}
+			if (emp == 0 && fromDate != null && toDate != null && customer == 0 && service == 0) {
+				list = workLogRepo.getDailyWorkLogList(stat, fromDate, toDate);
+			}
+			if (emp == 0 && fromDate != null && toDate != null && customer != 0 && service == 0) {
+				list = workLogRepo.getDailyWorkLogList(stat, fromDate, toDate, customer);
+			}
+
 		} catch (Exception e) {
 			System.err.println("Exce in getTaskDailyWorkLog " + e.getMessage());
 		}
-		System.out.println("Log List-------------"+ list.toString());
+		System.out.println("Log List-------------" + list.toString());
 		return list;
 	}
 
@@ -627,7 +639,7 @@ public class TaskApiController {
 			@RequestParam String empBudgetHr, @RequestParam String mgBudgetHr, @RequestParam String startDate,
 			@RequestParam String endDate, @RequestParam int customer, @RequestParam int service,
 			@RequestParam int periodicityId, @RequestParam int activity, @RequestParam String curDateTime,
-			@RequestParam int userId,@RequestParam String statDate,@RequestParam String billAmt) {
+			@RequestParam int userId, @RequestParam String statDate, @RequestParam String billAmt) {
 
 		Info info = new Info();
 		try {
@@ -637,7 +649,7 @@ public class TaskApiController {
 			String statDate1 = DateConvertor.convertToYMD(statDate);
 
 			int res = taskRepo.editTask(taskId, items1, empBudgetHr, mgBudgetHr, startDate1, curDateTime, endDate1,
-					customer, service, periodicityId, activity, userId,statDate1,billAmt);
+					customer, service, periodicityId, activity, userId, statDate1, billAmt);
 
 			if (res > 0) {
 				info.setError(false);
@@ -680,11 +692,10 @@ public class TaskApiController {
 
 		try {
 			int res = 0;
-			if(workDate.equals("null")) {
+			if (workDate.equals("null")) {
 				res = taskRepo.updateEditTaskForNull(taskId, empHr, mngHr, dueDate, empId, updateUserName,
 						updateDateTime);
-			}else
-			{
+			} else {
 				res = taskRepo.updateEditTask(taskId, empHr, mngHr, workDate, dueDate, empId, updateUserName,
 						updateDateTime);
 			}
@@ -723,6 +734,7 @@ public class TaskApiController {
 
 		return info;
 	}
+
 	/********************************
 	 * System Generated Status
 	 ********************************/
@@ -883,7 +895,7 @@ public class TaskApiController {
 		try {
 
 			taskList = new ArrayList<TaskListHome>();
-			taskList = taskListRepo.getManualTaskListDashOverDue(stat, empId, endDate,userId);
+			taskList = taskListRepo.getManualTaskListDashOverDue(stat, empId, endDate, userId);
 
 		} catch (Exception e) {
 			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());
@@ -896,7 +908,7 @@ public class TaskApiController {
 
 	@RequestMapping(value = { "/getTaskListByEmpIdAndDashCountDueToday" }, method = RequestMethod.POST)
 	public @ResponseBody List<TaskListHome> getTaskListByEmpIdAndDashCountDueDate(@RequestParam int empId,
-			@RequestParam int stat ,@RequestParam int userId) {
+			@RequestParam int stat, @RequestParam int userId) {
 		List<TaskListHome> taskList = null;
 		Date date = new Date();
 		String endDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
@@ -904,7 +916,7 @@ public class TaskApiController {
 		try {
 
 			taskList = new ArrayList<TaskListHome>();
-			taskList = taskListRepo.getManualTaskListDashDueToday(stat, empId, endDate,userId);
+			taskList = taskListRepo.getManualTaskListDashDueToday(stat, empId, endDate, userId);
 
 		} catch (Exception e) {
 			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());
@@ -925,7 +937,7 @@ public class TaskApiController {
 		try {
 
 			taskList = new ArrayList<TaskListHome>();
-			taskList = taskListRepo.getManualTaskListDashDueWeek(stat, empId, endDate,userId);
+			taskList = taskListRepo.getManualTaskListDashDueWeek(stat, empId, endDate, userId);
 
 		} catch (Exception e) {
 			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());
@@ -946,7 +958,7 @@ public class TaskApiController {
 		try {
 
 			taskList = new ArrayList<TaskListHome>();
-			taskList = taskListRepo.getManualTaskListDashDueMonth(stat, empId, endDate,userId);
+			taskList = taskListRepo.getManualTaskListDashDueMonth(stat, empId, endDate, userId);
 
 		} catch (Exception e) {
 			System.err.println("Exce in getTaskListByEmpId  " + e.getMessage());

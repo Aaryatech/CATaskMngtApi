@@ -50,7 +50,140 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
 			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllTaskList(@Param("stat") int stat);
+	List<GetTaskList> getAllTaskListAll(@Param("stat") int stat);
+	
+	
+	@Query(value=" SELECT\n" + 
+			"    t_tasks.task_id,\n" + 
+			"    t_tasks.task_code,\n" + 
+			"    t_tasks.mapping_id,\n" + 
+			"    t_tasks.task_subline,\n" + 
+			"    t_tasks.task_fy_id,\n" + 
+			"    t_tasks.task_text,\n" + 
+			"    t_tasks.task_start_date,\n" + 
+			"    t_tasks.task_end_date, t_tasks.task_completion_date ,\n" + 
+			"    t_tasks.task_statutory_due_date,\n" + 
+			"    CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr ,\n" + 
+			"    t_tasks.cust_id,\n" + 
+			"    t_tasks.periodicity_id,\n" + 
+			"    t_tasks.actv_id,\n" + 
+			"    t_tasks.serv_id,\n" + 
+			"    CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
+			"    dm_periodicity.periodicity_name,\n" + 
+			"    m_activities.acti_name,\n" + 
+			"    m_services.serv_name,m_cust_header.cust_firm_name ,  \n" + 
+			"    dm_fin_year.fin_year_name,(SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id=t_tasks.task_id) AS employees\n" + 
+			"FROM\n" + 
+			"    m_services,\n" + 
+			"    m_activities,\n" + 
+			"    dm_periodicity,\n" + 
+			"    m_cust_header,\n" + 
+			"    t_tasks,\n" + 
+			"    dm_fin_year\n" + 
+			"WHERE\n" + 
+			"    t_tasks.cust_id = m_cust_header.cust_id AND "
+			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
+			+ "m_services.serv_id = t_tasks.serv_id AND "
+			+ "m_activities.acti_id = t_tasks.actv_id AND "
+			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
+			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1  AND  t_tasks.serv_id=:servId AND t_tasks.cust_id=:custId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllTaskListSpec(@Param("stat") int stat,@Param("servId") int servId,@Param("custId") int custId);
+	
+	
+	
+	@Query(value=" SELECT\n" + 
+			"    t_tasks.task_id,\n" + 
+			"    t_tasks.task_code,\n" + 
+			"    t_tasks.mapping_id,\n" + 
+			"    t_tasks.task_subline,\n" + 
+			"    t_tasks.task_fy_id,\n" + 
+			"    t_tasks.task_text,\n" + 
+			"    t_tasks.task_start_date,\n" + 
+			"    t_tasks.task_end_date, t_tasks.task_completion_date ,\n" + 
+			"    t_tasks.task_statutory_due_date,\n" + 
+			"    CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr ,\n" + 
+			"    t_tasks.cust_id,\n" + 
+			"    t_tasks.periodicity_id,\n" + 
+			"    t_tasks.actv_id,\n" + 
+			"    t_tasks.serv_id,\n" + 
+			"    CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
+			"    dm_periodicity.periodicity_name,\n" + 
+			"    m_activities.acti_name,\n" + 
+			"    m_services.serv_name,m_cust_header.cust_firm_name ,  \n" + 
+			"    dm_fin_year.fin_year_name,(SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id=t_tasks.task_id) AS employees\n" + 
+			"FROM\n" + 
+			"    m_services,\n" + 
+			"    m_activities,\n" + 
+			"    dm_periodicity,\n" + 
+			"    m_cust_header,\n" + 
+			"    t_tasks,\n" + 
+			"    dm_fin_year\n" + 
+			"WHERE\n" + 
+			"    t_tasks.cust_id = m_cust_header.cust_id AND "
+			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
+			+ "m_services.serv_id = t_tasks.serv_id AND "
+			+ "m_activities.acti_id = t_tasks.actv_id AND "
+			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
+			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1   AND t_tasks.cust_id=:custId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllTaskListSpecCust(@Param("stat") int stat,@Param("custId") int custId);
+	
+	
+	
+	@Query(value=" SELECT\n" + 
+			"    t_tasks.task_id,\n" + 
+			"    t_tasks.task_code,\n" + 
+			"    t_tasks.mapping_id,\n" + 
+			"    t_tasks.task_subline,\n" + 
+			"    t_tasks.task_fy_id,\n" + 
+			"    t_tasks.task_text,\n" + 
+			"    t_tasks.task_start_date,\n" + 
+			"    t_tasks.task_end_date, t_tasks.task_completion_date ,\n" + 
+			"    t_tasks.task_statutory_due_date,\n" + 
+			"    CONCAT(FLOOR( t_tasks.mngr_bud_hr/60),':',MOD( t_tasks.mngr_bud_hr,60)) as mngr_bud_hr ,\n" + 
+			"    t_tasks.cust_id,\n" + 
+			"    t_tasks.periodicity_id,\n" + 
+			"    t_tasks.actv_id,\n" + 
+			"    t_tasks.serv_id,\n" + 
+			"    CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
+			"    dm_periodicity.periodicity_name,\n" + 
+			"    m_activities.acti_name,\n" + 
+			"    m_services.serv_name,m_cust_header.cust_firm_name ,  \n" + 
+			"    dm_fin_year.fin_year_name,(SELECT\n" + 
+			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
+			"        FROM\n" + 
+			"            t_tasks i,\n" + 
+			"            m_emp c     \n" + 
+			"        WHERE\n" + 
+			"            FIND_IN_SET(c.emp_id, task_emp_ids) AND i.task_id=t_tasks.task_id) AS employees\n" + 
+			"FROM\n" + 
+			"    m_services,\n" + 
+			"    m_activities,\n" + 
+			"    dm_periodicity,\n" + 
+			"    m_cust_header,\n" + 
+			"    t_tasks,\n" + 
+			"    dm_fin_year\n" + 
+			"WHERE\n" + 
+			"    t_tasks.cust_id = m_cust_header.cust_id AND "
+			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
+			+ "m_services.serv_id = t_tasks.serv_id AND "
+			+ "m_activities.acti_id = t_tasks.actv_id AND "
+			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
+			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1   AND t_tasks.serv_id=:servId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllTaskListSpecServ(@Param("stat") int stat,@Param("servId") int servId);
+	
+	
 	
 	
 	@Query(value=" SELECT\n" + 
