@@ -100,6 +100,20 @@ public class TaskApiController {
 		return fin;
 	}
 
+	
+
+	@RequestMapping(value = { "/getCurrentFinYear" }, method = RequestMethod.GET)
+	public @ResponseBody FinancialYear getCurrentFinYear() {
+		FinancialYear fin = new FinancialYear();
+		try {
+
+			fin = financialYearRepo.getCurrYear();
+		} catch (Exception e) {
+			System.err.println("Exce in getServiceById" + e.getMessage());
+		}
+		return fin;
+	}
+
 	@RequestMapping(value = { "/saveTaskRes" }, method = RequestMethod.POST)
 	public @ResponseBody Info saveTask(@RequestBody TempTaskSave tsk) {
 		Info inf = new Info();

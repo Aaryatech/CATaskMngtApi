@@ -16,6 +16,12 @@ public interface FinancialYearRepo  extends JpaRepository<FinancialYear, Integer
 			"FROM dm_fin_year\n" + 
 			"WHERE :finDate between dm_fin_year.fin_start_date AND dm_fin_year.fin_end_date ",nativeQuery=true)
 	FinancialYear getFinYearBetDate(@Param("finDate") String  finDate);
+	
+
+	@Query(value="SELECT *\n" + 
+			"FROM dm_fin_year\n" + 
+			"WHERE  dm_fin_year.is_current=1",nativeQuery=true)
+	FinancialYear getCurrYear();
 
 	List<FinancialYear> findByDelStatus(int i);
 }
