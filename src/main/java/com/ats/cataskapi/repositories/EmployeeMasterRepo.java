@@ -84,4 +84,6 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 
 	EmployeeMaster findByEmpEmail(@Param("email") String email);
 
+	EmployeeMaster findByEmpEmailAndEmpIdNot(@Param("email") String email, @Param("eid") int eid);
+
 }

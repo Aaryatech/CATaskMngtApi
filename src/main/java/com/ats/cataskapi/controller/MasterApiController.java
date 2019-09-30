@@ -389,21 +389,39 @@ public class MasterApiController {
 		
 	}
 	@RequestMapping(value = {"/checkEmployeeEmail"}, method = RequestMethod.POST)
-	public @ResponseBody EmployeeMaster checkEmployeeEmail(@RequestParam String email) {
-		System.err.println("Hiee");
+	public @ResponseBody Info checkEmployeeEmail(@RequestParam String email, @RequestParam int eid) {
+		
+		Info info=new Info();
 		EmployeeMaster emp = new EmployeeMaster();
 		try {
+			if(eid==0) {
 				emp = empRepo.findByEmpEmail(email);
+	
+				if(emp!=null) {
+					info.setError(false);
+				}else {
+					info.setError(true);
+				}
+			}else {
+				
+				emp = empRepo.findByEmpEmailAndEmpIdNot(email, eid);
+				
+				if(emp!=null) {
+					info.setError(false);
+				}else {
+					info.setError(true);
+				}
+			}
 			
 		}catch (Exception e) {
 			System.err.println("Exce in checkEmployeeEmail  " + e.getMessage());
 		}
 		
-		return emp;
+		return info;
 		
 	}
-
 	
+	/********************************************************************************/
 	@RequestMapping(value = {"/getExecutionPartner"}, method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeMaster> getExecutionPartner(@RequestParam int empId) {
 		List<EmployeeMaster> emp = null;
