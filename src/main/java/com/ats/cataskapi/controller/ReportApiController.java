@@ -60,7 +60,14 @@ public class ReportApiController {
 		List<InactiveTaskReport> logList = new ArrayList<InactiveTaskReport>();
 
 		try {
-			logList = inactiveTaskReportRepo.getAllInactiveTask(fromDate1, toDate1, empIds, status);
+			
+			if(status==9) {
+				logList = inactiveTaskReportRepo.getAllCompleteTask(fromDate1, toDate1, empIds, status);
+			}else {
+				logList = inactiveTaskReportRepo.getAllInactiveTask(fromDate1, toDate1, empIds, status);
+			}
+		
+			
 			System.err.println("dates" + logList.toString());
 
 		} catch (Exception e) {
