@@ -1,13 +1,17 @@
 package com.ats.cataskapi.task.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class EmpWorkLogHrs {
 @Id
 	private int workLogId;
-	private String workDate;		
+	private Date workDate;		
 	private String workHours;
 	private String workRemark;
 	private int exInt1;
@@ -28,10 +32,12 @@ public class EmpWorkLogHrs {
 	public void setWorkLogId(int workLogId) {
 		this.workLogId = workLogId;
 	}
-	public String getWorkDate() {
+	
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public Date getWorkDate() {
 		return workDate;
 	}
-	public void setWorkDate(String workDate) {
+	public void setWorkDate(Date workDate) {
 		this.workDate = workDate;
 	}
 	public String getWorkHours() {
