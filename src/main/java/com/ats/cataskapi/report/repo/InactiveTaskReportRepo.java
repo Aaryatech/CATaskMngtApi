@@ -226,7 +226,7 @@ public interface InactiveTaskReportRepo extends JpaRepository<InactiveTaskReport
 			"    m_cust_header,\n" + 
 			"    t_daily_work_log\n" + 
 			"WHERE\n" + 
-			"    m_services.serv_id = t_tasks.serv_id AND m_activities.acti_id = t_tasks.actv_id AND dm_periodicity.periodicity_id = t_tasks.periodicity_id AND t_tasks.task_status =:status AND t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_tasks.cust_id = m_cust_header.cust_id AND t_daily_work_log.task_id = t_tasks.task_id AND t_tasks.task_completion_date >=:fromDate1 AND t_tasks.task_completion_date<=:toDate1  AND FIND_IN_SET(:empIds, t_tasks.task_emp_ids)\n" + 
+			"    t_tasks.task_completion_date BETWEEN :fromDate1 AND  :toDate1 AND m_services.serv_id = t_tasks.serv_id AND m_activities.acti_id = t_tasks.actv_id AND dm_periodicity.periodicity_id = t_tasks.periodicity_id AND t_tasks.task_status =:status AND t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_tasks.cust_id = m_cust_header.cust_id AND t_daily_work_log.task_id = t_tasks.task_id AND    FIND_IN_SET(:empIds, t_tasks.task_emp_ids)\n" + 
 			"GROUP BY\n" + 
 			"    t_tasks.task_id\n" + 
 			") b\n" + 
@@ -303,7 +303,7 @@ public interface InactiveTaskReportRepo extends JpaRepository<InactiveTaskReport
 			"            t_tasks,\n" + 
 			"            t_daily_work_log\n" + 
 			"        WHERE\n" + 
-			"            t_tasks.task_status = :status AND t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_daily_work_log.task_id = t_tasks.task_id AND t_tasks.task_completion_date >=:fromDate1 AND t_tasks.task_completion_date<=:toDate1 \n" + 
+			"         t_tasks.task_completion_date BETWEEN :fromDate1 AND  :toDate1 AND   t_tasks.task_status = :status AND t_tasks.del_status = 1 AND t_tasks.is_active = 1  \n" + 
 			"        GROUP BY\n" + 
 			"            t_tasks.task_id,t_daily_work_log.emp_id) o \n" + 
 			" ON o.task_id=n.task_id and n.emp_id=o.emp_id ) a\n" + 

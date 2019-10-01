@@ -637,18 +637,17 @@ public class TaskApiController {
 	@RequestMapping(value = { "/submitEditMannualTask" }, method = RequestMethod.POST)
 	public @ResponseBody Info submitEditMannualTask(@RequestParam int taskId, @RequestParam String items1,
 			@RequestParam String empBudgetHr, @RequestParam String mgBudgetHr, @RequestParam String startDate,
-			@RequestParam String endDate, @RequestParam int customer, @RequestParam int service,
+			 @RequestParam int customer, @RequestParam int service,
 			@RequestParam int periodicityId, @RequestParam int activity, @RequestParam String curDateTime,
 			@RequestParam int userId, @RequestParam String statDate, @RequestParam String billAmt) {
 
 		Info info = new Info();
 		try {
 
-			String endDate1 = DateConvertor.convertToYMD(endDate);
 			String startDate1 = DateConvertor.convertToYMD(startDate);
 			String statDate1 = DateConvertor.convertToYMD(statDate);
 
-			int res = taskRepo.editTask(taskId, items1, empBudgetHr, mgBudgetHr, startDate1, curDateTime, endDate1,
+			int res = taskRepo.editTask(taskId, items1, empBudgetHr, mgBudgetHr, startDate1, curDateTime,
 					customer, service, periodicityId, activity, userId, statDate1, billAmt);
 
 			if (res > 0) {

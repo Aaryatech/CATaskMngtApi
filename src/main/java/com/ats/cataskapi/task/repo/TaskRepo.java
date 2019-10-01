@@ -65,9 +65,9 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 
 	@Transactional
 	@Modifying
-	@Query(value = "UPDATE t_tasks SET  t_tasks.task_emp_ids=:items1, t_tasks.update_username=:userId, t_tasks.update_datetime=:curDateTime, t_tasks.emp_bud_hr=:empBudgetHr,t_tasks.mngr_bud_hr=:mgBudgetHr, t_tasks.task_end_date=:endDate1,t_tasks.task_start_date=:startDate1,t_tasks.cust_id=:customer,t_tasks.serv_id=:service,t_tasks.periodicity_id=:periodicityId,t_tasks.actv_id=:activity,t_tasks.task_statutory_due_date=:statDate1 ,t_tasks.billing_amt=:billAmt   WHERE task_id=:taskId", nativeQuery = true)
+	@Query(value = "UPDATE t_tasks SET  t_tasks.task_emp_ids=:items1, t_tasks.update_username=:userId, t_tasks.update_datetime=:curDateTime, t_tasks.emp_bud_hr=:empBudgetHr,t_tasks.mngr_bud_hr=:mgBudgetHr,t_tasks.task_start_date=:startDate1,t_tasks.cust_id=:customer,t_tasks.serv_id=:service,t_tasks.periodicity_id=:periodicityId,t_tasks.actv_id=:activity,t_tasks.task_statutory_due_date=:statDate1 ,t_tasks.billing_amt=:billAmt   WHERE task_id=:taskId", nativeQuery = true)
 	int editTask(int taskId, String items1, String empBudgetHr, String mgBudgetHr, String startDate1,
-			String curDateTime, String endDate1, int customer, int service, int periodicityId, int activity,
+			String curDateTime, int customer, int service, int periodicityId, int activity,
 			int userId,String statDate1,String billAmt);
 	
 	
