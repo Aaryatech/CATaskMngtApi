@@ -36,8 +36,8 @@ public class ReportApiController {
 	public @ResponseBody List<CompletedTaskReport> getCompletedTaskReport(@RequestParam String fromDate,
 			@RequestParam String toDate, @RequestParam String empIds) {
 		List<CompletedTaskReport> logList = new ArrayList<CompletedTaskReport>();
-		String fromDate1 = fromDate.concat("  00:00:01");
-		String toDate1 = toDate.concat("  23:59:59");
+		String fromDate1 = fromDate;
+		String toDate1 = toDate;
 
 		// System.out.println("dates"+fromDate+toDate);
 
