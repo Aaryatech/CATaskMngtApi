@@ -10,13 +10,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 public class EmpWorkLogHrs {
 @Id
+	private String exVar1;
 	private int workLogId;
 	private Date workDate;		
 	private String workHours;
 	private String workRemark;
 	private int exInt1;
-	private int exInt2;
-	private String exVar1;
+	private int exInt2;	
 	private String exVar2;	
 	private int taskId;
 	private String taskText;
@@ -122,10 +122,11 @@ public class EmpWorkLogHrs {
 	public String toString() {
 		return "EmpWorkLogHrs [workLogId=" + workLogId + ", workDate=" + workDate + ", workHours=" + workHours
 				+ ", workRemark=" + workRemark + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVar1=" + exVar1
-				+ ", exVar2=" + exVar2 + ", taskText=" + taskText + ", actiName=" + actiName
+				+ ", exVar2=" + exVar2 + ", taskId=" + taskId + ", taskText=" + taskText + ", actiName=" + actiName
 				+ ", servName=" + servName + ", employees=" + employees + ", custFirmName=" + custFirmName
 				+ ", finYearName=" + finYearName + "]";
 	}
+	
 	
 	
 }
