@@ -420,19 +420,19 @@ public class TaskApiController {
 	public @ResponseBody List<GetTaskList> getAllTaskList(@RequestParam int stat, @RequestParam int servId,
 			@RequestParam int custId) {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
-		
-		System.out.println("prm are"+servId+custId);
+
+		System.out.println("prm are" + servId + custId);
 		try {
 
 			if (servId != 0 && custId != 0) {
-				servicsList = getTaskListRepo.getAllTaskListSpec(stat,servId,custId);
+				servicsList = getTaskListRepo.getAllTaskListSpec(stat, servId, custId);
 			} else if (servId != 0 && custId == 0) {
-				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat,servId);
+				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat, servId);
 			} else if (servId == 0 && custId != 0) {
-				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat,custId);
-			} else if((servId == -1 && custId == -1)) {
+				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat, custId);
+			} else if ((servId == -1 && custId == -1)) {
 				servicsList = getTaskListRepo.getAllTaskListAll(stat);
-			}else {
+			} else {
 				servicsList = getTaskListRepo.getAllTaskListAll(stat);
 			}
 
@@ -468,32 +468,32 @@ public class TaskApiController {
 			if (emp != 0 && fromDate != null && toDate != null && customer == 0 && service == 0) {
 				list = workLogRepo.getDailyWorkLogList(stat, emp, fromDate, toDate);
 				// System.out.println("// Query 1----------"+list);
-				 if(list.isEmpty()) {					 
-					 list = workLogRepo.getTaskLogList(stat, emp, fromDate, toDate);					 
-				 }
+				if (list.isEmpty()) {
+					list = workLogRepo.getTaskLogList(stat, emp, fromDate, toDate);
+				}
 			}
 			if (emp != 0 && fromDate != null && toDate != null && customer != 0 && service == 0) {
 				list = workLogRepo.getDailyWorkLogListByCust(stat, emp, customer, fromDate, toDate);
-				 //System.out.println("// Query 2----------"+list);
-				
+				// System.out.println("// Query 2----------"+list);
+
 			}
 			if (emp != 0 && fromDate != null && toDate != null && service != 0 && customer == 0) {
 				list = workLogRepo.getDailyWorkLogListBySerAct(stat, emp, fromDate, toDate, service, activity);
-				//System.out.println("// Query 3----------"+list);
+				// System.out.println("// Query 3----------"+list);
 			}
 			if (emp != 0 && fromDate != null && toDate != null && customer != 0 && service != 0) {
 
 				list = workLogRepo.getDailyWorkLogListByCustSerAct(stat, emp, customer, fromDate, toDate, service,
 						activity);
-				//System.out.println("// Query 4----------"+list);
+				// System.out.println("// Query 4----------"+list);
 			}
 			if (emp == 0 && fromDate != null && toDate != null && customer == 0 && service == 0) {
 				list = workLogRepo.getDailyWorkLogList(stat, fromDate, toDate);
-				//System.out.println("// Query 5----------"+list);
+				// System.out.println("// Query 5----------"+list);
 			}
 			if (emp == 0 && fromDate != null && toDate != null && customer != 0 && service == 0) {
 				list = workLogRepo.getDailyWorkLogList(stat, fromDate, toDate, customer);
-				//System.out.println("// Query 6----------"+list);
+				// System.out.println("// Query 6----------"+list);
 			}
 
 		} catch (Exception e) {
@@ -610,15 +610,19 @@ public class TaskApiController {
 		try {
 
 			String endDate = null;
-			if (workDate.isEmpty() == false) {
-				// System.err.println("in if**"+workDate);
+			int res = 0;
+			System.err.println("in if**" + workDate);
+
+			System.err.println("in if**" + workDate);
+
+			try {
 				endDate = DateConvertor.convertToYMD(workDate);
-			} else {
-				// System.err.println("in else**"+workDate);
-				endDate = "0000-00-00";
+				res = taskRepo.assignTask(taskIdList, empIdList, userId, curDateTime, endDate);
+			} catch (Exception e) {
+				res = taskRepo.assignTask1(taskIdList, empIdList, userId, curDateTime);
 			}
 
-			int res = taskRepo.assignTask(taskIdList, empIdList, userId, curDateTime, endDate);
+		
 
 			if (res > 0) {
 				info.setError(false);
@@ -644,9 +648,9 @@ public class TaskApiController {
 	@RequestMapping(value = { "/submitEditMannualTask" }, method = RequestMethod.POST)
 	public @ResponseBody Info submitEditMannualTask(@RequestParam int taskId, @RequestParam String items1,
 			@RequestParam String empBudgetHr, @RequestParam String mgBudgetHr, @RequestParam String startDate,
-			 @RequestParam int customer, @RequestParam int service,
-			@RequestParam int periodicityId, @RequestParam int activity, @RequestParam String curDateTime,
-			@RequestParam int userId, @RequestParam String statDate, @RequestParam String billAmt) {
+			@RequestParam int customer, @RequestParam int service, @RequestParam int periodicityId,
+			@RequestParam int activity, @RequestParam String curDateTime, @RequestParam int userId,
+			@RequestParam String statDate, @RequestParam String billAmt) {
 
 		Info info = new Info();
 		try {
@@ -654,8 +658,8 @@ public class TaskApiController {
 			String startDate1 = DateConvertor.convertToYMD(startDate);
 			String statDate1 = DateConvertor.convertToYMD(statDate);
 
-			int res = taskRepo.editTask(taskId, items1, empBudgetHr, mgBudgetHr, startDate1, curDateTime,
-					customer, service, periodicityId, activity, userId, statDate1, billAmt);
+			int res = taskRepo.editTask(taskId, items1, empBudgetHr, mgBudgetHr, startDate1, curDateTime, customer,
+					service, periodicityId, activity, userId, statDate1, billAmt);
 
 			if (res > 0) {
 				info.setError(false);
