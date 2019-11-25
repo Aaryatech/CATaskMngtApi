@@ -1193,4 +1193,42 @@ public class MasterApiController {
 		return info;
 
 	}
+	
+	@RequestMapping(value = { "/checkUniquePan" }, method = RequestMethod.POST)
+	public @ResponseBody Info checkUniquePan(@RequestParam int custId,@RequestParam String panNo ) {
+
+		Info info = new Info();
+		try
+		{
+			if(custId<1) {
+				System.err.println("A");
+			CustomerHeaderMaster custMst=custHeadRepo.findByCustPanNoAndDelStatus(panNo, 1);
+			if(custMst!=null) {
+				System.err.println("B");
+				info.setError(true);
+			}else {
+				System.err.println("C");
+				info.setError(false);
+			}
+			}else {
+				System.err.println("a");
+				CustomerHeaderMaster custMst=custHeadRepo.findByCustPanNoAndDelStatusAndCustIdNot(panNo, 1, custId);
+				
+				if(custMst!=null) {
+					System.err.println("b");
+					info.setError(true);
+				}else {
+					System.err.println("c");
+					info.setError(false);
+				}
+			}
+			
+		} catch (Exception e) {
+			System.err.println("Exce in checkUniquePan  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+		return info;
+	}
 }

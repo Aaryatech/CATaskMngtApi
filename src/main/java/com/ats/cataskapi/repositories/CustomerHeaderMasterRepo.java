@@ -18,6 +18,11 @@ public interface CustomerHeaderMasterRepo extends JpaRepository<CustomerHeaderMa
 	
 	CustomerHeaderMaster findByCustIdAndDelStatus(int custHeadId, int del);
 	
+	//Sachin 25-11-2019
+	CustomerHeaderMaster findByCustPanNoAndDelStatus(String panNo,int delStatus);
+	//Sachin 25-11-2019
+	CustomerHeaderMaster findByCustPanNoAndDelStatusAndCustIdNot(String panNo,int delStatus,int custId);
+
 	@Transactional
 	@Modifying
 	@Query(value="UPDATE  m_cust_header SET del_status=0, update_username=:userId WHERE cust_id=:custHeadId",nativeQuery=true)
