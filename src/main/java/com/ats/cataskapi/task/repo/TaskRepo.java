@@ -99,5 +99,9 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 	@Modifying
 	@Query(value = "UPDATE t_tasks SET t_tasks.task_status=:statusVal,update_username=:userId, update_datetime=:curDateTime, task_completion_date=:compltnDate WHERE t_tasks.task_id=:taskId", nativeQuery = true)
 	int updateStatusComplete(@Param("taskId") int taskId, @Param("statusVal") int statusVal,@Param("userId") int userId, @Param("curDateTime") String curDateTime, @Param("compltnDate") String compltnDate);
+	
+@Query(value = "SELECT COUNT(*) from t_tasks WHERE find_in_set(:empId,task_emp_ids) and t_tasks.task_status!=9 and is_active=1 and del_status=1 \n" + 
+					"	", nativeQuery = true)
+	int getLoginTask(@Param("empId") int empId);
 
 }

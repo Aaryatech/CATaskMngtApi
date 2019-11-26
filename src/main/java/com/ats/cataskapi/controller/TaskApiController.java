@@ -60,6 +60,22 @@ public class TaskApiController {
 	CustmrActivityMapRepo actMapRepo;
 
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	
+	//Sachin 26-11-2019 get count of assigned but not completed task for login person
+	@RequestMapping(value = {"/getCountofLoginEmpTask"}, method = RequestMethod.POST)
+	public @ResponseBody Object getCountofLoginTask(@RequestParam int empId){
+
+		int count=0;
+		try {
+			count = taskRepo.getLoginTask(empId);															//which are partner type
+		}catch (Exception e) {
+			System.err.println("Exce in getCountofManagers  " + e.getMessage());
+		}
+		
+		return count;
+	}
+	
+	
 
 	/*
 	 * @RequestMapping(value = { "/saveTask" }, method = RequestMethod.POST)
