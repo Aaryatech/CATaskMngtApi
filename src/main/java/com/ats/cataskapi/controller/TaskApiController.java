@@ -592,6 +592,26 @@ public class TaskApiController {
 		return servicsList;
 	}
 
+	@RequestMapping(value = { "/reopenTaskByTaskId" }, method = RequestMethod.POST)
+	public @ResponseBody Info reopenTaskByTaskId(@RequestParam int taskId) {
+		Info info = new Info();
+		try {
+			int res = taskRepo.reOpenTaskByTaskId(taskId);
+			if(res>0) {
+				info.setError(false);
+				info.setMsg("Success");
+			}else {
+				info.setError(true);
+				info.setMsg("Fail");
+			}
+		} catch (Exception e) {
+			System.err.println("Exce in reopenTaskByTaskId" + e.getMessage());
+			info.setError(true);
+			info.setMsg("Fail");
+		}
+		return info;
+	}
+	
 	@RequestMapping(value = { "/getTaskByTaskIdForEdit1" }, method = RequestMethod.POST)
 	public @ResponseBody Task getTaskByTaskIdForEdit(@RequestParam int taskId) {
 		Task empList = new Task();

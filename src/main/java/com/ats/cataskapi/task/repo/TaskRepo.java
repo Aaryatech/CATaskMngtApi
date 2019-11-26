@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.task.model.Task;
 
 public interface TaskRepo extends JpaRepository<Task, Integer> {
@@ -103,5 +104,10 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 @Query(value = "SELECT COUNT(*) from t_tasks WHERE find_in_set(:empId,task_emp_ids) and t_tasks.task_status!=9 and is_active=1 and del_status=1 \n" + 
 					"	", nativeQuery = true)
 	int getLoginTask(@Param("empId") int empId);
+
+	@Transactional
+	@Modifying
+	@Query(value="UPDATE t_tasks SET task_status=0 WHERE task_id=:taskId",nativeQuery=true)
+	int reOpenTaskByTaskId(@Param("taskId")int taskId);
 
 }
