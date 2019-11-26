@@ -593,11 +593,27 @@ public class TaskApiController {
 	}
 
 	@RequestMapping(value = { "/reopenTaskByTaskId" }, method = RequestMethod.POST)
-	public @ResponseBody Info reopenTaskByTaskId(@RequestParam int taskId) {
+	public @ResponseBody Info reopenTaskByTaskId(@RequestParam int taskId, @RequestParam int empId, 
+			@RequestParam int updateUserName, @RequestParam String updateDateTime) {
 		Info info = new Info();
 		try {
 			int res = taskRepo.reOpenTaskByTaskId(taskId);
 			if(res>0) {
+				Communication comcat = new Communication();
+				comcat.setCommunText("Task Reopened");
+				comcat.setDelStatus(1);
+				comcat.setEmpId(empId);
+				comcat.setExInt1(1);
+				comcat.setExInt2(1);
+				comcat.setExVar1("NA");
+				comcat.setExVar2("NA");
+				comcat.setTypeId(2);
+				comcat.setRemark("NA");
+				comcat.setTaskId(taskId);
+				comcat.setUpdateDatetime(updateDateTime);
+				comcat.setUpdateUser(updateUserName);
+				Communication save = communicationRepo.saveAndFlush(comcat);
+				
 				info.setError(false);
 				info.setMsg("Success");
 			}else {
