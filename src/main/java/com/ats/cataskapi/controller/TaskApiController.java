@@ -303,8 +303,13 @@ public class TaskApiController {
 
 		Info info = new Info();
 		try {
-			int res = taskRepo.updateStatusComplete(taskId, statusVal, userId, curDateTime, compltnDate);
-
+			int res=0;
+			if(statusVal==9) {
+				 res = taskRepo.updateStatusComplete(taskId, statusVal, userId, curDateTime, compltnDate);
+			}
+			else {
+				 res = taskRepo.updateStatus(taskId, statusVal, userId, curDateTime);
+			}
 			if (res > 0) {
 				info.setError(false);
 				info.setMsg("success");
@@ -312,7 +317,6 @@ public class TaskApiController {
 			} else {
 				info.setError(true);
 				info.setMsg("failed");
-
 			}
 		} catch (Exception e) {
 
