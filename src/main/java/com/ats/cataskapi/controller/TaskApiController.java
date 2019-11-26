@@ -994,5 +994,32 @@ public class TaskApiController {
 		return taskList;
 
 	}
+	
+	@RequestMapping(value = { "/deleteAllActMappByDate" }, method = RequestMethod.POST)
+	public @ResponseBody Info deleteAllActMappByDate(@RequestParam String date, @RequestParam int userId) {
 
+		Info info = new Info();
+		try
+		{
+			int res = taskListRepo.deleteMappedActivity(date, userId);
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in deleteAllActMappByDate  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+		
+		return info;
+	}
 }

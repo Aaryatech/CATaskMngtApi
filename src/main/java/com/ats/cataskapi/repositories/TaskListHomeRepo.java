@@ -3,8 +3,10 @@ package com.ats.cataskapi.repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ats.cataskapi.model.TaskListHome;
 
@@ -1139,6 +1141,12 @@ List<TaskListHome> getTaskListByStatus4(@Param("empId") int empId, @Param("fromD
 		"                AND dm_status_mst.status_value = t_tasks.task_status    \n" + 
 		"                AND t_tasks.task_status NOT IN(:statusIds)",nativeQuery=true)
 List<TaskListHome> getTaskListByStatus6(@Param("empId") int empId,@Param("fromDate") String fromDate,@Param("toDate") String toDate, @Param("statusIds") List<String> statusIds);
+
+
+@Transactional
+@Modifying
+@Query(value="UPDATE  t_tasks SET del_status=0, update_username=:userId WHERE task_statutory_due_date > :date",nativeQuery=true)
+int deleteMappedActivity(@Param("date")String date,@Param("userId") int userId);
 
 
 
