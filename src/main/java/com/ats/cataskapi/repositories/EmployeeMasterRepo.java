@@ -86,4 +86,8 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 
 	EmployeeMaster findByEmpEmailAndEmpIdNot(@Param("email") String email, @Param("eid") int eid);
 
+	//Sachin 26-11-2019
+	@Query(value="	SELECT COUNT(*) from m_emp WHERE emp_id IN (:empIdList) AND emp_type=3",nativeQuery=true)
+	int getCountofManagers(@Param("empIdList") List<String> empIdList);
+	
 }

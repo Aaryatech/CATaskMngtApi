@@ -33,7 +33,8 @@ public interface CustomerHeaderMasterRepo extends JpaRepository<CustomerHeaderMa
 	@Modifying
 	@Query(value = "UPDATE m_cust_header SET is_active=:isActiveStatus WHERE cust_id=:custId",nativeQuery=true)
 	int updateIsActiveStatus(@Param("custId") int cust_id, @Param("isActiveStatus") int isActiveStatus);
-	
+	@Query(value="	SELECT COUNT(*) from m_emp WHERE emp_id IN (:empIdList) AND emp_type=3",nativeQuery=true)
+	int getCountofManagers(@Param("empIdList") List<String> empIdList);
 	/*
 	 * @Query(value="SELECT m_cust_header.cust_id, CASE \n" +
 	 * "            WHEN m_cust_header.cust_group_id = 0 THEN m_cust_header.cust_firm_name \n"

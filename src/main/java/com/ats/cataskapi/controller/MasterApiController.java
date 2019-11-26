@@ -316,6 +316,19 @@ public class MasterApiController {
 		
 	}
 	
+	@RequestMapping(value = {"/getCountofManagers"}, method = RequestMethod.POST)
+	public @ResponseBody Object getCountofManagers(@RequestParam List<String> empIdList){
+
+		int count=0;
+		try {
+			count = empRepo.getCountofManagers(empIdList);																	//which are partner type
+		}catch (Exception e) {
+			System.err.println("Exce in getCountofManagers  " + e.getMessage());
+		}
+		
+		return count;
+	}
+	
 	@RequestMapping(value = {"/getAllEmployees"}, method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeMaster> getEmployees(){
 		
