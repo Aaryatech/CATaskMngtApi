@@ -69,11 +69,27 @@ public class TaskApiController {
 		try {
 			count = taskRepo.getLoginTask(empId);															//which are partner type
 		}catch (Exception e) {
-			System.err.println("Exce in getCountofManagers  " + e.getMessage());
+			System.err.println("Exce in getCountofLoginEmpTask  " + e.getMessage());
 		}
 		
 		return count;
 	}
+	
+	
+	//Sachin 26-11-2019 get count of no of manager selected while inserting manual task
+		@RequestMapping(value = {"/getCountofManagers"}, method = RequestMethod.POST)
+		public @ResponseBody Object getCountofManagers(@RequestParam List<String> empIdList){
+
+			int count=0;
+			try {
+				count = empRepo.getCountofManager(empIdList);//get no of manager from given empIdList
+				
+			}catch (Exception e) {
+				System.err.println("Exce in getCountofManagers  " + e.getMessage());
+			}
+			
+			return count;
+		}
 	
 	
 
@@ -268,6 +284,9 @@ public class TaskApiController {
 
 				serv = taskRepo.saveAndFlush(task);
 				if (serv != null) {
+					inf.setError(false);
+					inf.setMessage("success");
+					
 					Communication comcat = new Communication();
 					comcat.setCommunText("Manual Task Created");
 					comcat.setDelStatus(1);
@@ -288,7 +307,8 @@ public class TaskApiController {
 			}
 
 		} catch (Exception e) {
-
+			inf.setError(true);
+			inf.setMessage("error");
 			System.err.println("Exce in saving saveTask " + e.getMessage());
 			e.printStackTrace();
 

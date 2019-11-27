@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 
 
-
 public class PeriodicityDates {
 
 	public static List<DateValues> getDates(String fromDate, String toDate, int periodicityId) {
@@ -35,8 +34,29 @@ public class PeriodicityDates {
 				int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
 				// System.err.println("day of week " + dayOfWeek);
 
+				if (periodicityId == 7) {
+					System.err.println("In 7 ");
+					arryadate.add(dateFormat.format(j));
+
+					DateValues dv = new DateValues();
+					dv.setDate(c.getTime());
+					
+					//System.err.println("Final String is" + Fyyear);
+					String myString= String.valueOf(c.get(Calendar.YEAR));
+				    myString = myString.substring(myString.indexOf('0')+1);
+
+					String n = "One Time ";//.concat(String.valueOf(c.get(Calendar.WEEK_OF_YEAR)).concat(" ").concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1))));
+
+					dv.setValue(n);
+					dateList.add(dv);
+
+					sundayDates = sundayDates + "," + dddate.format(j);
+					//System.out.println("Sunday " + dddate.format(j));
+					totalcount++;
+						break;
+				}
 				// week
-				if (periodicityId == 1) {
+				else if (periodicityId == 1) {
 					if (dayOfWeek == 0) {
 						arryadate.add(dateFormat.format(j));
 
@@ -232,7 +252,7 @@ public class PeriodicityDates {
 						DateValues dv = new DateValues();
 						dv.setDate(c.getTime());
 						
-						String myString= String.valueOf(c.get(Calendar.YEAR));
+						String myString= String.valueOf(c.get(Calendar.YEAR)-1);
 					    myString = myString.substring(myString.indexOf('0')+1);
  						String n = "FY ".concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1)));
 						//System.err.println("Final String is" + n);
