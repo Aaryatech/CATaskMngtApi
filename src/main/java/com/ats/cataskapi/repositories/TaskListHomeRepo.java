@@ -1154,8 +1154,8 @@ List<TaskListHome> getTaskListByStatus6(@Param("empId") int empId,@Param("fromDa
 
 @Transactional
 @Modifying
-@Query(value="UPDATE  t_tasks SET del_status=0, update_username=:userId WHERE task_statutory_due_date > :date",nativeQuery=true)
-int deleteMappedActivity(@Param("date")String date,@Param("userId") int userId);
+@Query(value="UPDATE  t_tasks SET del_status=0, update_username=:userId WHERE task_statutory_due_date > :date AND cust_id=:custId",nativeQuery=true)
+int deleteMappedActivity(@Param("date")String date,@Param("userId") int userId, @Param("custId") int custId);
 
 
 

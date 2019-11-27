@@ -1056,12 +1056,13 @@ public class TaskApiController {
 	}
 	
 	@RequestMapping(value = { "/deleteAllActMappByDate" }, method = RequestMethod.POST)
-	public @ResponseBody Info deleteAllActMappByDate(@RequestParam String date, @RequestParam int userId) {
+	public @ResponseBody Info deleteAllActMappByDate(@RequestParam String date, @RequestParam int userId,
+			@RequestParam int custId) {
 
 		Info info = new Info();
 		try
 		{
-			int res = taskListRepo.deleteMappedActivity(date, userId);
+			int res = taskListRepo.deleteMappedActivity(date, userId, custId);
 
 			if (res > 0) {
 				info.setError(false);
