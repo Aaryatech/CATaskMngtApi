@@ -101,7 +101,32 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 	@Query(value = "UPDATE t_tasks SET t_tasks.task_status=:statusVal,update_username=:userId, update_datetime=:curDateTime, task_completion_date=:compltnDate WHERE t_tasks.task_id=:taskId", nativeQuery = true)
 	int updateStatusComplete(@Param("taskId") int taskId, @Param("statusVal") int statusVal,@Param("userId") int userId, @Param("curDateTime") String curDateTime, @Param("compltnDate") String compltnDate);
 	
-@Query(value = "SELECT COUNT(*) from t_tasks WHERE find_in_set(:empId,task_emp_ids) and t_tasks.task_status NOT IN (0,7,8,9) and is_active=1 and del_status=1 \n" + 
+@Query(value = "SELECT COUNT(*) from" + 
+		" " + 
+		" t_tasks, " + 
+		"        m_emp, " + 
+		"        m_services, " + 
+		"        m_activities, " + 
+		"        dm_periodicity, " + 
+		"        m_cust_header, " + 
+		"        dm_fin_year," + 
+		"        dm_status_mst  " + 
+		"    WHERE " + 
+		"        t_tasks.del_status = 1  " + 
+		"        AND t_tasks.is_active=1  " + 
+		"        AND m_services.ex_int1 = 1  " + 
+		"        AND   m_activities.ex_int1 = 1  " + 
+		"        AND m_emp.emp_id =:empId" + 
+		"        AND FIND_IN_SET(:empId, t_tasks.task_emp_ids)  " + 
+		"        AND  t_tasks.actv_id = m_activities.acti_id  " + 
+		"        AND   t_tasks.serv_id = m_services.serv_id  " + 
+		"        AND   m_activities.periodicity_id = dm_periodicity.periodicity_id  " + 
+		"        AND   t_tasks.cust_id = m_cust_header.cust_id  " + 
+		"        AND   dm_fin_year.fin_year_id = t_tasks.task_fy_id  " + 
+		"        AND   dm_status_mst.status_value = t_tasks.task_status  " + 
+		"        AND   t_tasks.task_status NOT IN( " + 
+		"           0,7,8,9 " + 
+		"        )" + 
 					"	", nativeQuery = true)
 	int getLoginTask(@Param("empId") int empId);
 
