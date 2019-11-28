@@ -132,7 +132,7 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE t_tasks SET task_status=0 WHERE task_id=:taskId",nativeQuery=true)
+	@Query(value="UPDATE t_tasks SET task_status=1 WHERE task_id=:taskId",nativeQuery=true)
 	int reOpenTaskByTaskId(@Param("taskId")int taskId);
 
 }
