@@ -55,7 +55,7 @@ public interface TaskCountByStatusRepo extends JpaRepository<TaskCountByStatus, 
 			"    from\n" + 
 			"        dm_status_mst s \n" + 
 			"    where\n" + 
-			"        del_status=1",nativeQuery=true)
+			"        del_status=1 and s.status_value!=9",nativeQuery=true)
 	List<TaskCountByStatus> getTaskCountByStatus(@Param("date") String date, @Param("empId") int empId, @Param("userId") int userId);
 
 }
