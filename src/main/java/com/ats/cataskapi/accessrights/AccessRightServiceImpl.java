@@ -121,11 +121,11 @@ public class AccessRightServiceImpl implements AccessRightService {
 	}
 
 	@Override
-	public String getRoleJsonByRoleId(int roleId) {
+	public String getRoleJsonByRoleId(int roleId,int delStatus) {
 		AssignRoleDetailList assignRoleDetailList = new AssignRoleDetailList();
 		try {
 			System.out.println("roleId Id : " + roleId);
-			assignRoleDetailList = assignRoleDetailListRepository.findByRoleId(roleId);
+			assignRoleDetailList = assignRoleDetailListRepository.findByRoleIdAndDelStatus(roleId,delStatus);
 			System.out.println("assignRoleDetailList  : " + assignRoleDetailList.toString());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

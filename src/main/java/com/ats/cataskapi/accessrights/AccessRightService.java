@@ -23,7 +23,7 @@ public interface AccessRightService {
 
 	String getRoleJson(int userId);
 	
-	String getRoleJsonByRoleId(int roleId);
+	String getRoleJsonByRoleId(int roleId,int delStatus);
 	
 	
 

@@ -137,7 +137,7 @@ public class AccessRightApiController {
 	@ResponseBody
 	public String getRoleJsonByRoleId(@RequestParam int roleId) {
 
-		return accessRightService.getRoleJsonByRoleId(roleId);
+		return accessRightService.getRoleJsonByRoleId(roleId,0);
 		
 	}
 	
@@ -185,10 +185,8 @@ System.err.println("userIdList" +userIdList);
 		AssignRoleDetailList role = new AssignRoleDetailList();
 		try {
 			
-			role =assignRoleDetailListRepository.findByRoleId(roleId);
+			role =assignRoleDetailListRepository.findByRoleIdAndDelStatus(roleId, 0);//(roleId);
 			 
-		 
-			
 		}catch(Exception e) {
 			
 			e.printStackTrace();
