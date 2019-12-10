@@ -15,22 +15,20 @@ public interface ShowCustActiMappedRepo extends JpaRepository<ShowCustActiMapped
 			"        m_cust_acti_map.actv_start_date,\n" + 
 			"        m_cust_acti_map.actv_end_date,\n" + 
 			"        m_cust_acti_map.actv_statutory_days,\n" + 
-			"        m_cust_acti_map.actv_man_budg_hr,\n" + 
-			"        m_cust_acti_map.actv_emp_budg_hr,\n" + 
-			"        m_cust_acti_map.actv_billing_amt,\n" + 
-			"       CASE \n" + 
-			"            WHEN m_cust_header.cust_group_id=0 \n" + 
-			"            	THEN m_cust_header.cust_firm_name    \n" + 
-			"           		 ELSE COALESCE(( SELECT\n" + 
-			"              		  m_cust_group.cust_group_name \n" + 
-			"          	  FROM\n" + 
-			"               	 m_cust_group \n" + 
-			"           	 WHERE\n" + 
-			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id      \n" + 
-			"                AND m_cust_header.cust_id=:custId\n" + 
-			"                AND m_cust_group.del_status=1 ),\n" + 
-			"            0) \n" + 
-			"        END AS cust_group_name,\n" + 
+			"   CONCAT(FLOOR(m_cust_acti_map.actv_man_budg_hr/60),\n" + 
+			"        ':',\n" + 
+			"        LPAD(MOD(m_cust_acti_map.actv_man_budg_hr,\n" + 
+			"        60),\n" + 
+			"        2,\n" + 
+			"        '0')) as actv_man_budg_hr,\n" + 
+			"        CONCAT(FLOOR( m_cust_acti_map.actv_emp_budg_hr/60),\n" + 
+			"        ':',\n" + 
+			"        LPAD(MOD( m_cust_acti_map.actv_emp_budg_hr,\n" + 
+			"        60),\n" + 
+			"        2,\n" + 
+			"        '0')) as actv_emp_budg_hr ,"
+			+"        m_cust_acti_map.actv_billing_amt,"+ 
+			"        m_cust_header.cust_firm_name   AS cust_group_name,\n" + 
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name      \n" + 

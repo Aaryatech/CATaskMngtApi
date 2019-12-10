@@ -884,6 +884,7 @@ public class MasterApiController {
 			custActivityMap = custActMapRepo.getAllCustActiMapList(custId);
 			
 		}catch (Exception e) {
+			e.printStackTrace();
 			System.err.println("Exce in getAllCustActivityMapped  " + e.getMessage());
 		}
 		return custActivityMap;

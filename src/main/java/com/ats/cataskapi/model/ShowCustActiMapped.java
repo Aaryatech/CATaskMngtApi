@@ -11,8 +11,8 @@ public class ShowCustActiMapped {
 	private String actvStartDate;
 	private String actvEndDate;
 	private int actvStatutoryDays;
-	private int actvManBudgHr;
-	private int actvEmpBudgHr;
+	private String actvManBudgHr;
+	private String actvEmpBudgHr;
 	private int actvBillingAmt;
 	private String custGroupName;
 	private String servName;
@@ -42,16 +42,16 @@ public class ShowCustActiMapped {
 	public void setActvStatutoryDays(int actvStatutoryDays) {
 		this.actvStatutoryDays = actvStatutoryDays;
 	}
-	public int getActvManBudgHr() {
+	public String getActvManBudgHr() {
 		return actvManBudgHr;
 	}
-	public void setActvManBudgHr(int actvManBudgHr) {
+	public void setActvManBudgHr(String actvManBudgHr) {
 		this.actvManBudgHr = actvManBudgHr;
 	}
-	public int getActvEmpBudgHr() {
+	public String getActvEmpBudgHr() {
 		return actvEmpBudgHr;
 	}
-	public void setActvEmpBudgHr(int actvEmpBudgHr) {
+	public void setActvEmpBudgHr(String actvEmpBudgHr) {
 		this.actvEmpBudgHr = actvEmpBudgHr;
 	}
 	public int getActvBillingAmt() {
