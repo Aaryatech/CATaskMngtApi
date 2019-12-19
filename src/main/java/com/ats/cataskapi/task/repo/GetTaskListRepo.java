@@ -28,7 +28,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name ,  \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name," + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -42,9 +42,10 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
-			"    t_tasks.cust_id = m_cust_header.cust_id AND "
+			"    dm_fin_year,m_emp\n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
+			" m_emp.emp_id=m_cust_header.owner_emp_id and   t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
@@ -71,7 +72,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name ,  \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name ,  \n" + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -85,8 +86,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp\n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -115,7 +117,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name ,  \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name ,  \n" + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -129,8 +131,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp\n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -159,7 +162,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    CONCAT(FLOOR( t_tasks.emp_bud_hr/60),':',MOD( t_tasks.emp_bud_hr,60)) as emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name ,  \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name ,  \n" + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -173,8 +176,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp\n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -204,7 +208,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name , \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name , \n" + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -218,8 +222,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp \n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -248,7 +253,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1, t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name , \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name , \n" + 
 			 "    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -262,8 +267,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp \n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -290,7 +296,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name ,\n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name ,\n" + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -304,8 +310,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp \n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -332,7 +339,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name , \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name , \n" + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -346,8 +353,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp \n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -374,7 +382,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name , \n" +  
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name , \n" +  
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -388,8 +396,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp \n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -416,7 +425,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1,t_tasks.ex_int2, \n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name , \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name, \n" + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -430,8 +439,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp \n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -462,7 +472,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1, t_tasks.ex_int2,\n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name , \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name , \n" + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -476,8 +486,8 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp \n" + 
+			"WHERE  m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -506,7 +516,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1, t_tasks.ex_int2,\n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name , \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name , \n" + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -520,8 +530,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp \n" + 
+			"WHERE"
+			+ " m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -550,7 +561,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.emp_bud_hr,t_tasks.ex_var1,t_tasks.ex_int1, t_tasks.ex_int2,\n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
 			"    m_activities.acti_name,\n" + 
-			"    m_services.serv_name,m_cust_header.cust_firm_name , \n" + 
+			"    m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name , \n" + 
 			"    dm_fin_year.fin_year_name,(SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
 			"        FROM\n" + 
@@ -564,8 +575,8 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    dm_periodicity,\n" + 
 			"    m_cust_header,\n" + 
 			"    t_tasks,\n" + 
-			"    dm_fin_year\n" + 
-			"WHERE\n" + 
+			"    dm_fin_year,m_emp \n" + 
+			"WHERE  m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"    t_tasks.cust_id = m_cust_header.cust_id AND "
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
@@ -596,7 +607,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"        t_tasks.ex_int2,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
 			"        m_activities.acti_name,\n" + 
-			"        m_services.serv_name,m_cust_header.cust_firm_name , \n" + 
+			"        m_services.serv_name,concat (m_cust_header.cust_firm_name,' :' ,m_emp.emp_name) as cust_firm_name , \n" + 
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)              \n" + 
@@ -613,9 +624,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"        dm_periodicity,\n" + 
 			"        m_cust_header,\n" + 
 			"        t_tasks,\n" + 
-			"        dm_fin_year\n" + 
+			"        dm_fin_year,m_emp \n" + 
 			"       \n" + 
-			"    WHERE\n" + 
+			"    WHERE  m_emp.emp_id=m_cust_header.owner_emp_id and \n" + 
 			"        t_tasks.cust_id = m_cust_header.cust_id \n" + 
 			"        AND t_tasks.task_fy_id = dm_fin_year.fin_year_id \n" + 
 			"        AND m_services.serv_id = t_tasks.serv_id \n" + 
