@@ -274,7 +274,7 @@ public class TaskApiController {
 				task.setTaskCode("NA");
 				task.setTaskEmpIds(custserv.getExVar1());
 				task.setTaskFyId(fin.getFinYearId());
-				// task.setTaskEndDate(dateFormat.format(date));
+				 task.setTaskEndDate(task.getTaskStatutoryDueDate());
 				task.setTaskStatus(-1);
 				task.setTaskSubline("NA");
 				task.setTaskText(String.valueOf(sb1));
@@ -458,18 +458,18 @@ public class TaskApiController {
 
 	@RequestMapping(value = { "/getAllTaskList" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetTaskList> getAllTaskList(@RequestParam int stat, @RequestParam int servId,
-			@RequestParam int custId) {
+			@RequestParam int custId, @RequestParam int periodicityId) {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
 
 		System.out.println("prm are" + servId + custId);
 		try {
 
 			if (servId != 0 && custId != 0) {
-				servicsList = getTaskListRepo.getAllTaskListSpec(stat, servId, custId);
+				servicsList = getTaskListRepo.getAllTaskListSpec(stat, servId, custId,periodicityId);
 			} else if (servId != 0 && custId == 0) {
-				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat, servId);
+				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat, servId,periodicityId);
 			} else if (servId == 0 && custId != 0) {
-				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat, custId);
+				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat, custId,periodicityId);
 			} else if ((servId == -1 && custId == -1)) {
 				servicsList = getTaskListRepo.getAllTaskListAll(stat);
 			} else {
@@ -689,13 +689,23 @@ public class TaskApiController {
 			int res = 0;
 			System.err.println("in if**" + workDate);
 
-			System.err.println("in if**" + workDate);
-
+			System.err.println("in if length**" + workDate.length());
 			try {
-				endDate = DateConvertor.convertToYMD(workDate);
-				res = taskRepo.assignTask(taskIdList, empIdList, userId, curDateTime, endDate);
+				try {
+					if(workDate.equals("") || workDate==null || workDate.length()==0) {
+						res = taskRepo.assignTask1(taskIdList, empIdList, userId, curDateTime);
+					}else {
+						endDate = DateConvertor.convertToYMD(workDate);
+						res = taskRepo.assignTask(taskIdList, empIdList, userId, curDateTime, endDate);
+					}
+				
+				}catch (Exception e) {
+					
+				}
+				
 			} catch (Exception e) {
-				res = taskRepo.assignTask1(taskIdList, empIdList, userId, curDateTime);
+				
+				System.err.println("In catch");
 			}
 
 		

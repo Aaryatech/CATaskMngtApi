@@ -93,9 +93,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
-			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
+			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND dm_periodicity.periodicity_id=:periodicityId AND "
 			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1  AND  t_tasks.serv_id=:servId AND t_tasks.cust_id=:custId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllTaskListSpec(@Param("stat") int stat,@Param("servId") int servId,@Param("custId") int custId);
+	List<GetTaskList> getAllTaskListSpec(@Param("stat") int stat,@Param("servId") int servId,@Param("custId") int custId, @Param("periodicityId") int periodicityId);
 	
 	
 	
@@ -138,9 +138,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
-			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
+			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND dm_periodicity.periodicity_id=:periodicityId and  "
 			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1   AND t_tasks.cust_id=:custId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllTaskListSpecCust(@Param("stat") int stat,@Param("custId") int custId);
+	List<GetTaskList> getAllTaskListSpecCust(@Param("stat") int stat,@Param("custId") int custId, @Param("periodicityId") int periodicityId);
 	
 	
 	
@@ -183,9 +183,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "t_tasks.task_fy_id = dm_fin_year.fin_year_id AND "
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
-			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
+			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND dm_periodicity.periodicity_id =:periodicityId AND "
 			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1   AND t_tasks.serv_id=:servId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllTaskListSpecServ(@Param("stat") int stat,@Param("servId") int servId);
+	List<GetTaskList> getAllTaskListSpecServ(@Param("stat") int stat,@Param("servId") int servId,@Param("periodicityId") int periodicityId);
 	
 	
 	
