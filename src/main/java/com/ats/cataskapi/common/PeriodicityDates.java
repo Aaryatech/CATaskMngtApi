@@ -100,9 +100,9 @@ public class PeriodicityDates {
 						} else if (c.get(Calendar.MONTH) == 3) {
 							monthName = "Apr";
 						} else if (c.get(Calendar.MONTH) == 4) {
-							monthName = "Jun";
+							monthName = "May";
 						} else if (c.get(Calendar.MONTH) == 5) {
-							monthName = "Feb";
+							monthName = "Jun";
 						} else if (c.get(Calendar.MONTH) == 6) {
 							monthName = "Jul";
 						} else if (c.get(Calendar.MONTH) == 7) {
@@ -149,11 +149,11 @@ public class PeriodicityDates {
 						} else if (c.get(Calendar.MONTH) == 2) {
 							monthName = "Mar";
 						} else if (c.get(Calendar.MONTH) == 3) {
-							monthName = "April";
+							monthName = "Apr";
 						} else if (c.get(Calendar.MONTH) == 4) {
-							monthName = "Jun";
+							monthName = "May";
 						} else if (c.get(Calendar.MONTH) == 5) {
-							monthName = "Feb";
+							monthName = "Jun";
 						} else if (c.get(Calendar.MONTH) == 6) {
 							monthName = "Jul";
 						} else if (c.get(Calendar.MONTH) == 7) {
@@ -300,5 +300,195 @@ public class PeriodicityDates {
 		return newDate;
 	}
 
+	
+	public static String getTaskName(String date,int periodicityId) throws ParseException {
+		String n=new String();
+		SimpleDateFormat yydate = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dddate = new SimpleDateFormat("dd-MM-yyyy");
+		Date j = yydate.parse(date);
+		Calendar c = Calendar.getInstance();
+		c.setTime(j);
+		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
+		
+		if (periodicityId == 7) {
+			System.err.println("In 7 ");
+
+			DateValues dv = new DateValues();
+			dv.setDate(c.getTime());
+			
+			//System.err.println("Final String is" + Fyyear);
+			String myString= String.valueOf(c.get(Calendar.YEAR));
+		    myString = myString.substring(myString.indexOf('0')+1);
+
+			n = "One Time ";//.concat(String.valueOf(c.get(Calendar.WEEK_OF_YEAR)).concat(" ").concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1))));
+		}
+		
+		
+		else if (periodicityId == 1) {
+			if (dayOfWeek == 0) {
+				
+				String myString= String.valueOf(c.get(Calendar.YEAR));
+			    myString = myString.substring(myString.indexOf('0')+1);
+
+				 n = "WK ".concat(String.valueOf(c.get(Calendar.WEEK_OF_YEAR)).concat(" ").concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1))));
+
+			}
+
+		} // bi week
+		else if (periodicityId == 2) {
+
+			if (c.get(Calendar.DAY_OF_MONTH) == c.getActualMaximum(Calendar.DAY_OF_MONTH)
+					|| 15 == c.get(Calendar.DAY_OF_MONTH)) {
+				//System.out.println("Hello Bi Weekly " + dddate.format(j));
+				String biweek=null;
+				if(c.get(Calendar.DAY_OF_MONTH)<=15) {
+					biweek="BW 1-";
+				}else {
+					biweek="BW 2-";
+				}
+				String monthName = null;
+				if (c.get(Calendar.MONTH) == 0) {
+					monthName = "Jan";
+				} else if (c.get(Calendar.MONTH) == 1) {
+					monthName = "Feb";
+				} else if (c.get(Calendar.MONTH) == 2) {
+					monthName = "Mar";
+				} else if (c.get(Calendar.MONTH) == 3) {
+					monthName = "Apr";
+				} else if (c.get(Calendar.MONTH) == 4) {
+					monthName = "May";
+				} else if (c.get(Calendar.MONTH) == 5) {
+					monthName = "Jun";
+				} else if (c.get(Calendar.MONTH) == 6) {
+					monthName = "Jul";
+				} else if (c.get(Calendar.MONTH) == 7) {
+					monthName = "Aug";
+				} else if (c.get(Calendar.MONTH) == 8) {
+					monthName = "Sep";
+				} else if (c.get(Calendar.MONTH) == 9) {
+					monthName = "Oct";
+				} else if (c.get(Calendar.MONTH) == 10) {
+					monthName = "Nov";
+				} else {
+					monthName = "Dec";
+				}
+
+				DateValues dv = new DateValues();
+				dv.setDate(c.getTime());
+					String myString= String.valueOf(c.get(Calendar.YEAR));
+					myString = myString.substring(myString.indexOf('0')+1);
+				 n = biweek.concat(monthName).concat(" ").concat(myString);
+
+			}
+
+		}
+		// monthly
+		else if (periodicityId == 3) {
+			if (c.get(Calendar.DAY_OF_MONTH) == c.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+				// c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+				//System.err.println("Month End " + dddate.format(j));
+				
+				String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
+				int a=Integer.parseInt(result[1])+1;
+
+				String monthName = null;
+				//System.err.println("Month No." + c.get(Calendar.MONTH) + "***" + c.get(Calendar.YEAR));
+				if (c.get(Calendar.MONTH) == 0) {
+					monthName = "Jan";
+				} else if (c.get(Calendar.MONTH) == 1) {
+					monthName = "Feb";
+				} else if (c.get(Calendar.MONTH) == 2) {
+					monthName = "Mar";
+				} else if (c.get(Calendar.MONTH) == 3) {
+					monthName = "Apr";
+				} else if (c.get(Calendar.MONTH) == 4) {
+					monthName = "May";
+				} else if (c.get(Calendar.MONTH) == 5) {
+					monthName = "Jun";
+				} else if (c.get(Calendar.MONTH) == 6) {
+					monthName = "Jul";
+				} else if (c.get(Calendar.MONTH) == 7) {
+					monthName = "Aug";
+				} else if (c.get(Calendar.MONTH) == 8) {
+					monthName = "Sep";
+				} else if (c.get(Calendar.MONTH) == 9) {
+					monthName = "Oct";
+				} else if (c.get(Calendar.MONTH) == 10) {
+					monthName = "Nov";
+				} else {
+					monthName = "Dec";
+				}
+				
+				String myString= String.valueOf(c.get(Calendar.YEAR));
+			    myString = myString.substring(myString.indexOf('0')+1);
+				 n ="MT ".concat(monthName).concat(" ").concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1)));
+
+			}
+		}
+		// Quarterly
+		else if (periodicityId == 4) {
+
+			if (c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH) == 5
+					|| c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH) == 8
+					|| c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 11
+					|| c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 2) {
+				System.out.println("Hello Quarterly  " + dddate.format(j));
+
+
+				String quarNo = null;
+				
+				if (c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH) == 5) {
+					quarNo="Q1"+" "+"FY"+" ";
+				} else if (c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH) == 8) {
+					quarNo="Q2"+" "+"FY"+" ";
+				} else if (c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 11) {
+					quarNo="Q3"+" "+"FY"+" ";
+				} else {
+					quarNo="Q4"+" "+"FY"+" ";
+				}
+				//String[] result = String.valueOf(c.get(Calendar.YEAR)).split("0");
+				//int a=Integer.parseInt(result[1])+1;
+				String myString= String.valueOf(c.get(Calendar.YEAR));
+			    myString = myString.substring(myString.indexOf('0')+1);
+				 n = quarNo.concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1)));
+
+			}
+		}
+		// Yearly
+		else if (periodicityId == 5) {
+
+			if (c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH) == 8
+					|| c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 2) {
+				String text=null;
+
+				if(c.get(Calendar.DAY_OF_MONTH) == 30 && c.get(Calendar.MONTH) == 8) {
+					text ="Part 1 FY ";
+				}else {
+					text="Part 2 FY ";
+				}
+				
+				DateValues dv = new DateValues();
+				dv.setDate(c.getTime());
+				String myString= String.valueOf(c.get(Calendar.YEAR));
+			    myString = myString.substring(myString.indexOf('0')+1);
+			
+				n = text.concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1)));
+
+			}
+		} else {
+			if (c.get(Calendar.DAY_OF_MONTH) == 31 && c.get(Calendar.MONTH) == 2) {
+				
+				String myString= String.valueOf(c.get(Calendar.YEAR)-1);
+			    myString = myString.substring(myString.indexOf('0')+1);
+					 n = "FY ".concat(myString).concat("-").concat(String.valueOf((Integer.parseInt(myString) + 1)));
+
+			}
+		}
+		
+		return n;
+		
+		
+		
+	}
 
 }

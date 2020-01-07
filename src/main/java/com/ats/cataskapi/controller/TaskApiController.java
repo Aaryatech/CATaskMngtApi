@@ -60,38 +60,37 @@ public class TaskApiController {
 	CustmrActivityMapRepo actMapRepo;
 
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	
-	//Sachin 26-11-2019 get count of assigned but not completed task for login person
-	@RequestMapping(value = {"/getCountofLoginEmpTask"}, method = RequestMethod.POST)
-	public @ResponseBody Object getCountofLoginTask(@RequestParam int empId){
 
-		int count=0;
+	// Sachin 26-11-2019 get count of assigned but not completed task for login
+	// person
+	@RequestMapping(value = { "/getCountofLoginEmpTask" }, method = RequestMethod.POST)
+	public @ResponseBody Object getCountofLoginTask(@RequestParam int empId) {
+
+		int count = 0;
 		try {
-			count = taskRepo.getLoginTask(empId);															//which are partner type
-		}catch (Exception e) {
+			count = taskRepo.getLoginTask(empId); // which are partner type
+		} catch (Exception e) {
 			System.err.println("Exce in getCountofLoginEmpTask  " + e.getMessage());
 		}
-		
+
 		return count;
 	}
-	
-	
-	//Sachin 26-11-2019 get count of no of manager selected while inserting manual task
-		@RequestMapping(value = {"/getCountofManagers"}, method = RequestMethod.POST)
-		public @ResponseBody Object getCountofManagers(@RequestParam List<String> empIdList){
 
-			int count=0;
-			try {
-				count = empRepo.getCountofManager(empIdList);//get no of manager from given empIdList
-				
-			}catch (Exception e) {
-				System.err.println("Exce in getCountofManagers  " + e.getMessage());
-			}
-			
-			return count;
+	// Sachin 26-11-2019 get count of no of manager selected while inserting manual
+	// task
+	@RequestMapping(value = { "/getCountofManagers" }, method = RequestMethod.POST)
+	public @ResponseBody Object getCountofManagers(@RequestParam List<String> empIdList) {
+
+		int count = 0;
+		try {
+			count = empRepo.getCountofManager(empIdList);// get no of manager from given empIdList
+
+		} catch (Exception e) {
+			System.err.println("Exce in getCountofManagers  " + e.getMessage());
 		}
-	
-	
+
+		return count;
+	}
 
 	/*
 	 * @RequestMapping(value = { "/saveTask" }, method = RequestMethod.POST)
@@ -198,6 +197,28 @@ public class TaskApiController {
 	@Autowired
 	SetttingKeyValueRepo setttingKeyValueRepo;
 
+	// Insert New Manual Task 29-12-2019.
+	@RequestMapping(value = { "/insertMannualTask" }, method = RequestMethod.POST)
+	public @ResponseBody Info insertMannualTask(@RequestBody Task task) {
+
+		Info inf = new Info();
+		Task taskRes = null;
+		try {
+			taskRes = taskRepo.saveAndFlush(task);
+			if (taskRes != null) {
+				inf.setError(false);
+			} else {
+				inf.setError(true);
+			}
+
+		} catch ( Exception e) {
+			inf.setError(true);
+		}
+
+		return inf;
+
+	}
+
 	@RequestMapping(value = { "/saveMannualTask" }, method = RequestMethod.POST)
 	public @ResponseBody Info saveMannualTask(@RequestBody CustmrActivityMap custserv) {
 
@@ -234,15 +255,14 @@ public class TaskApiController {
 
 			servc = srvMstrRepo.findByServIdAndDelStatus(actv.getServId(), 1);
 
-			for (int i = 0; i < listDate.size(); i++) {
+//			for (int i = 0; i < listDate.size(); i++) {
 
 				Task task = new Task();
 
-				Date date1 = listDate.get(i).getDate();
+				//Date date1 = listDate.get(i).getDate();
 
 				// System.out.println("date bef stat**" +dateFormat.format(date1));
-				task.setTaskStatutoryDueDate(
-						PeriodicityDates.addDaysToGivenDate(dateFormat.format(date1), custserv.getActvStatutoryDays()));
+				task.setTaskStatutoryDueDate(strDate);
 
 				// System.out.println("stat date **" + task.getTaskStatutoryDueDate());
 				FinancialYear fin = new FinancialYear();
@@ -252,7 +272,8 @@ public class TaskApiController {
 
 				StringBuilder sb1 = new StringBuilder(servc.getServName());
 
-				sb1.append("-").append(actv.getActiName()).append("-").append(listDate.get(i).getValue());
+				//sb1.append("-"+PeriodicityDates.getTaskName(strDate, custserv.getPeriodicityId()))
+				sb1.append("-").append(actv.getActiName()).append("-").append(PeriodicityDates.getTaskName(strDate, custserv.getPeriodicityId()));
 				// System.out.println("Fin task name" + sb1);
 
 				SetttingKeyValue sk = new SetttingKeyValue();
@@ -263,7 +284,7 @@ public class TaskApiController {
 				task.setDelStatus(1);
 				task.setEmpBudHr(String.valueOf(custserv.getActvEmpBudgHr()));
 				task.setExInt1(1);
-				task.setExInt2(1);
+				task.setExInt2(0);
 				task.setExVar1("NA");
 				task.setExVar2("NA");
 				task.setMappingId(sk.getIntValue());
@@ -274,7 +295,7 @@ public class TaskApiController {
 				task.setTaskCode("NA");
 				task.setTaskEmpIds(custserv.getExVar1());
 				task.setTaskFyId(fin.getFinYearId());
-				 task.setTaskEndDate(task.getTaskStatutoryDueDate());
+				task.setTaskEndDate(endDate);
 				task.setTaskStatus(-1);
 				task.setTaskSubline("NA");
 				task.setTaskText(String.valueOf(sb1));
@@ -286,7 +307,7 @@ public class TaskApiController {
 				if (serv != null) {
 					inf.setError(false);
 					inf.setMessage("success");
-					
+
 					Communication comcat = new Communication();
 					comcat.setCommunText("Manual Task Created");
 					comcat.setDelStatus(1);
@@ -304,7 +325,7 @@ public class TaskApiController {
 
 				}
 
-			}
+			//} end of for
 
 		} catch (Exception e) {
 			inf.setError(true);
@@ -323,12 +344,11 @@ public class TaskApiController {
 
 		Info info = new Info();
 		try {
-			int res=0;
-			if(statusVal==9) {
-				 res = taskRepo.updateStatusComplete(taskId, statusVal, userId, curDateTime, compltnDate);
-			}
-			else {
-				 res = taskRepo.updateStatus(taskId, statusVal, userId, curDateTime);
+			int res = 0;
+			if (statusVal == 9) {
+				res = taskRepo.updateStatusComplete(taskId, statusVal, userId, curDateTime, compltnDate);
+			} else {
+				res = taskRepo.updateStatus(taskId, statusVal, userId, curDateTime);
 			}
 			if (res > 0) {
 				info.setError(false);
@@ -465,11 +485,11 @@ public class TaskApiController {
 		try {
 
 			if (servId != 0 && custId != 0) {
-				servicsList = getTaskListRepo.getAllTaskListSpec(stat, servId, custId,periodicityId);
+				servicsList = getTaskListRepo.getAllTaskListSpec(stat, servId, custId, periodicityId);
 			} else if (servId != 0 && custId == 0) {
-				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat, servId,periodicityId);
+				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat, servId, periodicityId);
 			} else if (servId == 0 && custId != 0) {
-				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat, custId,periodicityId);
+				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat, custId, periodicityId);
 			} else if ((servId == -1 && custId == -1)) {
 				servicsList = getTaskListRepo.getAllTaskListAll(stat);
 			} else {
@@ -617,12 +637,12 @@ public class TaskApiController {
 	}
 
 	@RequestMapping(value = { "/reopenTaskByTaskId" }, method = RequestMethod.POST)
-	public @ResponseBody Info reopenTaskByTaskId(@RequestParam int taskId, @RequestParam int empId, 
+	public @ResponseBody Info reopenTaskByTaskId(@RequestParam int taskId, @RequestParam int empId,
 			@RequestParam int updateUserName, @RequestParam String updateDateTime) {
 		Info info = new Info();
 		try {
 			int res = taskRepo.reOpenTaskByTaskId(taskId);
-			if(res>0) {
+			if (res > 0) {
 				Communication comcat = new Communication();
 				comcat.setCommunText("Task Reopened");
 				comcat.setDelStatus(1);
@@ -637,10 +657,10 @@ public class TaskApiController {
 				comcat.setUpdateDatetime(updateDateTime);
 				comcat.setUpdateUser(updateUserName);
 				Communication save = communicationRepo.saveAndFlush(comcat);
-				
+
 				info.setError(false);
 				info.setMsg("Success");
-			}else {
+			} else {
 				info.setError(true);
 				info.setMsg("Fail");
 			}
@@ -651,7 +671,7 @@ public class TaskApiController {
 		}
 		return info;
 	}
-	
+
 	@RequestMapping(value = { "/getTaskByTaskIdForEdit1" }, method = RequestMethod.POST)
 	public @ResponseBody Task getTaskByTaskIdForEdit(@RequestParam int taskId) {
 		Task empList = new Task();
@@ -692,23 +712,21 @@ public class TaskApiController {
 			System.err.println("in if length**" + workDate.length());
 			try {
 				try {
-					if(workDate.equals("") || workDate==null || workDate.length()==0) {
+					if (workDate.equals("") || workDate == null || workDate.length() == 0) {
 						res = taskRepo.assignTask1(taskIdList, empIdList, userId, curDateTime);
-					}else {
+					} else {
 						endDate = DateConvertor.convertToYMD(workDate);
 						res = taskRepo.assignTask(taskIdList, empIdList, userId, curDateTime, endDate);
 					}
-				
-				}catch (Exception e) {
-					
+
+				} catch (Exception e) {
+
 				}
-				
+
 			} catch (Exception e) {
-				
+
 				System.err.println("In catch");
 			}
-
-		
 
 			if (res > 0) {
 				info.setError(false);
@@ -1064,14 +1082,13 @@ public class TaskApiController {
 		return taskList;
 
 	}
-	
+
 	@RequestMapping(value = { "/deleteAllActMappByDate" }, method = RequestMethod.POST)
 	public @ResponseBody Info deleteAllActMappByDate(@RequestParam String date, @RequestParam int userId,
 			@RequestParam int custId) {
 
 		Info info = new Info();
-		try
-		{
+		try {
 			int res = taskListRepo.deleteMappedActivity(date, userId, custId);
 
 			if (res > 0) {
@@ -1090,7 +1107,7 @@ public class TaskApiController {
 			info.setError(true);
 			info.setMsg("excep");
 		}
-		
+
 		return info;
 	}
 }
