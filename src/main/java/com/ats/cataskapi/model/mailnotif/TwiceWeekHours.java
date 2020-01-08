@@ -7,8 +7,12 @@ import javax.persistence.Id;
 public class TwiceWeekHours {
 
 	@Id
+	private String uniqueId;
+	
 	private int empId;
 	private String empNickname;
+	private int empType;
+	
 	
 	private String day1;
 	private String day2;
@@ -21,9 +25,21 @@ public class TwiceWeekHours {
 	private String totHrs;
 	private String avgTotHrs;
 	
+	public int getEmpType() {
+		return empType;
+	}
+	public void setEmpType(int empType) {
+		this.empType = empType;
+	}
 	
 	
 	
+	public String getUniqueId() {
+		return uniqueId;
+	}
+	public void setUniqueId(String uniqueId) {
+		this.uniqueId = uniqueId;
+	}
 	public int getEmpId() {
 		return empId;
 	}
@@ -87,9 +103,10 @@ public class TwiceWeekHours {
 	
 	@Override
 	public String toString() {
-		return "TwiceWeekHours [empId=" + empId + ", empNickname=" + empNickname + ", day1=" + day1 + ", day2=" + day2
-				+ ", day3=" + day3 + ", dayname1=" + dayname1 + ", dayname2=" + dayname2 + ", dayname3=" + dayname3
-				+ ", totHrs=" + totHrs + ", avgTotHrs=" + avgTotHrs + "]";
+		return "TwiceWeekHours [uniqueId=" + uniqueId + ", empId=" + empId + ", empNickname=" + empNickname
+				+ ", empType=" + empType + ", day1=" + day1 + ", day2=" + day2 + ", day3=" + day3 + ", dayname1="
+				+ dayname1 + ", dayname2=" + dayname2 + ", dayname3=" + dayname3 + ", totHrs=" + totHrs + ", avgTotHrs="
+				+ avgTotHrs + "]";
 	}
 	
 	
