@@ -63,6 +63,15 @@ public class TaskApiController {
 
 	// Sachin 26-11-2019 get count of assigned but not completed task for login
 	// person
+	
+	@RequestMapping(value = { "/sendMail" }, method = RequestMethod.POST)
+	public @ResponseBody String sendMail() {
+
+		
+		EmailUtility.sendEmailNotif("Test Email KPPM server", "dummy email body", "handgesachin1@gmail.com");
+		return "done";
+		
+	}
 	@RequestMapping(value = { "/getCountofLoginEmpTask" }, method = RequestMethod.POST)
 	public @ResponseBody Object getCountofLoginTask(@RequestParam int empId) {
 

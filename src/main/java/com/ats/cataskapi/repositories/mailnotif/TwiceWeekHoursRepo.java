@@ -11,7 +11,7 @@ import com.ats.cataskapi.model.mailnotif.TwiceWeekHours;
 public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Integer>
 {
 	
-	@Query(value="SELECT a.emp_id,a.emp_nickname,a.emp_type,a.unique_id,COALESCE(b.today,0)as day1,COALESCE(c.today1,0)as day2, COALESCE(d.today2,0) as day3 ,\n" + 
+	@Query(value="SELECT a.emp_id,a.emp_nickname,a.emp_type,a.unique_id,COALESCE(b.today,0)as day1,COALESCE(c.today1,0)as day2, COALESCE(d.today2,0) as day3 , 'NA' as day4, 'NA' AS dayname4, \n" + 
 			"\n" + 
 			"   dayname((select CURDATE() - INTERVAL 1 DAY FROM DUAL))   as dayname1,  dayname((select CURDATE() - INTERVAL 2 DAY FROM DUAL))   as dayname2 , dayname((select CURDATE() - INTERVAL 3 DAY FROM DUAL))   as dayname3     ,\n" + 
 			"\n" + 
@@ -79,5 +79,140 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"        WHERE\n" + 
 			"           c.del_status=1 and c.is_active=1 and c.emp_type IN (:empType))",nativeQuery=true)
 	List<String> getEmailIds(@Param("empType") String empType);
-           		
+    
+	@Query(value="SELECT\n" + 
+			"    a.emp_id,\n" + 
+			"    a.emp_nickname,a.unique_id, a.emp_type,\n" + 
+			"    COALESCE(b.today,\n" + 
+			"    0)as day1,\n" + 
+			"    COALESCE(c.today1,\n" + 
+			"    0)as day2,\n" + 
+			"    COALESCE(d.today2,\n" + 
+			"    0) as day3 ,\n" + 
+			"   \n" + 
+			"    COALESCE(e.today3,\n" + 
+			"    0) as day4 ,\n" + 
+			"   \n" + 
+			"   \n" + 
+			"    dayname((select\n" + 
+			"        CURDATE() - INTERVAL 1 DAY\n" + 
+			"    FROM\n" + 
+			"        DUAL))   as dayname1,\n" + 
+			"    dayname((select\n" + 
+			"        CURDATE() - INTERVAL 2 DAY\n" + 
+			"    FROM\n" + 
+			"        DUAL))   as dayname2 ,\n" + 
+			"    dayname((select\n" + 
+			"        CURDATE() - INTERVAL 3 DAY\n" + 
+			"    FROM\n" + 
+			"        DUAL))   as dayname3     ,\n" + 
+			"       \n" + 
+			"        dayname((select\n" + 
+			"        CURDATE() - INTERVAL 4 DAY\n" + 
+			"    FROM\n" + 
+			"        DUAL))   as dayname4     ,\n" + 
+			"       \n" + 
+			"       \n" + 
+			"    ADDTIME(COALESCE(b.today,0),(ADDTIME(COALESCE(c.today1,0),\n" + 
+			"    ADDTIME(COALESCE(d.today2,0),  COALESCE(e.today3,0)) ) )) as tot_hrs,\n" + 
+			"    \n" + 
+			"    TIME_FORMAT(SEC_TO_TIME(TIME_TO_SEC(ADDTIME(COALESCE(b.today,0),(ADDTIME(COALESCE(c.today1,0), ADDTIME(COALESCE(d.today2, 0),COALESCE(e.today3,0)))))/4)),\n" + 
+			"    '%H:%i:%s') as avg_tot_hrs\n" + 
+			"FROM\n" + 
+			"    ( SELECT\n" + 
+			"        UUID() as unique_id, m_emp.emp_id,m_emp.emp_nickname,m_emp.emp_type  FROM m_emp WHERE m_emp.del_status=1 and m_emp.is_active=1 and m_emp.emp_type=:empType) a  \n" + 
+			"LEFT JOIN\n" + 
+			"    (\n" + 
+			"        SELECT\n" + 
+			"            d.emp_id,\n" + 
+			"            CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"            ':',\n" + 
+			"            LPAD(MOD(d.work_hours,\n" + 
+			"            60),\n" + 
+			"            2,\n" + 
+			"            '0')) as today          \n" + 
+			"        FROM\n" + 
+			"            t_daily_work_log d        \n" + 
+			"        WHERE\n" + 
+			"            d.work_date= (\n" + 
+			"                select\n" + 
+			"                    CURDATE() - INTERVAL 1 DAY\n" + 
+			"                FROM\n" + 
+			"                    DUAL\n" + 
+			"            )          \n" + 
+			"        ) b\n" + 
+			"            on a.emp_id=b.emp_id  \n" + 
+			"    LEFT JOIN\n" + 
+			"        (\n" + 
+			"            SELECT\n" + 
+			"                d.emp_id,\n" + 
+			"                CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"                ':',\n" + 
+			"                LPAD(MOD(d.work_hours,\n" + 
+			"                60),\n" + 
+			"                2,\n" + 
+			"                '0')) as today1          \n" + 
+			"            FROM\n" + 
+			"                t_daily_work_log d        \n" + 
+			"            WHERE\n" + 
+			"                d.work_date= (\n" + 
+			"                    select\n" + 
+			"                        CURDATE() - INTERVAL 2 DAY\n" + 
+			"                    FROM\n" + 
+			"                        DUAL\n" + 
+			"                )    \n" + 
+			"            ) c\n" + 
+			"                on c.emp_id=a.emp_id  \n" + 
+			"        LEFT JOIN\n" + 
+			"            (\n" + 
+			"                SELECT\n" + 
+			"                    d.emp_id,\n" + 
+			"                    CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"                    ':',\n" + 
+			"                    LPAD(MOD(d.work_hours,\n" + 
+			"                    60),\n" + 
+			"                    2,\n" + 
+			"                    '0')) as today2        \n" + 
+			"                FROM\n" + 
+			"                    t_daily_work_log d        \n" + 
+			"                WHERE\n" + 
+			"                    d.work_date= (\n" + 
+			"                        select\n" + 
+			"                            CURDATE() - INTERVAL 3 DAY\n" + 
+			"                        FROM\n" + 
+			"                            DUAL\n" + 
+			"                    )    \n" + 
+			"                ) d\n" + 
+			"                    on d.emp_id=a.emp_id\n" + 
+			"                   \n" + 
+			"                   \n" + 
+			"                   \n" + 
+			"                     LEFT JOIN\n" + 
+			"            (\n" + 
+			"                SELECT\n" + 
+			"                    d.emp_id,\n" + 
+			"                    CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"                    ':',\n" + 
+			"                    LPAD(MOD(d.work_hours,\n" + 
+			"                    60),\n" + 
+			"                    2,\n" + 
+			"                    '0')) as today3        \n" + 
+			"                FROM\n" + 
+			"                    t_daily_work_log d        \n" + 
+			"                WHERE\n" + 
+			"                    d.work_date= (\n" + 
+			"                        select\n" + 
+			"                            CURDATE() - INTERVAL 4 DAY\n" + 
+			"                        FROM\n" + 
+			"                            DUAL\n" + 
+			"                    )    \n" + 
+			"                ) e\n" + 
+			"                    on e.emp_id=a.emp_id ORDER BY a.emp_nickname desc",nativeQuery=true)
+	List<TwiceWeekHours> getPrev4DayWorkLog(@Param("empType") int empType);
+    
+	
+
+	
+	
+	
 }

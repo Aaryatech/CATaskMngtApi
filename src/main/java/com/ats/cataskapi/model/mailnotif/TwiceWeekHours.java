@@ -17,10 +17,12 @@ public class TwiceWeekHours {
 	private String day1;
 	private String day2;
 	private String day3;
+	private String day4;
 	
 	private String dayname1;
 	private String dayname2;
 	private String dayname3;
+	private String dayname4;
 	
 	private String totHrs;
 	private String avgTotHrs;
@@ -100,14 +102,27 @@ public class TwiceWeekHours {
 	public void setAvgTotHrs(String avgTotHrs) {
 		this.avgTotHrs = avgTotHrs;
 	}
+	public String getDay4() {
+		return day4;
+	}
+	public void setDay4(String day4) {
+		this.day4 = day4;
+	}
+	public String getDayname4() {
+		return dayname4;
+	}
+	public void setDayname4(String dayname4) {
+		this.dayname4 = dayname4;
+	}
 	
 	@Override
 	public String toString() {
 		return "TwiceWeekHours [uniqueId=" + uniqueId + ", empId=" + empId + ", empNickname=" + empNickname
-				+ ", empType=" + empType + ", day1=" + day1 + ", day2=" + day2 + ", day3=" + day3 + ", dayname1="
-				+ dayname1 + ", dayname2=" + dayname2 + ", dayname3=" + dayname3 + ", totHrs=" + totHrs + ", avgTotHrs="
-				+ avgTotHrs + "]";
+				+ ", empType=" + empType + ", day1=" + day1 + ", day2=" + day2 + ", day3=" + day3 + ", day4=" + day4
+				+ ", dayname1=" + dayname1 + ", dayname2=" + dayname2 + ", dayname3=" + dayname3 + ", dayname4="
+				+ dayname4 + ", totHrs=" + totHrs + ", avgTotHrs=" + avgTotHrs + "]";
 	}
+	
 	
 	
 	/* 6:27 pm for 4 day query.
