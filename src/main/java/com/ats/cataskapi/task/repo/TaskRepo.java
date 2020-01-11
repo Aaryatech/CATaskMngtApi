@@ -62,16 +62,16 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 
 	@Transactional
 	@Modifying
-	@Query(value = "UPDATE t_tasks SET t_tasks.task_emp_ids=:empId,t_tasks.mngr_bud_hr=:mngHr1,t_tasks.emp_bud_hr=:empHr1,t_tasks.task_statutory_due_date=:dueDate,t_tasks.task_end_date=:endDate,t_tasks.update_username =:updateUserName,t_tasks.update_datetime =:updateDateTime  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
+	@Query(value = "UPDATE t_tasks SET t_tasks.task_emp_ids=:empId,t_tasks.mngr_bud_hr=:mngHr1,t_tasks.emp_bud_hr=:empHr1,t_tasks.task_statutory_due_date=:dueDate,t_tasks.task_end_date=:endDate,t_tasks.update_username =:updateUserName,t_tasks.update_datetime =:updateDateTime,t_tasks.billing_amt=:bilAmt  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
 	int updateEditTask(int taskId, String empHr1, String mngHr1, String endDate, String dueDate, String empId,
-			int updateUserName, String updateDateTime);
+			int updateUserName, String updateDateTime,String bilAmt); //Ok
 	
 	
 	@Transactional
 	@Modifying
-	@Query(value = "UPDATE t_tasks SET t_tasks.task_emp_ids=:empId,t_tasks.mngr_bud_hr=:mngHr1,t_tasks.emp_bud_hr=:empHr1,t_tasks.task_statutory_due_date=:dueDate,t_tasks.update_username =:updateUserName,t_tasks.update_datetime =:updateDateTime  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
+	@Query(value = "UPDATE t_tasks SET t_tasks.task_emp_ids=:empId,t_tasks.mngr_bud_hr=:mngHr1,t_tasks.emp_bud_hr=:empHr1,t_tasks.task_statutory_due_date=:dueDate,t_tasks.update_username =:updateUserName,t_tasks.update_datetime =:updateDateTime,t_tasks.billing_amt=:bilAmt  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
 	int updateEditTaskForNull(int taskId, String empHr1, String mngHr1, String dueDate, String empId,
-			int updateUserName, String updateDateTime);
+			int updateUserName, String updateDateTime,String bilAmt); //OK
 
 	@Transactional
 	@Modifying

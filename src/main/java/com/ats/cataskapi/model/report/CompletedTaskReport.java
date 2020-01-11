@@ -44,6 +44,8 @@ public class CompletedTaskReport {
 	private String  teamLeader;
 	
  	private String  employee;
+ 	
+ 	private String exVar1; //Sachin 11-01-2020 for Showing deliverable Link to Employee Completed Task report
 
 	public int getTaskId() {
 		return taskId;
@@ -183,6 +185,14 @@ public class CompletedTaskReport {
 		this.employee = employee;
 	}
 
+	public String getExVar1() {
+		return exVar1;
+	}
+
+	public void setExVar1(String exVar1) {
+		this.exVar1 = exVar1;
+	}
+
 	@Override
 	public String toString() {
 		return "CompletedTaskReport [taskId=" + taskId + ", taskText=" + taskText + ", servName=" + servName
@@ -190,21 +200,7 @@ public class CompletedTaskReport {
 				+ taskStatutoryDueDate + ", taskStartDate=" + taskStartDate + ", taskEndDate=" + taskEndDate
 				+ ", empBudHr=" + empBudHr + ", mngrBudHr=" + mngrBudHr + ", custFirmName=" + custFirmName
 				+ ", workHours=" + workHours + ", admin=" + admin + ", partner=" + partner + ", manager=" + manager
-				+ ", teamLeader=" + teamLeader + ", employee=" + employee + ", getTaskId()=" + getTaskId()
-				+ ", getTaskText()=" + getTaskText() + ", getServName()=" + getServName() + ", getActiName()="
-				+ getActiName() + ", getPeriodicityName()=" + getPeriodicityName() + ", getTaskStatutoryDueDate()="
-				+ getTaskStatutoryDueDate() + ", getTaskStartDate()=" + getTaskStartDate() + ", getTaskEndDate()="
-				+ getTaskEndDate() + ", getEmpBudHr()=" + getEmpBudHr() + ", getMngrBudHr()=" + getMngrBudHr()
-				+ ", getCustFirmName()=" + getCustFirmName() + ", getWorkHours()=" + getWorkHours() + ", getAdmin()="
-				+ getAdmin() + ", getPartner()=" + getPartner() + ", getManager()=" + getManager()
-				+ ", getTeamLeader()=" + getTeamLeader() + ", getEmployee()=" + getEmployee() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+				+ ", teamLeader=" + teamLeader + ", employee=" + employee + ", exVar1=" + exVar1 + "]";
 	}
- 	
- 	
- 	
- 	
-	
-	
 
 }

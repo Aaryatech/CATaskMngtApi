@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.AuthenticationFailedException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,7 @@ import com.ats.cataskapi.model.SetttingKeyValue;
 import com.ats.cataskapi.model.TaskListHome;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.CustmrActivityMapRepo;
+import com.ats.cataskapi.repositories.DailyWorkLogRepo;
 import com.ats.cataskapi.repositories.DevPeriodicityMasterRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 import com.ats.cataskapi.repositories.FinancialYearRepo;
@@ -63,15 +66,30 @@ public class TaskApiController {
 
 	// Sachin 26-11-2019 get count of assigned but not completed task for login
 	// person
-	
-	@RequestMapping(value = { "/sendMail" }, method = RequestMethod.POST)
-	public @ResponseBody String sendMail() {
+	@Autowired
+	DailyWorkLogRepo wLogRepo;
 
-		
+	@RequestMapping(value = { "/sendMail" }, method = RequestMethod.GET)
+	public @ResponseBody String sendMail() throws AuthenticationFailedException {
 		EmailUtility.sendEmailNotif("Test Email KPPM server", "dummy email body", "handgesachin1@gmail.com");
-		return "done";
-		
+		return "x";
+
 	}
+
+	// Sachin 11-01-2020
+	@RequestMapping(value = { "/getDailyWorkLogCountForTask" }, method = RequestMethod.POST)
+	public @ResponseBody Object getDailyWorkLogCountForTask(@RequestParam int taskId) {
+
+		int count = 0;
+		try {
+			count = wLogRepo.getDailyWorkLogCountForTask(taskId);
+		} catch (Exception e) {
+			System.err.println("Exce in getDailyWorkLogCountForTask  " + e.getMessage());
+		}
+
+		return count;
+	}
+
 	@RequestMapping(value = { "/getCountofLoginEmpTask" }, method = RequestMethod.POST)
 	public @ResponseBody Object getCountofLoginTask(@RequestParam int empId) {
 
@@ -93,6 +111,20 @@ public class TaskApiController {
 		int count = 0;
 		try {
 			count = empRepo.getCountofManager(empIdList);// get no of manager from given empIdList
+
+		} catch (Exception e) {
+			System.err.println("Exce in getCountofManagers  " + e.getMessage());
+		}
+
+		return count;
+	}
+
+	@RequestMapping(value = { "/getCountofPartner" }, method = RequestMethod.POST)
+	public @ResponseBody Object getCountofPartner(@RequestParam List<String> empIdList) {
+
+		int count = 0;
+		try {
+			count = empRepo.getCountofPartner(empIdList);// get no of partner from given empIdList
 
 		} catch (Exception e) {
 			System.err.println("Exce in getCountofManagers  " + e.getMessage());
@@ -220,7 +252,7 @@ public class TaskApiController {
 				inf.setError(true);
 			}
 
-		} catch ( Exception e) {
+		} catch (Exception e) {
 			inf.setError(true);
 		}
 
@@ -266,75 +298,77 @@ public class TaskApiController {
 
 //			for (int i = 0; i < listDate.size(); i++) {
 
-				Task task = new Task();
+			Task task = new Task();
 
-				//Date date1 = listDate.get(i).getDate();
+			// Date date1 = listDate.get(i).getDate();
 
-				// System.out.println("date bef stat**" +dateFormat.format(date1));
-				task.setTaskStatutoryDueDate(strDate);
+			// System.out.println("date bef stat**" +dateFormat.format(date1));
+			task.setTaskStatutoryDueDate(strDate);
 
-				// System.out.println("stat date **" + task.getTaskStatutoryDueDate());
-				FinancialYear fin = new FinancialYear();
-				fin = financialYearRepo.getFinYearBetDate(String.valueOf(task.getTaskStatutoryDueDate()));
+			// System.out.println("stat date **" + task.getTaskStatutoryDueDate());
+			FinancialYear fin = new FinancialYear();
+			fin = financialYearRepo.getFinYearBetDate(String.valueOf(task.getTaskStatutoryDueDate()));
 
-				task.setTaskStartDate(PeriodicityDates.addDaysToGivenDate(task.getTaskStatutoryDueDate(), -30));
+			task.setTaskStartDate(PeriodicityDates.addDaysToGivenDate(task.getTaskStatutoryDueDate(), -30));
 
-				StringBuilder sb1 = new StringBuilder(servc.getServName());
+			StringBuilder sb1 = new StringBuilder(servc.getServName());
 
-				//sb1.append("-"+PeriodicityDates.getTaskName(strDate, custserv.getPeriodicityId()))
-				sb1.append("-").append(actv.getActiName()).append("-").append(PeriodicityDates.getTaskName(strDate, custserv.getPeriodicityId()));
-				// System.out.println("Fin task name" + sb1);
+			// sb1.append("-"+PeriodicityDates.getTaskName(strDate,
+			// custserv.getPeriodicityId()))
+			sb1.append("-").append(actv.getActiName()).append("-")
+					.append(PeriodicityDates.getTaskName(strDate, custserv.getPeriodicityId()));
+			// System.out.println("Fin task name" + sb1);
 
-				SetttingKeyValue sk = new SetttingKeyValue();
-				sk = setttingKeyValueRepo.findBySettingKeyAndDelStatus("ManualTaskMapId", 1);
+			SetttingKeyValue sk = new SetttingKeyValue();
+			sk = setttingKeyValueRepo.findBySettingKeyAndDelStatus("ManualTaskMapId", 1);
 
-				task.setActvId(custserv.getActvId());
-				task.setCustId(custserv.getCustId());
-				task.setDelStatus(1);
-				task.setEmpBudHr(String.valueOf(custserv.getActvEmpBudgHr()));
-				task.setExInt1(1);
-				task.setExInt2(0);
-				task.setExVar1("NA");
-				task.setExVar2("NA");
-				task.setMappingId(sk.getIntValue());
-				task.setPeriodicityId(custserv.getPeriodicityId());
-				task.setIsActive(1);
-				task.setMngrBudHr(String.valueOf(custserv.getActvManBudgHr()));
-				task.setServId(custserv.getExInt1());
-				task.setTaskCode("NA");
-				task.setTaskEmpIds(custserv.getExVar1());
-				task.setTaskFyId(fin.getFinYearId());
-				task.setTaskEndDate(endDate);
-				task.setTaskStatus(-1);
-				task.setTaskSubline("NA");
-				task.setTaskText(String.valueOf(sb1));
-				task.setUpdateDatetime(dateFormat1.format(date));
-				task.setUpdateUsername(custserv.getUpdateUsername());
-				task.setBillingAmt(String.valueOf(custserv.getActvBillingAmt()));
+			task.setActvId(custserv.getActvId());
+			task.setCustId(custserv.getCustId());
+			task.setDelStatus(1);
+			task.setEmpBudHr(String.valueOf(custserv.getActvEmpBudgHr()));
+			task.setExInt1(1);
+			task.setExInt2(0);
+			task.setExVar1("NA");
+			task.setExVar2("NA");
+			task.setMappingId(sk.getIntValue());
+			task.setPeriodicityId(custserv.getPeriodicityId());
+			task.setIsActive(1);
+			task.setMngrBudHr(String.valueOf(custserv.getActvManBudgHr()));
+			task.setServId(custserv.getExInt1());
+			task.setTaskCode("NA");
+			task.setTaskEmpIds(custserv.getExVar1());
+			task.setTaskFyId(fin.getFinYearId());
+			task.setTaskEndDate(endDate);
+			task.setTaskStatus(-1);
+			task.setTaskSubline("NA");
+			task.setTaskText(String.valueOf(sb1));
+			task.setUpdateDatetime(dateFormat1.format(date));
+			task.setUpdateUsername(custserv.getUpdateUsername());
+			task.setBillingAmt(String.valueOf(custserv.getActvBillingAmt()));
 
-				serv = taskRepo.saveAndFlush(task);
-				if (serv != null) {
-					inf.setError(false);
-					inf.setMessage("success");
+			serv = taskRepo.saveAndFlush(task);
+			if (serv != null) {
+				inf.setError(false);
+				inf.setMessage("success");
 
-					Communication comcat = new Communication();
-					comcat.setCommunText("Manual Task Created");
-					comcat.setDelStatus(1);
-					comcat.setEmpId(custserv.getUpdateUsername());
-					comcat.setExInt1(1);
-					comcat.setExInt2(1);
-					comcat.setExVar1("NA");
-					comcat.setExVar2("NA");
-					comcat.setTypeId(2);
-					comcat.setRemark("NA");
-					comcat.setTaskId(serv.getTaskId());
-					comcat.setUpdateDatetime(dateFormat1.format(date));
-					comcat.setUpdateUser(custserv.getUpdateUsername());
-					Communication save = communicationRepo.saveAndFlush(comcat);
+				Communication comcat = new Communication();
+				comcat.setCommunText("Manual Task Created");
+				comcat.setDelStatus(1);
+				comcat.setEmpId(custserv.getUpdateUsername());
+				comcat.setExInt1(1);
+				comcat.setExInt2(1);
+				comcat.setExVar1("NA");
+				comcat.setExVar2("NA");
+				comcat.setTypeId(2);
+				comcat.setRemark("NA");
+				comcat.setTaskId(serv.getTaskId());
+				comcat.setUpdateDatetime(dateFormat1.format(date));
+				comcat.setUpdateUser(custserv.getUpdateUsername());
+				Communication save = communicationRepo.saveAndFlush(comcat);
 
-				}
+			}
 
-			//} end of for
+			// } end of for
 
 		} catch (Exception e) {
 			inf.setError(true);
@@ -809,18 +843,18 @@ public class TaskApiController {
 	@RequestMapping(value = { "/updateEditTsk" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam String empHr,
 			@RequestParam String mngHr, @RequestParam String dueDate, @RequestParam String workDate,
-			@RequestParam String empId, int updateUserName, String updateDateTime) {
+			@RequestParam String empId, int updateUserName, String updateDateTime, @RequestParam String bilAmt) {
 
 		Info info = new Info();
-
+		System.err.println("BillAmt " + bilAmt);
 		try {
 			int res = 0;
 			if (workDate.equals("null")) {
 				res = taskRepo.updateEditTaskForNull(taskId, empHr, mngHr, dueDate, empId, updateUserName,
-						updateDateTime);
+						updateDateTime, bilAmt);
 			} else {
 				res = taskRepo.updateEditTask(taskId, empHr, mngHr, workDate, dueDate, empId, updateUserName,
-						updateDateTime);
+						updateDateTime, bilAmt);
 			}
 
 			if (res > 0) {

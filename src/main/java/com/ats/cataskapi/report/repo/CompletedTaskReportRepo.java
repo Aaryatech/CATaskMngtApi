@@ -11,7 +11,7 @@ import com.ats.cataskapi.model.report.CompletedTaskReport;
 public interface CompletedTaskReportRepo extends JpaRepository<CompletedTaskReport, Integer>{
 	
 	@Query(value="SELECT b.*,coalesce((c.admin),'-')as admin,coalesce((c.partner),'-') as partner ,coalesce((c.manager),'-') as manager,coalesce((c.team_leader),'-') as team_leader,coalesce((c.employee),'-') as  employee from (SELECT\n" + 
-			"    t_tasks.task_id,t_tasks.task_text,\n" + 
+			"    t_tasks.task_id,t_tasks.task_text,t_tasks.ex_var1,\n" + 
 			"    m_services.serv_name,\n" + 
 			"    m_activities.acti_name,\n" + 
 			"    dm_periodicity.periodicity_name,\n" + 

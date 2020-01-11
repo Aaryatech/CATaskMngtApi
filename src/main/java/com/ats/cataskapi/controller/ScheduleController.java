@@ -275,8 +275,8 @@ public class ScheduleController {
 
 	//@RequestMapping(value = { "/sendWeekHoursEmailThurs" }, method = RequestMethod.GET)
 	@Scheduled(cron="0 0 6 * * 1")
-	public @ResponseBody Object sendWeekHoursEmailThurs() {
-
+	//public @ResponseBody Object sendWeekHoursEmailThurs() {
+		public  void sendWeekHoursEmailThurs() {
 		int count = 0;
 		try {
 
@@ -513,7 +513,7 @@ public class ScheduleController {
 
 		}
 
-		return count;
+		//return count;
 	}
 
 	@Autowired
