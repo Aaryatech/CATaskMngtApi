@@ -20,7 +20,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"TIME_FORMAT(SEC_TO_TIME(TIME_TO_SEC((ADDTIME(COALESCE(b.today,0),ADDTIME(COALESCE(c.today1,0),COALESCE(d.today2,0)))))/3), '%H:%i') as avg_tot_hrs\n" + 
 			"\n" + 
 			"FROM (\n" + 
-			"SELECT UUID() as unique_id, m_emp.emp_id,m_emp.emp_nickname,m_emp.emp_type  FROM m_emp WHERE m_emp.del_status=1 and m_emp.is_active=1 and m_emp.emp_type=:empType ) a \n" + 
+			"SELECT UUID() as unique_id, m_emp.emp_id,m_emp.emp_name as emp_nickname,m_emp.emp_type  FROM m_emp WHERE m_emp.del_status=1 and m_emp.is_active=1 and m_emp.emp_type=:empType ) a \n" + 
 			"LEFT JOIN \n" + 
 			"( \n" + 
 			"\n" + 
@@ -34,7 +34,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"        2,\n" + 
 			"        '0')) as today \n" + 
 			"        FROM t_daily_work_log d\n" + 
-			"        WHERE  d.work_date= (select CURDATE() - INTERVAL 1 DAY FROM DUAL)\n" + 
+			"        WHERE  d.work_date= (select CURDATE() - INTERVAL 1 DAY FROM DUAL) group by d.work_date,d.emp_id \n" + 
 			"        \n" + 
 			") b on a.emp_id=b.emp_id\n" + 
 			"\n" + 
@@ -50,7 +50,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"        2,\n" + 
 			"        '0')) as today1 \n" + 
 			"        FROM t_daily_work_log d\n" + 
-			"        WHERE  d.work_date= (select CURDATE() - INTERVAL 2 DAY FROM DUAL)\n" + 
+			"        WHERE  d.work_date= (select CURDATE() - INTERVAL 2 DAY FROM DUAL) group by d.work_date,d.emp_id \n" + 
 			"    ) c on c.emp_id=a.emp_id\n" + 
 			"\n" + 
 			"LEFT JOIN \n" + 
@@ -65,7 +65,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"        2,\n" + 
 			"        '0')) as today2\n" + 
 			"        FROM t_daily_work_log d\n" + 
-			"        WHERE  d.work_date= (select CURDATE() - INTERVAL 3 DAY FROM DUAL)\n" + 
+			"        WHERE  d.work_date= (select CURDATE() - INTERVAL 3 DAY FROM DUAL) group by d.work_date,d.emp_id \n" + 
 			"    ) d on d.emp_id=a.emp_id ORDER BY a.emp_nickname desc", nativeQuery=true)
 	List<TwiceWeekHours> getPrev3DayWorkLog(@Param("empType") int empType); 
 
@@ -120,7 +120,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"    '%H:%i:%s') as avg_tot_hrs\n" + 
 			"FROM\n" + 
 			"    ( SELECT\n" + 
-			"        UUID() as unique_id, m_emp.emp_id,m_emp.emp_nickname,m_emp.emp_type  FROM m_emp WHERE m_emp.del_status=1 and m_emp.is_active=1 and m_emp.emp_type=:empType) a  \n" + 
+			"        UUID() as unique_id, m_emp.emp_id,m_emp.emp_name as emp_nickname,m_emp.emp_type  FROM m_emp WHERE m_emp.del_status=1 and m_emp.is_active=1 and m_emp.emp_type=:empType) a  \n" + 
 			"LEFT JOIN\n" + 
 			"    (\n" + 
 			"        SELECT\n" + 
@@ -139,7 +139,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"                    CURDATE() - INTERVAL 1 DAY\n" + 
 			"                FROM\n" + 
 			"                    DUAL\n" + 
-			"            )          \n" + 
+			"            ) group by d.work_date,d.emp_id          \n" + 
 			"        ) b\n" + 
 			"            on a.emp_id=b.emp_id  \n" + 
 			"    LEFT JOIN\n" + 
@@ -160,7 +160,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"                        CURDATE() - INTERVAL 2 DAY\n" + 
 			"                    FROM\n" + 
 			"                        DUAL\n" + 
-			"                )    \n" + 
+			"                ) group by d.work_date,d.emp_id    \n" + 
 			"            ) c\n" + 
 			"                on c.emp_id=a.emp_id  \n" + 
 			"        LEFT JOIN\n" + 
@@ -181,8 +181,8 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"                            CURDATE() - INTERVAL 3 DAY\n" + 
 			"                        FROM\n" + 
 			"                            DUAL\n" + 
-			"                    )    \n" + 
-			"                ) d\n" + 
+			"                    ) group by d.work_date,d.emp_id    \n" + 
+			"                ) d \n" + 
 			"                    on d.emp_id=a.emp_id\n" + 
 			"                   \n" + 
 			"                   \n" + 
@@ -205,8 +205,8 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"                            CURDATE() - INTERVAL 4 DAY\n" + 
 			"                        FROM\n" + 
 			"                            DUAL\n" + 
-			"                    )    \n" + 
-			"                ) e\n" + 
+			"                    ) group by d.work_date,d.emp_id    \n" + 
+			"                ) e \n" + 
 			"                    on e.emp_id=a.emp_id ORDER BY a.emp_nickname desc",nativeQuery=true)
 	List<TwiceWeekHours> getPrev4DayWorkLog(@Param("empType") int empType);
     
