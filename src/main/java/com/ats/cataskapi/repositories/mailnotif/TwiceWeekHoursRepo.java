@@ -27,9 +27,9 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"SELECT\n" + 
 			"d.emp_id,\n" + 
 			"        \n" + 
-			"        CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"        CONCAT(FLOOR(SUM(d.work_hours)/60),\n" + 
 			"        ':',\n" + 
-			"        LPAD(MOD(d.work_hours,\n" + 
+			"        LPAD(MOD(SUM(d.work_hours),\n" + 
 			"        60),\n" + 
 			"        2,\n" + 
 			"        '0')) as today \n" + 
@@ -43,9 +43,9 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"SELECT\n" + 
 			"d.emp_id,\n" + 
 			"        \n" + 
-			"        CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"        CONCAT(FLOOR(SUM(d.work_hours)/60),\n" + 
 			"        ':',\n" + 
-			"        LPAD(MOD(d.work_hours,\n" + 
+			"        LPAD(MOD(SUM(d.work_hours),\n" + 
 			"        60),\n" + 
 			"        2,\n" + 
 			"        '0')) as today1 \n" + 
@@ -58,9 +58,9 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"SELECT\n" + 
 			"d.emp_id,\n" + 
 			"        \n" + 
-			"        CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"        CONCAT(FLOOR(SUM(d.work_hours)/60),\n" + 
 			"        ':',\n" + 
-			"        LPAD(MOD(d.work_hours,\n" + 
+			"        LPAD(MOD(SUM(d.work_hours),\n" + 
 			"        60),\n" + 
 			"        2,\n" + 
 			"        '0')) as today2\n" + 
@@ -116,7 +116,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"    ADDTIME(COALESCE(b.today,0),(ADDTIME(COALESCE(c.today1,0),\n" + 
 			"    ADDTIME(COALESCE(d.today2,0),  COALESCE(e.today3,0)) ) )) as tot_hrs,\n" + 
 			"    \n" + 
-			"    TIME_FORMAT(SEC_TO_TIME(TIME_TO_SEC(ADDTIME(COALESCE(b.today,0),(ADDTIME(COALESCE(c.today1,0), ADDTIME(COALESCE(d.today2, 0),COALESCE(e.today3,0)))))/4)),\n" + 
+			"    TIME_FORMAT(SEC_TO_TIME(TIME_TO_SEC(ADDTIME(0,(ADDTIME(COALESCE(c.today1,0), ADDTIME(COALESCE(d.today2, 0),COALESCE(e.today3,0))))))/3),\n" + 
 			"    '%H:%i:%s') as avg_tot_hrs\n" + 
 			"FROM\n" + 
 			"    ( SELECT\n" + 
@@ -125,9 +125,9 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"    (\n" + 
 			"        SELECT\n" + 
 			"            d.emp_id,\n" + 
-			"            CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"            CONCAT(FLOOR(SUM(d.work_hours)/60),\n" + 
 			"            ':',\n" + 
-			"            LPAD(MOD(d.work_hours,\n" + 
+			"            LPAD(MOD(SUM(d.work_hours),\n" + 
 			"            60),\n" + 
 			"            2,\n" + 
 			"            '0')) as today          \n" + 
@@ -146,9 +146,9 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"        (\n" + 
 			"            SELECT\n" + 
 			"                d.emp_id,\n" + 
-			"                CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"                CONCAT(FLOOR(SUM(d.work_hours)/60),\n" + 
 			"                ':',\n" + 
-			"                LPAD(MOD(d.work_hours,\n" + 
+			"                LPAD(MOD(SUM(d.work_hours),\n" + 
 			"                60),\n" + 
 			"                2,\n" + 
 			"                '0')) as today1          \n" + 
@@ -167,9 +167,9 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"            (\n" + 
 			"                SELECT\n" + 
 			"                    d.emp_id,\n" + 
-			"                    CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"                    CONCAT(FLOOR(SUM(d.work_hours)/60),\n" + 
 			"                    ':',\n" + 
-			"                    LPAD(MOD(d.work_hours,\n" + 
+			"                    LPAD(MOD(SUM(d.work_hours),\n" + 
 			"                    60),\n" + 
 			"                    2,\n" + 
 			"                    '0')) as today2        \n" + 
@@ -191,9 +191,9 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"            (\n" + 
 			"                SELECT\n" + 
 			"                    d.emp_id,\n" + 
-			"                    CONCAT(FLOOR(d.work_hours/60),\n" + 
+			"                    CONCAT(FLOOR(SUM(d.work_hours)/60),\n" + 
 			"                    ':',\n" + 
-			"                    LPAD(MOD(d.work_hours,\n" + 
+			"                    LPAD(MOD(SUM(d.work_hours),\n" + 
 			"                    60),\n" + 
 			"                    2,\n" + 
 			"                    '0')) as today3        \n" + 

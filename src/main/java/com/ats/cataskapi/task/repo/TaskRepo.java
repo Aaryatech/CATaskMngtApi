@@ -134,5 +134,19 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 	@Modifying
 	@Query(value="UPDATE t_tasks SET task_status=1 WHERE task_id=:taskId",nativeQuery=true)
 	int reOpenTaskByTaskId(@Param("taskId")int taskId);
-
+	//Sachin 04-02-2020
+			@Query(value="SELECT COUNT(t_tasks.task_id) from t_tasks WHERE t_tasks.serv_id=:id",nativeQuery=true)
+	        int getTaskCountByServId(@Param("id") int id);
+			
+			@Query(value="SELECT COUNT(t_tasks.task_id) from t_tasks WHERE t_tasks.actv_id=:id",nativeQuery=true)
+	        int getTaskCountByActvId(@Param("id") int id);
+			
+			@Query(value="SELECT COUNT(t_tasks.task_id) from t_tasks WHERE t_tasks.cust_id=:id",nativeQuery=true)
+	        int getTaskCountByCustId(@Param("id") int id);
+			
+			@Query(value="SELECT COUNT(t_tasks.task_id) from t_tasks WHERE find_in_set(:id,t_tasks.task_emp_ids)",nativeQuery=true)
+	        int getTaskCountByEmpId(@Param("id") int id);
+			
+			@Query(value="SELECT COUNT(t_tasks.task_id) from t_tasks WHERE t_tasks.task_status=:id",nativeQuery=true)
+	        int getTaskCountByStatus(@Param("id") int id);
 }

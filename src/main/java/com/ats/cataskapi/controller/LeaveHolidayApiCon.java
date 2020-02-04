@@ -27,8 +27,7 @@ import com.ats.cataskapi.repositories.CalculateYearRepository;
 import com.ats.cataskapi.repositories.GetHolidayRepo;
 import com.ats.cataskapi.repositories.HolidayRepo;
 import com.ats.cataskapi.repositories.LeaveApplyRepository;
-import com.ats.cataskapi.repositories.LeaveDetailRepo; 
- 
+import com.ats.cataskapi.repositories.LeaveDetailRepo;
 
 @RestController
 public class LeaveHolidayApiCon {
@@ -38,16 +37,16 @@ public class LeaveHolidayApiCon {
 
 	@Autowired
 	GetHolidayRepo getHolidayRepo;
- 
+
 	@Autowired
 	CalculateYearRepository calculateYearRepository;
- 
+
 	@Autowired
 	LeaveApplyRepository leaveApplyRepository;
-	
+
 	@Autowired
 	LeaveDetailRepo leaveDetailRepo;
-	
+
 	// -----------Holiday-----------------------
 	@RequestMapping(value = { "/saveHoliday" }, method = RequestMethod.POST)
 	public @ResponseBody Holiday saveHoliday(@RequestBody Holiday holiday) {
@@ -82,7 +81,6 @@ public class LeaveHolidayApiCon {
 		try {
 
 			list = getHolidayRepo.getHolidayListByCompany(companyId);
- 
 
 		} catch (Exception e) {
 
@@ -100,8 +98,11 @@ public class LeaveHolidayApiCon {
 		try {
 
 			holiday = holidayRepo.findByHolidayIdAndDelStatus(holidayId, 1);
-			/*holiday.setHolidayFromdt(DateConvertor.convertToDMY(holiday.getHolidayFromdt()));
-			holiday.setHolidayTodt(DateConvertor.convertToDMY(holiday.getHolidayTodt()));*/
+			/*
+			 * holiday.setHolidayFromdt(DateConvertor.convertToDMY(holiday.getHolidayFromdt(
+			 * )));
+			 * holiday.setHolidayTodt(DateConvertor.convertToDMY(holiday.getHolidayTodt()));
+			 */
 
 		} catch (Exception e) {
 
@@ -118,8 +119,14 @@ public class LeaveHolidayApiCon {
 		Info info = new Info();
 
 		try {
+			int recordCount = 0;
+			Holiday holiDay = holidayRepo.getOne(holidayId);
 
-			int delete = holidayRepo.deleteHoliday(holidayId);
+			recordCount = leaveApplyRepository.getCountofLeaveFdTd(holiDay.getHolidayFromdt(),
+					holiDay.getHolidayTodt());
+			int delete = 0;
+			if (recordCount < 1)
+				delete = holidayRepo.deleteHoliday(holidayId);
 
 			if (delete > 0) {
 				info.setError(false);
@@ -161,8 +168,6 @@ public class LeaveHolidayApiCon {
 		return calendearYear;
 
 	}
-	
-	
 
 	@RequestMapping(value = { "/saveLeaveApply" }, method = RequestMethod.POST)
 	public @ResponseBody LeaveApply saveLeaveApply(@RequestBody LeaveApply leave) {
@@ -171,7 +176,6 @@ public class LeaveHolidayApiCon {
 		try {
 
 			save = leaveApplyRepository.saveAndFlush(leave);
-			 
 
 		} catch (Exception e) {
 
@@ -181,24 +185,23 @@ public class LeaveHolidayApiCon {
 		return save;
 
 	}
-	
+
 	@RequestMapping(value = { "/deleteLeaveApply" }, method = RequestMethod.POST)
 	public @ResponseBody Info deleteLeaveApply(@RequestParam("leaveId") int leaveId) {
 
 		Info info = new Info();
-		
+
 		try {
 
 			int delete = leaveApplyRepository.deleteLeaveApply(leaveId);
-			
-			if(delete>0) {
+
+			if (delete > 0) {
 				info.setError(false);
 				info.setMessage("successfull");
-			}else {
+			} else {
 				info.setError(true);
 				info.setMessage("error");
 			}
-			 
 
 		} catch (Exception e) {
 
@@ -208,7 +211,7 @@ public class LeaveHolidayApiCon {
 		return info;
 
 	}
-	 
+
 	@RequestMapping(value = { "getLeaveListByEmp" }, method = RequestMethod.POST)
 	public @ResponseBody List<LeaveDetail> getLeaveListByLocIdAndEmp(@RequestParam("empId") int empId) {
 
@@ -217,7 +220,7 @@ public class LeaveHolidayApiCon {
 		try {
 
 			employeeInfo = leaveDetailRepo.getLeaveListByEmp(empId);
-			 
+
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -226,6 +229,5 @@ public class LeaveHolidayApiCon {
 		return employeeInfo;
 
 	}
-   
 
 }

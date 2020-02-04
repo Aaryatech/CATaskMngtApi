@@ -23,5 +23,11 @@ public interface CustomerGroupMasterRepo extends JpaRepository<CustomerGroupMast
 	int deleteCustGroup(@Param("custGrpId") int custGrpId, @Param("userId") int userId);
 	
 	//UPDATE m_cust_group SET del_status=0 WHERE cust_group_id IN (:custGrpId) 
+	@Query(value="SELECT count(  m_cust_group SET del_status=0, update_username=:userId WHERE cust_group_id=:custGrpId",nativeQuery=true)
+	int getCustCount(@Param("custGrpId") int custGrpId, @Param("userId") int userId);
+	
+	
+	@Query(value="SELECT COUNT(m_cust_group.cust_group_id) from m_cust_group WHERE m_cust_group.cust_id=:id",nativeQuery=true)
+    int getCustCountByCustId(@Param("id") int id);
 	
 }

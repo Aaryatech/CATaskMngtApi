@@ -26,10 +26,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ats.cataskapi.common.EmailUtility;
+import com.ats.cataskapi.model.EmpListForDashboard;
 import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.TaskCountByStatus;
 import com.ats.cataskapi.model.mailnotif.EmpHoursUpdate;
 import com.ats.cataskapi.model.mailnotif.TwiceWeekHours;
+import com.ats.cataskapi.repositories.EmpListForDashboardRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 import com.ats.cataskapi.repositories.TaskCountByStatusRepo;
 import com.ats.cataskapi.repositories.mailnotif.EmpHoursUpdateRepo;
@@ -738,9 +740,9 @@ public class ScheduleController {
 	// @RequestMapping(value = { "/sendWeekHoursEmail" }, method =
 	// RequestMethod.GET)
 	// @Scheduled(cron = "0 0 0,21 * THU *")
-	@Scheduled(cron = "0 0 16 * * 4") // to be at night 8 pm
+	@Scheduled(cron = "0 0 20 * * 4") // to be at night 8 pm
 	public void sendWeekHoursEmailMng() {
-
+		System.err.println("THURS 8 PM");
 		int count = 0;
 		try {
 
@@ -971,9 +973,10 @@ public class ScheduleController {
 
 	// @RequestMapping(value = { "/sendWeekHoursEmailThurs" }, method =
 	// RequestMethod.GET)
-	@Scheduled(cron = "0 0 16 * * 1") // For Monday 7 pm
+	@Scheduled(cron = "0 0 20 * * 1") // For Monday 7 pm
 	// public @ResponseBody Object sendWeekHoursEmailThurs() {
 	public void sendWeekHoursEmailThurs8PMMonday() {
+		System.err.println("Mon 8 PM");
 		int count = 0;
 		try {
 
@@ -1215,6 +1218,15 @@ public class ScheduleController {
 
 		// return count;
 	}
+	
+	@Autowired
+	EmpListForDashboardRepo empListForDashboardRepo;
+
+
+		// return count;
+	
+
+
 
 	/*
 	 * SELECT a.emp_id,a.emp_nickname,COALESCE(b.today,0)as

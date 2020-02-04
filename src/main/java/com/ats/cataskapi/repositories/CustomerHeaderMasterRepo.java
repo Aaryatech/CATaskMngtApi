@@ -49,4 +49,7 @@ public interface CustomerHeaderMasterRepo extends JpaRepository<CustomerHeaderMa
 	 * ,nativeQuery=true) CustomerHeaderMaster getCustHead(@Param("custHeadId") int
 	 * custHeadId);
 	 */
+	//Sac 04-02-2020
+	@Query(value="SELECT COUNT(m_cust_header.cust_group_id) from m_cust_header WHERE m_cust_header.cust_group_id=:id",nativeQuery=true)
+    int getCustCountByCustGrpId(@Param("id") int id);
 }

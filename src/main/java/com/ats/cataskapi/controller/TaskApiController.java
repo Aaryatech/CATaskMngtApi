@@ -69,6 +69,22 @@ public class TaskApiController {
 	@Autowired
 	DailyWorkLogRepo wLogRepo;
 
+	
+	
+	
+	@RequestMapping(value = { "/checkDelete" }, method = RequestMethod.GET)
+	public @ResponseBody int getTaskCountByColName(@RequestParam int tableId,@RequestParam  int idValue) {
+
+		int x=0;
+		
+		try {
+			
+		}catch (Exception e) {
+			x=0;
+		}
+		
+		return x;
+	}
 	@RequestMapping(value = { "/sendMail" }, method = RequestMethod.GET)
 	public @ResponseBody String sendMail() throws AuthenticationFailedException {
 		EmailUtility.sendEmailNotif("Test Email KPPM server", "dummy email body", "handgesachin1@gmail.com");
