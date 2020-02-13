@@ -27,11 +27,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ats.cataskapi.common.EmailUtility;
 import com.ats.cataskapi.model.EmpListForDashboard;
+import com.ats.cataskapi.model.EmployeeListWithAvailableHours;
 import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.TaskCountByStatus;
 import com.ats.cataskapi.model.mailnotif.EmpHoursUpdate;
 import com.ats.cataskapi.model.mailnotif.TwiceWeekHours;
 import com.ats.cataskapi.repositories.EmpListForDashboardRepo;
+import com.ats.cataskapi.repositories.EmployeeListWithAvailableHoursRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 import com.ats.cataskapi.repositories.TaskCountByStatusRepo;
 import com.ats.cataskapi.repositories.mailnotif.EmpHoursUpdateRepo;
@@ -46,10 +48,13 @@ public class ScheduleController {
 	@Autowired
 	TwiceWeekHoursRepo twiceWeekHoursRepo;
 
+	@Autowired
+	EmployeeListWithAvailableHoursRepo empListForLeave;
+
 	// @RequestMapping(value = { "/sendWeekHoursEmail" }, method =
 	// RequestMethod.GET)
 	// @Scheduled(cron = "0 0 0,21 * THU *")
-	@Scheduled(cron = "0 0 6 * * 4")
+	@Scheduled(cron = "0 0 6 * * 4") //M T W work Log email on Thursday
 	public void sendWeekHoursEmail() {
 
 		int count = 0;
@@ -92,6 +97,59 @@ public class ScheduleController {
 				try {
 					List<TwiceWeekHours> workLogList = new ArrayList<>();
 					workLogList = twiceWeekHoursRepo.getPrev3DayWorkLog(empTypeIds.get(j));
+
+					String date1 = DateControl.getDate(-1);
+					String date2 = DateControl.getDate(-2);
+					String date3 = DateControl.getDate(-3);
+
+					
+
+					for (int a = 0; a < workLogList.size(); a++) {
+						// if(workLogList.get(a).getEmpId()==44) {
+						int zeroHrCount = 0;
+					
+						if (workLogList.get(a).getDay1().equals("0")) {
+							System.err.println("Its zero day 1");
+							// check if he was on leave
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date1, date1, workLogList.get(a).getEmpId());
+							// if yes mark as leave
+							// set zeroHrCount
+							if (empLeave.size() > 0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay1("Leave");
+							}
+						}
+						if (workLogList.get(a).getDay2().equals("0")) {
+
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date2, date2, workLogList.get(a).getEmpId());
+
+							if (empLeave.size() > 0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay2("Leave");
+							}
+
+						}
+						if (workLogList.get(a).getDay3().equals("0")) {
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date3, date3, workLogList.get(a).getEmpId());
+
+							if (empLeave.size() > 0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay3("Leave");
+							}
+
+						}
+						System.err.println("zeroHrCount " + zeroHrCount);
+						if (zeroHrCount == 3) {
+							// remove from mailToAddress
+							System.err.println("Removing from mail to address" + workLogList.get(a).getEmpEmail());
+							mailToAddress.remove(workLogList.get(a).getEmpEmail());
+						}
+
+					}
+
 					final String emailSMTPserver = "smtp.gmail.com";
 					final String emailSMTPPort = "587";
 					final String mailStoreType = "imaps";
@@ -277,7 +335,7 @@ public class ScheduleController {
 	// RequestMethod.GET)
 	@Scheduled(cron = "0 0 6 * * 1")
 	// public @ResponseBody Object sendWeekHoursEmailThurs() {
-	public void sendWeekHoursEmailThurs() {
+	public void sendWeekHoursEmailThurs() { //T F S Sun work Log email on Monday 6 am
 		int count = 0;
 		try {
 
@@ -319,6 +377,72 @@ public class ScheduleController {
 				try {
 					List<TwiceWeekHours> workLogList = new ArrayList<>();
 					workLogList = twiceWeekHoursRepo.getPrev4DayWorkLog(empTypeIds.get(j));
+					
+					String date1 = DateControl.getDate(-1);
+					String date2 = DateControl.getDate(-2);
+					String date3 = DateControl.getDate(-3);
+					
+					String date4 = DateControl.getDate(-4);
+					
+					for (int a = 0; a < workLogList.size(); a++) {
+						// if(workLogList.get(a).getEmpId()==44) {
+						int zeroHrCount = 0;
+					
+						if (workLogList.get(a).getDay1().equals("0")) {
+							System.err.println("Its zero day 1");
+							// check if he was on leave
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date1, date1, workLogList.get(a).getEmpId());
+							// if yes mark as leave
+							// set zeroHrCount
+							if (empLeave.size() > 0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay1("Leave");
+							}
+						}
+						if (workLogList.get(a).getDay2().equals("0")) {
+
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date2, date2, workLogList.get(a).getEmpId());
+
+							if (empLeave.size() > 0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay2("Leave");
+							}
+
+						}
+						if (workLogList.get(a).getDay3().equals("0")) {
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date3, date3, workLogList.get(a).getEmpId());
+
+							if (empLeave.size() > 0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay3("Leave");
+							}
+
+						}
+						
+						if (workLogList.get(a).getDay4().equals("0")) {
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date4, date4, workLogList.get(a).getEmpId());
+
+							if (empLeave.size() > 0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay4("Leave");
+							}
+
+						}
+						
+						System.err.println("zeroHrCount " + zeroHrCount);
+						if (zeroHrCount == 4) {
+							// remove from mailToAddress
+							System.err.println("Removing from mail to address" + workLogList.get(a).getEmpEmail());
+							mailToAddress.remove(workLogList.get(a).getEmpEmail());
+						}
+
+					}
+					
+					
 					final String emailSMTPserver = "smtp.gmail.com";
 					final String emailSMTPPort = "587";
 					final String mailStoreType = "imaps";
@@ -521,8 +645,8 @@ public class ScheduleController {
 
 	// @RequestMapping(value = { "/sendEmailForNotUpdatingWork" }, method =
 	// RequestMethod.GET)
-	@Scheduled(cron = "0 0 7 * * *")
-	public void sendEmailForNotUpdatingWork() {
+	@Scheduled(cron = "0 0 7 * * *")  //Daily email to those not updating 50 % work.. 7 am
+	public void sendEmailForNotUpdatingWork() { 
 
 		List<Integer> empTypeIds = new ArrayList<>();
 
@@ -561,7 +685,7 @@ public class ScheduleController {
 	@Autowired
 	EmployeeMasterRepo empRepo;
 
-	@Scheduled(cron = "0 0 8 * * *")
+	@Scheduled(cron = "0 0 8 * * *") //Task status BD for Emp and Mng Daily 8 am
 	public void dailyEmailTaskStaus() {
 
 		int count = 0;
@@ -718,7 +842,7 @@ public class ScheduleController {
 							e.printStackTrace();
 						}
 
-						break;
+						//break; removed on 13-02-2020
 					} // for loop emplist
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -728,7 +852,7 @@ public class ScheduleController {
 
 		} catch (Exception e) {
 
-			System.err.println("Exce in sendWeekHoursEmail  " + e.getMessage());
+			System.err.println("Exce in dailyEmailTaskStaus Employee, Mng   " + e.getMessage());
 
 		}
 
@@ -741,7 +865,7 @@ public class ScheduleController {
 	// RequestMethod.GET)
 	// @Scheduled(cron = "0 0 0,21 * THU *")
 	@Scheduled(cron = "0 0 20 * * 4") // to be at night 8 pm
-	public void sendWeekHoursEmailMng() {
+	public void sendWeekHoursEmailMng() { //DWL for M T W on THUR 8 pm Night
 		System.err.println("THURS 8 PM");
 		int count = 0;
 		try {
@@ -790,6 +914,61 @@ public class ScheduleController {
 				try {
 					List<TwiceWeekHours> workLogList = new ArrayList<>();
 					workLogList = twiceWeekHoursRepo.getPrev3DayWorkLog(empTypeIds.get(j));
+					
+					String date1 = DateControl.getDate(-1);
+					String date2 = DateControl.getDate(-2);
+					String date3 = DateControl.getDate(-3);
+
+					for (int a = 0; a < workLogList.size(); a++) {
+					//	if(workLogList.get(a).getEmpId()==44) {
+						int zeroHrCount = 0;
+						System.out.println("First Record  " +workLogList.get(a).getEmpEmail()+" "+workLogList.get(a).getEmpNickname());
+						if (workLogList.get(a).getDay1().equals("0")) {
+							System.err.println("Its zero day 1");
+							// check if he was on leave
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date1, date1, workLogList.get(a).getEmpId());
+							System.err.println("empLeave 1 " +empLeave.size());
+							// if yes mark as leave
+							// set zeroHrCount
+							if (empLeave.size()>0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay1("Leave");
+							}
+						} 
+						if (workLogList.get(a).getDay2().equals("0")) {
+
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date2, date2, workLogList.get(a).getEmpId());
+							System.err.println("empLeave 2 " +empLeave.toString());
+
+							if (empLeave.size()>0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay2("Leave");
+							}
+
+						}
+						if (workLogList.get(a).getDay3().equals("0")) {
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date3, date3, workLogList.get(a).getEmpId());
+							System.err.println("empLeave 3 " +empLeave.toString());
+
+							if (empLeave.size()>0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay3("Leave");
+							}
+
+						}
+						/*
+						 * System.err.println("zeroHrCount "+zeroHrCount); if (zeroHrCount == 3) { //
+						 * remove from mailToAddress System.err.println("Removing from mail to address"
+						 * + workLogList.get(a).getEmpEmail());
+						 * mailToAddress.remove(workLogList.get(a).getEmpEmail()); }
+						 */
+
+					}
+					
+					
 					final String emailSMTPserver = "smtp.gmail.com";
 					final String emailSMTPPort = "587";
 					final String mailStoreType = "imaps";
@@ -975,8 +1154,8 @@ public class ScheduleController {
 	// RequestMethod.GET)
 	@Scheduled(cron = "0 0 20 * * 1") // For Monday 7 pm
 	// public @ResponseBody Object sendWeekHoursEmailThurs() {
-	public void sendWeekHoursEmailThurs8PMMonday() {
-		System.err.println("Mon 8 PM");
+	public void sendWeekHoursEmailThurs8PMMonday() { //DWL for T F S Su on Monday 8 pm Night
+		System.err.println("Mon 8 PM"); 
 		int count = 0;
 		try {
 
@@ -1022,6 +1201,74 @@ public class ScheduleController {
 				try {
 					List<TwiceWeekHours> workLogList = new ArrayList<>();
 					workLogList = twiceWeekHoursRepo.getPrev4DayWorkLog(empTypeIds.get(j));
+					
+					
+					String date1 = DateControl.getDate(-1);
+					String date2 = DateControl.getDate(-2);
+					String date3 = DateControl.getDate(-3);
+					String date4 = DateControl.getDate(-4);
+
+					for (int a = 0; a < workLogList.size(); a++) {
+					//	if(workLogList.get(a).getEmpId()==44) {
+						int zeroHrCount = 0;
+						//System.out.println("First Record  " +workLogList.get(a).getEmpEmail()+" "+workLogList.get(a).getEmpNickname());
+						if (workLogList.get(a).getDay1().equals("0")) {
+						//	System.err.println("Its zero day 1");
+							// check if he was on leave
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date1, date1, workLogList.get(a).getEmpId());
+							//System.err.println("empLeave 1 " +empLeave.size());
+							// if yes mark as leave
+							// set zeroHrCount
+							if (empLeave.size()>0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay1("Leave");
+							}
+						} 
+						if (workLogList.get(a).getDay2().equals("0")) {
+
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date2, date2, workLogList.get(a).getEmpId());
+							//System.err.println("empLeave 2 " +empLeave.toString());
+
+							if (empLeave.size()>0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay2("Leave");
+							}
+
+						}
+						if (workLogList.get(a).getDay3().equals("0")) {
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date3, date3, workLogList.get(a).getEmpId());
+							//System.err.println("empLeave 3 " +empLeave.toString());
+
+							if (empLeave.size()>0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay3("Leave");
+							}
+
+						}
+						
+						if (workLogList.get(a).getDay4().equals("0")) {
+							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+									.getLeaveRecordByEmpIdSac(date4, date4, workLogList.get(a).getEmpId());
+
+							if (empLeave.size()>0) {
+								zeroHrCount = zeroHrCount + 1;
+								workLogList.get(a).setDay4("Leave");
+							}
+
+						}
+						/*
+						 * System.err.println("zeroHrCount "+zeroHrCount); if (zeroHrCount == 3) { //
+						 * remove from mailToAddress System.err.println("Removing from mail to address"
+						 * + workLogList.get(a).getEmpEmail());
+						 * mailToAddress.remove(workLogList.get(a).getEmpEmail()); }
+						 */
+
+					}
+					
+					
 					final String emailSMTPserver = "smtp.gmail.com";
 					final String emailSMTPPort = "587";
 					final String mailStoreType = "imaps";
@@ -1218,15 +1465,202 @@ public class ScheduleController {
 
 		// return count;
 	}
-	
+
 	@Autowired
 	EmpListForDashboardRepo empListForDashboardRepo;
+	//Sachin 13-02-2020
+	@Scheduled(cron = "0 0 8 * * *")
+	public void dailyEmailTaskBdStausPartner() { //Daily Partner Task Status BD 8 AM new Req Harshal Sir
+		try {
+
+			List<Integer> empTypeIds = new ArrayList<>();
+
+			empTypeIds.add(2);
+
+			final String emailSMTPserver = "smtp.gmail.com";
+			final String emailSMTPPort = "587";
+			final String mailStoreType = "imaps";
+
+			Properties props = new Properties();
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.socketFactory.port", "465");
+			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.port", "587");
+			props.put("mail.smtp.starttls.enable", "true");
+
+			Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(username, password);
+				}
+			});
+
+			Store mailStore = session.getStore(mailStoreType);
+			mailStore.connect(emailSMTPserver, username, password);
+
+			for (int j = 0; j < empTypeIds.size(); j++) {
+
+				System.err.println("Type Id" + empTypeIds.get(j));
+
+				List<EmployeeMaster> empList = new ArrayList<EmployeeMaster>();
+				try {
+					empList = empRepo.findByDelStatusAndIsActiveAndEmpTypeOrderByEmpIdDesc(1, 1, empTypeIds.get(j)); // Fetched
+																														// those
+																														// employees
+					// which are partner type
+				} catch (Exception e) {
+					System.err.println("Exce in getAllEmployees  " + e.getMessage());
+				}
+
+				try {
+					int isEmpty=0;
+					for (int k = 0; k < empList.size(); k++) {
+						StringBuilder email = new StringBuilder();
+						isEmpty=0;
+						Message mimeMessage = new MimeMessage(session);
+						mimeMessage.setFrom(new InternetAddress(username));
+						
+						int partnerId=empList.get(k).getEmpId();
+						List<EmpListForDashboard> dataList = new ArrayList<>();
+
+								try {
+
+									dataList = empListForDashboardRepo.getManagerEmpList();
+
+									Date date = new Date();
+									SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+									for (int i = 0; i < dataList.size(); i++) {
+
+										List<TaskCountByStatus> list = new ArrayList<TaskCountByStatus>();
+										list = taskCountByStatusRepo.getTaskCountByStatus(sf.format(date), dataList.get(i).getEmpId(), partnerId);
+										dataList.get(i).setList(list);
+									}
+
+								} catch (Exception e) {
+
+									e.printStackTrace();
+								}
+
+						try {
+
+							String subject = "Task Status Breakdown Partner ";// " Login Credentials For RUSA Login ";
 
 
+						
+							mimeMessage.setRecipients(Message.RecipientType.TO,
+									InternetAddress.parse(empList.get(k).getEmpEmail()));
+
+							// mimeMessage.setRecipients(Message.RecipientType.CC,
+
+							mimeMessage.setSubject(subject);
+							email.append("<html><body>" + "<table style='border:2px solid black' border=1>");
+							email.append("<tr bgcolor=\"#ffae4c\">");
+							email.append("<th style='text-align:center;' colspan=6>");
+							DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+							Date date1 = Calendar.getInstance().getTime();
+							dateFormat1.format(date1);
+							String crDtTime = dateFormat1.format(date1);
+							email.append("Task Status breakdown  " + crDtTime);
+
+							email.append("</th>");
+							email.append("</tr>");
+
+							email.append("<tr bgcolor=\"#ffae4c\">");
+
+							email.append("<th>");
+							email.append("Manager Name");
+							email.append("</th>");
+							
+							email.append("<th>");
+							email.append("Status Wise Task");
+							email.append("</th>");
+
+							email.append("<th>");
+							email.append("Overdue");
+							email.append("</th>");
+
+							email.append("<th>");
+							email.append("Due Today");
+							email.append("</th>");
+
+							email.append("<th>");
+							email.append("Due This Week");
+							email.append("</th>");
+
+							email.append("<th>");
+							email.append("Due This Month");
+							email.append("</th>");
+
+							email.append("</tr>");
+							for (int i = 0; i < dataList.size(); i++) {
+								//TaskCountByStatus log = dataList.get(i);
+								List<TaskCountByStatus> list=dataList.get(i).getList();
+								
+								for(int b=0;b<list.size();b++) {
+									TaskCountByStatus task=list.get(b);
+									
+									if(task.getOverdeu()>0||task.getDuetoday()>0||task.getMonth()>0||task.getWeek()>0) {
+										isEmpty=1;
+									email.append("<tr>");
+									email.append("<th style='text-align:left;'>");
+									email.append("" /* + (index) + ")" */ + dataList.get(i).getEmpName());
+									email.append("</th>");
+									email.append("<th>");
+									email.append("" + task.getStatusText());
+									email.append("</th>");
+									email.append("<th>");
+									email.append("" + task.getOverdeu());
+									email.append("</th>");
+
+									email.append("<th>");
+									email.append("" + task.getDuetoday());
+									email.append("</th>");
+
+									email.append("<th>");
+									email.append("" + task.getWeek());
+									email.append("</th>");
+
+									email.append("<th>");
+									email.append("" + task.getMonth());
+									email.append("</th>");
+
+									email.append("</tr>");
+									
+								}else {
+									
+								}
+									//end of list for loop
+								}
+							}//end of datalist for loop
+							
+							
+						
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+						email.append("</table></body></html><br>");
+
+						mimeMessage.setContent("" + email, "text/html");
+						System.err.println("isEmpty ="+isEmpty);
+						if(isEmpty==1)
+						Transport.send(mimeMessage);	
+						
+					} // for loop emplist
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("Exce in send Partner Task Status BD  " + e.getMessage());
+		}
 		// return count;
+		}
 	
 
-
+	// return count;
 
 	/*
 	 * SELECT a.emp_id,a.emp_nickname,COALESCE(b.today,0)as

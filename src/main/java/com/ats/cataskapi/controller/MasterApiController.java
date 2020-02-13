@@ -344,6 +344,21 @@ public class MasterApiController {
 		return empList;
 
 	}
+	
+	//Sachin 13-02-2020
+	@RequestMapping(value = { "/getEmpForChangePass" }, method = RequestMethod.POST)
+	public @ResponseBody EmployeeMaster getEmp(@RequestParam String email) {
+
+		EmployeeMaster emp = new EmployeeMaster();
+		try {
+			emp= empRepo.findByEmpEmailAndDelStatus(email, 1);
+		} catch (Exception e) {
+			emp = new EmployeeMaster();
+			System.err.println("Exce in getEmpForChangePass MasterApi  " + e.getMessage());
+		}
+
+		return emp;
+	}
 
 	@RequestMapping(value = { "/getAllEmployeesActiveInactive" }, method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeMaster> getAllEmployeesActiveInactive() {

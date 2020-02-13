@@ -12,7 +12,7 @@ public class TwiceWeekHours {
 	private int empId;
 	private String empNickname;
 	private int empType;
-	
+	private String empEmail;
 	
 	private String day1;
 	private String day2;
@@ -115,13 +115,22 @@ public class TwiceWeekHours {
 		this.dayname4 = dayname4;
 	}
 	
+	
+	
+	public String getEmpEmail() {
+		return empEmail;
+	}
+	public void setEmpEmail(String empEmail) {
+		this.empEmail = empEmail;
+	}
 	@Override
 	public String toString() {
 		return "TwiceWeekHours [uniqueId=" + uniqueId + ", empId=" + empId + ", empNickname=" + empNickname
-				+ ", empType=" + empType + ", day1=" + day1 + ", day2=" + day2 + ", day3=" + day3 + ", day4=" + day4
-				+ ", dayname1=" + dayname1 + ", dayname2=" + dayname2 + ", dayname3=" + dayname3 + ", dayname4="
-				+ dayname4 + ", totHrs=" + totHrs + ", avgTotHrs=" + avgTotHrs + "]";
+				+ ", empType=" + empType + ", empEmail=" + empEmail + ", day1=" + day1 + ", day2=" + day2 + ", day3="
+				+ day3 + ", day4=" + day4 + ", dayname1=" + dayname1 + ", dayname2=" + dayname2 + ", dayname3="
+				+ dayname3 + ", dayname4=" + dayname4 + ", totHrs=" + totHrs + ", avgTotHrs=" + avgTotHrs + "]";
 	}
+	
 	
 	
 	

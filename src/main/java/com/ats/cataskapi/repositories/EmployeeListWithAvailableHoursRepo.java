@@ -93,7 +93,42 @@ public interface EmployeeListWithAvailableHoursRepo extends JpaRepository<Employ
 			"        ) and e.emp_id in (:ids)", nativeQuery = true)
 	List<EmployeeListWithAvailableHours> getLeaveRecordByEmpId(@Param("fromDate")String fromDate,@Param("toDate") String toDate,@Param("ids")  int ids);
 
-	
+	@Query(value = "select\n" + 
+			"        l.leave_id,\n" + 
+			"        l.cal_yr_id,\n" + 
+			"        l.emp_id,\n" + 
+			"        l.leave_duration,\n" + 
+			"        l.leave_fromdt,\n" + 
+			"        l.leave_todt,\n" + 
+			"        l.leave_num_days,\n" + 
+			"        e.emp_name \n" + 
+			"    from\n" + 
+			"        t_leave_apply l,\n" + 
+			"        m_emp e \n" + 
+			"    where\n" + 
+			"        e.emp_id=l.emp_id \n" + 
+			"        and e.del_status=1 \n" + 
+			"        and l.del_status=1 \n" + 
+			"        and (\n" + 
+			"            (\n" + 
+			"                l.leave_fromdt>=:fromDate \n" + 
+			"                and l.leave_fromdt<=:toDate\n" + 
+			"            ) \n" + 
+			"            or (\n" + 
+			"                l.leave_todt>=:fromDate \n" + 
+			"                and l.leave_todt<=:toDate\n" + 
+			"            ) \n" + 
+			"            or (\n" + 
+			"                l.leave_fromdt<=:fromDate\n" + 
+			"                and l.leave_todt>=:toDate\n" + 
+			"            ) \n" + 
+			"            or (\n" + 
+			"                l.leave_fromdt>=:fromDate \n" + 
+			"                and l.leave_todt<=:toDate\n" + 
+			"            )\n" + 
+			"        ) and e.emp_id=:ids", nativeQuery = true)
+	List<EmployeeListWithAvailableHours> getLeaveRecordByEmpIdSac(@Param("fromDate")String fromDate,@Param("toDate") String toDate,@Param("ids")  int ids);
+
 	
 	//for common utility
 	@Query(value = "select\n" + 

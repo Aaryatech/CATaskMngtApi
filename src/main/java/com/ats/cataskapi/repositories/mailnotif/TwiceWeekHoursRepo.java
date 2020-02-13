@@ -11,7 +11,7 @@ import com.ats.cataskapi.model.mailnotif.TwiceWeekHours;
 public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Integer>
 {
 	
-	@Query(value="SELECT a.emp_id,a.emp_nickname,a.emp_type,a.unique_id,COALESCE(b.today,0)as day1,COALESCE(c.today1,0)as day2, COALESCE(d.today2,0) as day3 , 'NA' as day4, 'NA' AS dayname4, \n" + 
+	@Query(value="SELECT a.emp_email, a.emp_id,a.emp_nickname,a.emp_type,a.unique_id,COALESCE(b.today,0)as day1,COALESCE(c.today1,0)as day2, COALESCE(d.today2,0) as day3 , 'NA' as day4, 'NA' AS dayname4, \n" + 
 			"\n" + 
 			"   dayname((select CURDATE() - INTERVAL 1 DAY FROM DUAL))   as dayname1,  dayname((select CURDATE() - INTERVAL 2 DAY FROM DUAL))   as dayname2 , dayname((select CURDATE() - INTERVAL 3 DAY FROM DUAL))   as dayname3     ,\n" + 
 			"\n" + 
@@ -20,7 +20,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"TIME_FORMAT(SEC_TO_TIME(TIME_TO_SEC((ADDTIME(COALESCE(b.today,0),ADDTIME(COALESCE(c.today1,0),COALESCE(d.today2,0)))))/3), '%H:%i') as avg_tot_hrs\n" + 
 			"\n" + 
 			"FROM (\n" + 
-			"SELECT UUID() as unique_id, m_emp.emp_id,m_emp.emp_name as emp_nickname,m_emp.emp_type  FROM m_emp WHERE m_emp.del_status=1 and m_emp.is_active=1 and m_emp.emp_type=:empType ) a \n" + 
+			"SELECT UUID() as unique_id, m_emp.emp_id,m_emp.emp_name as emp_nickname,m_emp.emp_type,m_emp.emp_email  FROM m_emp WHERE m_emp.del_status=1 and m_emp.is_active=1 and m_emp.emp_type=:empType ) a \n" + 
 			"LEFT JOIN \n" + 
 			"( \n" + 
 			"\n" + 
@@ -80,7 +80,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"           c.del_status=1 and c.is_active=1 and c.emp_type IN (:empType))",nativeQuery=true)
 	List<String> getEmailIds(@Param("empType") String empType);
     
-	@Query(value="SELECT\n" + 
+	@Query(value="SELECT a.emp_email\n" + 
 			"    a.emp_id,\n" + 
 			"    a.emp_nickname,a.unique_id, a.emp_type,\n" + 
 			"    COALESCE(b.today,\n" + 
@@ -120,7 +120,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"    '%H:%i:%s') as avg_tot_hrs\n" + 
 			"FROM\n" + 
 			"    ( SELECT\n" + 
-			"        UUID() as unique_id, m_emp.emp_id,m_emp.emp_name as emp_nickname,m_emp.emp_type  FROM m_emp WHERE m_emp.del_status=1 and m_emp.is_active=1 and m_emp.emp_type=:empType) a  \n" + 
+			"        UUID() as unique_id, m_emp.emp_id,m_emp.emp_name as emp_nickname,m_emp.emp_type,m_emp.emp_email  FROM m_emp WHERE m_emp.del_status=1 and m_emp.is_active=1 and m_emp.emp_type=:empType) a  \n" + 
 			"LEFT JOIN\n" + 
 			"    (\n" + 
 			"        SELECT\n" + 

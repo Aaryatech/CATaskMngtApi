@@ -94,4 +94,7 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 		@Query(value="	SELECT COUNT(*) from m_emp WHERE emp_id IN (:empIdList) AND emp_type=2",nativeQuery=true)
 		int getCountofPartner(@Param("empIdList") List<String> empIdList);
 		
+		EmployeeMaster findByEmpEmailAndDelStatus(@Param("email") String email,@Param("delStatus") int delStatus);
+		
+		
 }
