@@ -91,7 +91,7 @@ public interface EmployeeListWithAvailableHoursRepo extends JpaRepository<Employ
 			"                and l.leave_todt<=:toDate\n" + 
 			"            )\n" + 
 			"        ) and e.emp_id in (:ids)", nativeQuery = true)
-	List<EmployeeListWithAvailableHours> getLeaveRecordByEmpId(@Param("fromDate")String fromDate,@Param("toDate") String toDate,@Param("ids")  int ids);
+	List<EmployeeListWithAvailableHours> getLeaveRecordByEmpId(@Param("fromDate")String fromDate,@Param("toDate") String toDate,@Param("ids")  List<Integer> ids);
 
 	@Query(value = "select\n" + 
 			"        l.leave_id,\n" + 

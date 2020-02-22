@@ -12,6 +12,9 @@ public class BugetedAmtAndRevenue {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="emp_id")
+	private int empId;
+	
 	@Column(name="bugeted_hrs")
 	private float bugetedHrs;
 	
@@ -78,11 +81,19 @@ public class BugetedAmtAndRevenue {
 		this.actualCost = actualCost;
 	}
 
+	public int getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
+
 	@Override
 	public String toString() {
-		return "BugetedAmtAndRevenue [bugetedHrs=" + bugetedHrs + ", actualHrs=" + actualHrs + ", bugetedRev="
-				+ bugetedRev + ", actulRev=" + actulRev + ", bugetedCost=" + bugetedCost + ", actualCost=" + actualCost
-				+ "]";
+		return "BugetedAmtAndRevenue [empId=" + empId + ", bugetedHrs=" + bugetedHrs + ", actualHrs=" + actualHrs
+				+ ", bugetedRev=" + bugetedRev + ", actulRev=" + actulRev + ", bugetedCost=" + bugetedCost
+				+ ", actualCost=" + actualCost + "]";
 	}
 
 	 

@@ -288,7 +288,7 @@ public class WeeklyOffApiController {
 
 					Calendar temp = Calendar.getInstance();
 					temp.setTime(yydate.parse(fromDate));
-					int k=temp.get(Calendar.MONTH)+1;
+					int k = temp.get(Calendar.MONTH) + 1;
 					int year = fc.get(Calendar.YEAR);
 					// System.out.println("year " + year);
 
@@ -331,13 +331,13 @@ public class WeeklyOffApiController {
 							m.setTime(m.getTime() + 1000 * 60 * 60 * 24);
 						}
 
-						String dt = year + "-" + (k+1) + "-0";
+						String dt = year + "-" + (k + 1) + "-0";
 						e = yydate.parse(dt);
 						e.setTime(e.getTime() + 1000 * 60 * 60 * 24);
 						Calendar a = Calendar.getInstance();
 						a.setTime(e);
 						year = a.get(Calendar.YEAR);
-						k=a.get(Calendar.MONTH)+1;
+						k = a.get(Calendar.MONTH) + 1;
 					}
 				} else if (Integer.parseInt(weeklyList.get(i).getWoType()) == 4) {
 
@@ -351,7 +351,7 @@ public class WeeklyOffApiController {
 
 					Calendar temp = Calendar.getInstance();
 					temp.setTime(yydate.parse(fromDate));
-					int k=temp.get(Calendar.MONTH)+1;
+					int k = temp.get(Calendar.MONTH) + 1;
 					int year = fc.get(Calendar.YEAR);
 					// System.out.println("year " + year);
 
@@ -392,13 +392,13 @@ public class WeeklyOffApiController {
 							m.setTime(m.getTime() + 1000 * 60 * 60 * 24);
 						}
 
-						String dt = year + "-" + (k+1) + "-0";
+						String dt = year + "-" + (k + 1) + "-0";
 						e = yydate.parse(dt);
 						e.setTime(e.getTime() + 1000 * 60 * 60 * 24);
 						Calendar a = Calendar.getInstance();
 						a.setTime(e);
 						year = a.get(Calendar.YEAR);
-						k=a.get(Calendar.MONTH)+1;
+						k = a.get(Calendar.MONTH) + 1;
 					}
 				} else if (Integer.parseInt(weeklyList.get(i).getWoType()) == 5) {
 
@@ -409,10 +409,10 @@ public class WeeklyOffApiController {
 
 					Calendar tc = Calendar.getInstance();
 					tc.setTime(todt);
-					
+
 					Calendar temp = Calendar.getInstance();
 					temp.setTime(yydate.parse(fromDate));
-					int k=temp.get(Calendar.MONTH)+1;
+					int k = temp.get(Calendar.MONTH) + 1;
 					int year = fc.get(Calendar.YEAR);
 					// System.out.println("year " + year);
 
@@ -459,7 +459,7 @@ public class WeeklyOffApiController {
 						Calendar a = Calendar.getInstance();
 						a.setTime(e);
 						year = a.get(Calendar.YEAR);
-						k=a.get(Calendar.MONTH)+1;
+						k = a.get(Calendar.MONTH) + 1;
 					}
 				} else if (Integer.parseInt(weeklyList.get(i).getWoType()) == 6) {
 
@@ -473,7 +473,7 @@ public class WeeklyOffApiController {
 
 					Calendar temp = Calendar.getInstance();
 					temp.setTime(yydate.parse(fromDate));
-					int k=temp.get(Calendar.MONTH)+1;
+					int k = temp.get(Calendar.MONTH) + 1;
 					int year = fc.get(Calendar.YEAR);
 					// System.out.println("year " + year);
 
@@ -520,7 +520,7 @@ public class WeeklyOffApiController {
 						Calendar a = Calendar.getInstance();
 						a.setTime(e);
 						year = a.get(Calendar.YEAR);
-						k=a.get(Calendar.MONTH)+1;
+						k = a.get(Calendar.MONTH) + 1;
 
 					}
 				} else if (Integer.parseInt(weeklyList.get(i).getWoType()) == 1) {
@@ -535,7 +535,7 @@ public class WeeklyOffApiController {
 
 					Calendar temp = Calendar.getInstance();
 					temp.setTime(yydate.parse(fromDate));
-					int k=temp.get(Calendar.MONTH)+1;
+					int k = temp.get(Calendar.MONTH) + 1;
 					int year = fc.get(Calendar.YEAR);
 					// System.out.println("year " + year);
 
@@ -574,7 +574,7 @@ public class WeeklyOffApiController {
 						Calendar a = Calendar.getInstance();
 						a.setTime(e);
 						year = a.get(Calendar.YEAR);
-						k=a.get(Calendar.MONTH)+1;
+						k = a.get(Calendar.MONTH) + 1;
 					}
 				} else if (Integer.parseInt(weeklyList.get(i).getWoType()) == 2) {
 
@@ -588,7 +588,7 @@ public class WeeklyOffApiController {
 
 					Calendar temp = Calendar.getInstance();
 					temp.setTime(yydate.parse(fromDate));
-					int k=temp.get(Calendar.MONTH)+1;
+					int k = temp.get(Calendar.MONTH) + 1;
 					int year = fc.get(Calendar.YEAR);
 					System.out.println("year " + year);
 
@@ -636,7 +636,7 @@ public class WeeklyOffApiController {
 						Calendar a = Calendar.getInstance();
 						a.setTime(e);
 						year = a.get(Calendar.YEAR);
-						k=a.get(Calendar.MONTH)+1;
+						k = a.get(Calendar.MONTH) + 1;
 					}
 				}
 
@@ -1265,13 +1265,153 @@ public class WeeklyOffApiController {
 
 	}
 
-	@RequestMapping(value = { "/calculateBugetedAmtAndBugetedRevenue" }, method = RequestMethod.POST)
-	public @ResponseBody BugetedAmtAndRevenue calculateBugetedAmtAndBugetedRevenue(@RequestParam("empId") int empId,
-			@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
-			@RequestParam("typeId") int typeId, @RequestParam("groupId") int groupId,
-			@RequestParam("clientId") int clientId) {
+	/*
+	 * @RequestMapping(value = { "/calculateBugetedAmtAndBugetedRevenue" }, method =
+	 * RequestMethod.POST) public @ResponseBody BugetedAmtAndRevenue
+	 * calculateBugetedAmtAndBugetedRevenue(@RequestParam("empId") int empId,
+	 * 
+	 * @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String
+	 * toDate,
+	 * 
+	 * @RequestParam("typeId") int typeId, @RequestParam("groupId") int groupId,
+	 * 
+	 * @RequestParam("clientId") int clientId) {
+	 * 
+	 * BugetedAmtAndRevenue bugetedAmtAndRevenue = new BugetedAmtAndRevenue();
+	 * 
+	 * try {
+	 * 
+	 * List<Integer> clntIds = new ArrayList<>();
+	 * 
+	 * if (clientId == 0) { clntIds =
+	 * bugetedAmtAndRevenueRepo.getclientByGroupId(groupId); } else {
+	 * clntIds.add(clientId); } LeaveCount totalDayCount =
+	 * calculateHolidayBetweenDate(0, fromDate, toDate); float freeHours =
+	 * totalDayCount.getLeavecount() * 7;
+	 * 
+	 * List<EmployeeListWithAvailableHours> list = new ArrayList<>(); list =
+	 * employeeListWithAvailableHoursRepo.getLeaveRecordByEmpId(fromDate, toDate,
+	 * empId);
+	 * 
+	 * SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
+	 * 
+	 * float bsyhrs = 0;
+	 * 
+	 * for (int i = 0; i < list.size(); i++) {
+	 * 
+	 * String lvfmdt = yy.format(list.get(i).getLeaveFromdt()); String lvtodt =
+	 * yy.format(list.get(i).getLeaveTodt());
+	 * 
+	 * if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0 &&
+	 * yy.parse(toDate).compareTo(yy.parse(lvfmdt)) >= 0 &&
+	 * yy.parse(toDate).compareTo(yy.parse(lvtodt)) < 0) {
+	 * 
+	 * if (list.get(i).getLeaveDuration() == 0) {
+	 * 
+	 * LeaveCount bsyDaycount = calculateHolidayBetweenDate(0,
+	 * yy.format(yy.parse(lvfmdt)), toDate); bsyhrs = (float) (bsyhrs +
+	 * (bsyDaycount.getLeavecount() * 3.5));
+	 * 
+	 * } else {
+	 * 
+	 * LeaveCount bsyDaycount = calculateHolidayBetweenDate(0,
+	 * yy.format(yy.parse(lvfmdt)), toDate); bsyhrs = (float) (bsyhrs +
+	 * (bsyDaycount.getLeavecount() * 7)); }
+	 * 
+	 * } else if (yy.parse(fromDate).compareTo(yy.parse(lvtodt)) <= 0 &&
+	 * yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0 &&
+	 * yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) > 0) {
+	 * 
+	 * if (list.get(i).getLeaveDuration() == 0) {
+	 * 
+	 * LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate,
+	 * yy.format(yy.parse(lvtodt))); bsyhrs = (float) (bsyhrs +
+	 * (bsyDaycount.getLeavecount() * 3.5));
+	 * 
+	 * } else {
+	 * 
+	 * LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate,
+	 * yy.format(yy.parse(lvtodt))); bsyhrs = (float) (bsyhrs +
+	 * (bsyDaycount.getLeavecount() * 7)); }
+	 * 
+	 * } else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0 &&
+	 * yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0) {
+	 * 
+	 * if (list.get(i).getLeaveDuration() == 0) {
+	 * 
+	 * LeaveCount bsyDaycount = calculateHolidayBetweenDate(0,
+	 * yy.format(yy.parse(lvfmdt)), yy.format(yy.parse(lvtodt))); bsyhrs = (float)
+	 * (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+	 * 
+	 * } else {
+	 * 
+	 * LeaveCount bsyDaycount = calculateHolidayBetweenDate(0,
+	 * yy.format(yy.parse(lvfmdt)), yy.format(yy.parse(lvtodt))); bsyhrs = (float)
+	 * (bsyhrs + (bsyDaycount.getLeavecount() * 7)); }
+	 * 
+	 * } else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) >= 0 &&
+	 * yy.parse(toDate).compareTo(yy.parse(lvtodt)) <= 0) {
+	 * 
+	 * if (list.get(i).getLeaveDuration() == 0) {
+	 * 
+	 * LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, toDate);
+	 * bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+	 * 
+	 * } else {
+	 * 
+	 * LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, toDate);
+	 * bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7)); } }
+	 * 
+	 * }
+	 * 
+	 * float bugetedCap = freeHours - bsyhrs;
+	 * 
+	 * Date date = yy.parse(fromDate); LocalDate localDate =
+	 * date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); int month =
+	 * localDate.getMonthValue(); float sal = 0; EmpSalary empSalary =
+	 * empSalaryRepo.getrecordByEmpIdAndDate(fromDate, empId); bugetedAmtAndRevenue
+	 * = bugetedAmtAndRevenueRepo.calculateBugetedAmtAndBugetedRevenue(empId,
+	 * fromDate, toDate, clntIds);
+	 * 
+	 * if (month == 1) { sal = (empSalary.getJan() + 6000) / bugetedCap; } else if
+	 * (month == 2) { sal = (empSalary.getFeb() + 6000) / bugetedCap; } else if
+	 * (month == 3) { sal = (empSalary.getMar() + 6000) / bugetedCap; } else if
+	 * (month == 4) { sal = (empSalary.getApr() + 6000) / bugetedCap; } else if
+	 * (month == 5) { sal = (empSalary.getMay() + 6000) / bugetedCap; } else if
+	 * (month == 6) { sal = (empSalary.getJun() + 6000) / bugetedCap; } else if
+	 * (month == 7) { sal = (empSalary.getJul() + 6000) / bugetedCap; } else if
+	 * (month == 8) { sal = (empSalary.getAug() + 6000) / bugetedCap; } else if
+	 * (month == 9) { sal = (empSalary.getSep() + 6000) / bugetedCap; } else if
+	 * (month == 10) { sal = (empSalary.getOct() + 6000) / bugetedCap; } else if
+	 * (month == 11) { sal = (empSalary.getNov() + 6000) / bugetedCap; } else if
+	 * (month == 12) { sal = (empSalary.getDece() + 6000) / bugetedCap; }
+	 * 
+	 * int bugetedHrs = (int) (bugetedAmtAndRevenue.getBugetedHrs() / 60); int
+	 * remHrs = (int) (bugetedAmtAndRevenue.getBugetedHrs() % 60); float remHrsValue
+	 * = (sal / 60) * remHrs;
+	 * 
+	 * int actualHrs = (int) (bugetedAmtAndRevenue.getActualHrs() / 60); int
+	 * actualRemHrs = (int) (bugetedAmtAndRevenue.getActualHrs() % 60); float
+	 * remActuslHrsValue = (sal / 60) * actualRemHrs;
+	 * 
+	 * bugetedAmtAndRevenue.setBugetedCost((bugetedHrs * sal) + remHrsValue);
+	 * bugetedAmtAndRevenue.setActualCost((actualHrs * sal) + remActuslHrsValue); }
+	 * catch (Exception e) {
+	 * 
+	 * e.printStackTrace(); bugetedAmtAndRevenue = new BugetedAmtAndRevenue(); }
+	 * 
+	 * return bugetedAmtAndRevenue;
+	 * 
+	 * }
+	 */
 
-		BugetedAmtAndRevenue bugetedAmtAndRevenue = new BugetedAmtAndRevenue();
+	@RequestMapping(value = { "/calculateBugetedAmtAndBugetedRevenue" }, method = RequestMethod.POST)
+	public @ResponseBody BugetedAmtAndRevenue calculateBugetedAmtAndBugetedRevenue(
+			@RequestParam("empId") List<Integer> empIds, @RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate, @RequestParam("typeId") int typeId,
+			@RequestParam("groupId") int groupId, @RequestParam("clientId") int clientId) {
+
+		BugetedAmtAndRevenue bugetedAmtAndRevenue1 = new BugetedAmtAndRevenue();
 
 		try {
 
@@ -1282,137 +1422,198 @@ public class WeeklyOffApiController {
 			} else {
 				clntIds.add(clientId);
 			}
+
 			LeaveCount totalDayCount = calculateHolidayBetweenDate(0, fromDate, toDate);
-			float freeHours = totalDayCount.getLeavecount() * 7;
+			List<EmployeeListWithAvailableHours> list = employeeListWithAvailableHoursRepo
+					.getLeaveRecordByEmpId(fromDate, toDate, empIds);
+			List<EmpSalary> empSalaryList = empSalaryRepo.getrecordByEmpIdAndDate(fromDate, empIds);
 
-			List<EmployeeListWithAvailableHours> list = new ArrayList<>();
-			list = employeeListWithAvailableHoursRepo.getLeaveRecordByEmpId(fromDate, toDate, empId);
+			List<BugetedAmtAndRevenue> bugetedAmtAndRevenueList = bugetedAmtAndRevenueRepo
+					.calculateBugetedAmtAndBugetedRevenueSumofRev(empIds, fromDate, toDate, clntIds);
+ 
 
-			SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
+			for (int a = 0; a < empIds.size(); a++) {
 
-			float bsyhrs = 0;
+				int empId = empIds.get(a);
 
-			for (int i = 0; i < list.size(); i++) {
+				float freeHours = totalDayCount.getLeavecount() * 7;
 
-				String lvfmdt = yy.format(list.get(i).getLeaveFromdt());
-				String lvtodt = yy.format(list.get(i).getLeaveTodt());
+				SimpleDateFormat yy = new SimpleDateFormat("yyyy-MM-dd");
 
-				if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
-						&& yy.parse(toDate).compareTo(yy.parse(lvfmdt)) >= 0
-						&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) < 0) {
+				float bsyhrs = 0;
 
-					if (list.get(i).getLeaveDuration() == 0) {
+				for (int i = 0; i < list.size(); i++) {
 
-						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)), toDate);
-						bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+					if (empId == list.get(i).getEmpId()) {
 
-					} else {
+						String lvfmdt = yy.format(list.get(i).getLeaveFromdt());
+						String lvtodt = yy.format(list.get(i).getLeaveTodt());
 
-						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)), toDate);
-						bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
-					}
+						if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvfmdt)) >= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) < 0) {
 
-				} else if (yy.parse(fromDate).compareTo(yy.parse(lvtodt)) <= 0
-						&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0
-						&& yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) > 0) {
+							if (list.get(i).getLeaveDuration() == 0) {
 
-					if (list.get(i).getLeaveDuration() == 0) {
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
+										toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
 
-						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, yy.format(yy.parse(lvtodt)));
-						bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+							} else {
 
-					} else {
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
+										toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
 
-						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, yy.format(yy.parse(lvtodt)));
-						bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
-					}
+						} else if (yy.parse(fromDate).compareTo(yy.parse(lvtodt)) <= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0
+								&& yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) > 0) {
 
-				} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
-						&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0) {
+							if (list.get(i).getLeaveDuration() == 0) {
 
-					if (list.get(i).getLeaveDuration() == 0) {
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate,
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
 
-						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
-								yy.format(yy.parse(lvtodt)));
-						bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+							} else {
 
-					} else {
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate,
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
 
-						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
-								yy.format(yy.parse(lvtodt)));
-						bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
-					}
+						} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) <= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) >= 0) {
 
-				} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) >= 0
-						&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) <= 0) {
+							if (list.get(i).getLeaveDuration() == 0) {
 
-					if (list.get(i).getLeaveDuration() == 0) {
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
 
-						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, toDate);
-						bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+							} else {
 
-					} else {
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, yy.format(yy.parse(lvfmdt)),
+										yy.format(yy.parse(lvtodt)));
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
 
-						LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, toDate);
-						bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+						} else if (yy.parse(fromDate).compareTo(yy.parse(lvfmdt)) >= 0
+								&& yy.parse(toDate).compareTo(yy.parse(lvtodt)) <= 0) {
+
+							if (list.get(i).getLeaveDuration() == 0) {
+
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 3.5));
+
+							} else {
+
+								LeaveCount bsyDaycount = calculateHolidayBetweenDate(0, fromDate, toDate);
+								bsyhrs = (float) (bsyhrs + (bsyDaycount.getLeavecount() * 7));
+							}
+						}
 					}
 				}
 
+				float bugetedCap = freeHours - bsyhrs;
+
+				Date date = yy.parse(fromDate);
+				LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				int month = localDate.getMonthValue();
+				float sal = 0;
+
+				BugetedAmtAndRevenue bugetedAmtAndRevenue = new BugetedAmtAndRevenue();
+				EmpSalary empSalary = new EmpSalary();
+
+				for (int i = 0; i < bugetedAmtAndRevenueList.size(); i++) {
+
+					if (empId == bugetedAmtAndRevenueList.get(i).getEmpId()) {
+						bugetedAmtAndRevenue = bugetedAmtAndRevenueList.get(i);
+						bugetedAmtAndRevenue1.setBugetedRev(bugetedAmtAndRevenue.getBugetedRev());
+						bugetedAmtAndRevenue1.setActulRev(bugetedAmtAndRevenue.getActulRev());
+						break;
+					}
+
+				}
+
+				for (int i = 0; i < empSalaryList.size(); i++) {
+
+					if (empId == empSalaryList.get(i).getEmpId()) {
+						empSalary = empSalaryList.get(i);
+						break;
+					}
+
+				}
+
+				try {
+
+					if (month == 1) {
+						sal = (empSalary.getJan() + 6000) / bugetedCap;
+					} else if (month == 2) {
+						sal = (empSalary.getFeb() + 6000) / bugetedCap;
+					} else if (month == 3) {
+						sal = (empSalary.getMar() + 6000) / bugetedCap;
+					} else if (month == 4) {
+						sal = (empSalary.getApr() + 6000) / bugetedCap;
+					} else if (month == 5) {
+						sal = (empSalary.getMay() + 6000) / bugetedCap;
+					} else if (month == 6) {
+						sal = (empSalary.getJun() + 6000) / bugetedCap;
+					} else if (month == 7) {
+						sal = (empSalary.getJul() + 6000) / bugetedCap;
+					} else if (month == 8) {
+						sal = (empSalary.getAug() + 6000) / bugetedCap;
+					} else if (month == 9) {
+						sal = (empSalary.getSep() + 6000) / bugetedCap;
+					} else if (month == 10) {
+						sal = (empSalary.getOct() + 6000) / bugetedCap;
+					} else if (month == 11) {
+						sal = (empSalary.getNov() + 6000) / bugetedCap;
+					} else if (month == 12) {
+						sal = (empSalary.getDece() + 6000) / bugetedCap;
+					}
+				} catch (Exception e) {
+					sal = 0;
+				}
+
+				if (bugetedCap == 0) {
+					sal = 0;
+				}
+				int bugetedHrs = (int) (bugetedAmtAndRevenue.getBugetedHrs() / 60);
+				int remHrs = (int) (bugetedAmtAndRevenue.getBugetedHrs() % 60);
+				float remHrsValue = (sal / 60) * remHrs;
+
+				int actualHrs = (int) (bugetedAmtAndRevenue.getActualHrs() / 60);
+				int actualRemHrs = (int) (bugetedAmtAndRevenue.getActualHrs() % 60);
+				float remActuslHrsValue = (sal / 60) * actualRemHrs;
+
+				bugetedAmtAndRevenue.setBugetedCost((bugetedHrs * sal) + remHrsValue);
+				bugetedAmtAndRevenue.setActualCost((actualHrs * sal) + remActuslHrsValue);
+
+				bugetedAmtAndRevenue1
+						.setBugetedCost(bugetedAmtAndRevenue1.getBugetedCost() + bugetedAmtAndRevenue.getBugetedCost());
+
+				bugetedAmtAndRevenue1
+						.setActualCost(bugetedAmtAndRevenue1.getActualCost() + bugetedAmtAndRevenue.getActualCost());
+
+				bugetedAmtAndRevenue1
+						.setActualHrs(bugetedAmtAndRevenue1.getActualHrs() + bugetedAmtAndRevenue.getActualHrs());
+				bugetedAmtAndRevenue1
+						.setBugetedHrs(bugetedAmtAndRevenue1.getBugetedHrs() + bugetedAmtAndRevenue.getBugetedHrs());
+ 
 			}
 
-			float bugetedCap = freeHours - bsyhrs;
-
-			Date date = yy.parse(fromDate);
-			LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-			int month = localDate.getMonthValue();
-			float sal = 0;
-			EmpSalary empSalary = empSalaryRepo.getrecordByEmpIdAndDate(fromDate, empId);
-			bugetedAmtAndRevenue = bugetedAmtAndRevenueRepo.calculateBugetedAmtAndBugetedRevenue(empId, fromDate,
-					toDate, clntIds);
-
-			if (month == 1) {
-				sal = (empSalary.getJan() + 6000) / bugetedCap;
-			} else if (month == 2) {
-				sal = (empSalary.getFeb() + 6000) / bugetedCap;
-			} else if (month == 3) {
-				sal = (empSalary.getMar() + 6000) / bugetedCap;
-			} else if (month == 4) {
-				sal = (empSalary.getApr() + 6000) / bugetedCap;
-			} else if (month == 5) {
-				sal = (empSalary.getMay() + 6000) / bugetedCap;
-			} else if (month == 6) {
-				sal = (empSalary.getJun() + 6000) / bugetedCap;
-			} else if (month == 7) {
-				sal = (empSalary.getJul() + 6000) / bugetedCap;
-			} else if (month == 8) {
-				sal = (empSalary.getAug() + 6000) / bugetedCap;
-			} else if (month == 9) {
-				sal = (empSalary.getSep() + 6000) / bugetedCap;
-			} else if (month == 10) {
-				sal = (empSalary.getOct() + 6000) / bugetedCap;
-			} else if (month == 11) {
-				sal = (empSalary.getNov() + 6000) / bugetedCap;
-			} else if (month == 12) {
-				sal = (empSalary.getDece() + 6000) / bugetedCap;
-			}
-
-			int bugetedHrs = (int) (bugetedAmtAndRevenue.getBugetedHrs() / 60);
-			int remHrs = (int) (bugetedAmtAndRevenue.getBugetedHrs() % 60);
-			float remHrsValue = (sal / 60) * remHrs;
-
-			int actualHrs = (int) (bugetedAmtAndRevenue.getActualHrs() / 60);
-			int actualRemHrs = (int) (bugetedAmtAndRevenue.getActualHrs() % 60);
-			float remActuslHrsValue = (sal / 60) * actualRemHrs;
-
-			bugetedAmtAndRevenue.setBugetedCost((bugetedHrs * sal) + remHrsValue);
-			bugetedAmtAndRevenue.setActualCost((actualHrs * sal) + remActuslHrsValue);
+			
+			
+			
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			bugetedAmtAndRevenue = new BugetedAmtAndRevenue();
+			bugetedAmtAndRevenue1 = new BugetedAmtAndRevenue();
 		}
 
-		return bugetedAmtAndRevenue;
+		return bugetedAmtAndRevenue1;
 
 	}
 
