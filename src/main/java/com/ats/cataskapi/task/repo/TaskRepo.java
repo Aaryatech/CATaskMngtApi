@@ -149,4 +149,7 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 			
 			@Query(value="SELECT COUNT(t_tasks.task_id) from t_tasks WHERE t_tasks.task_status=:id",nativeQuery=true)
 	        int getTaskCountByStatus(@Param("id") int id);
+			
+			@Query(value="SELECT COUNT(m_emp.emp_role_id) from m_emp WHERE m_emp.emp_role_id=:id",nativeQuery=true)
+	        int getRoleCountByRoleId(@Param("id") int id);
 }

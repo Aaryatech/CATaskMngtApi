@@ -20,6 +20,7 @@ import com.ats.cataskapi.accessrights.CreatedRoleList;
 import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
+import com.ats.cataskapi.task.repo.TaskRepo;
 
 @RestController
 public class AccessRightApiController {
@@ -43,13 +44,23 @@ public class AccessRightApiController {
 	 * @Autowired UserService userServices;
 	 */
  
-	
+	 @Autowired
+		TaskRepo taskRepo;
+
 	@RequestMapping(value = { "/deleteRole" }, method = RequestMethod.POST)
 	public @ResponseBody Info deleteRole(@RequestParam int roleId) {
 
-		int isDeleted = assignRoleDetailListRepository.deleteRole(roleId);
+		
+		
+		int res = 0;
+		int isDeleted=0;
+		int taskCount = 0;
+		taskCount = taskRepo.getRoleCountByRoleId(roleId);
+		if (taskCount < 1) {
+		 isDeleted = assignRoleDetailListRepository.deleteRole(roleId);
+		}
 		Info info = new Info();
-		if (isDeleted == 1) {
+		if (isDeleted>0) {
 			info.setError(false);
 			info.setMessage("Role  Deleted");
 		} else {

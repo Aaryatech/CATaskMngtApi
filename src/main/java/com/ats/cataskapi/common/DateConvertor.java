@@ -2,6 +2,7 @@ package com.ats.cataskapi.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateConvertor {
@@ -76,7 +77,33 @@ public class DateConvertor {
 		}
 
 		
-		
+	public static String getCurTime() {
+
+		int interval = 0;
+		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar curCal = Calendar.getInstance();
+
+		//System.out.println("Time " + String.valueOf(df.format(curCal.getTime())));
+
+		curCal.add(Calendar.MINUTE, interval);
+		 return String.valueOf(df.format(curCal.getTime()));
+		//return curCal;
+
+	}
+	
+	public static String getCurDateTimeYmD() {
+
+		int interval = 0;
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Calendar curCal = Calendar.getInstance();
+
+		//System.out.println("Time " + String.valueOf(df.format(curCal.getTime())));
+
+		curCal.add(Calendar.MINUTE, interval);
+		 return String.valueOf(df.format(curCal.getTime()));
+		//return curCal;
+
+	}
 
 	}
 

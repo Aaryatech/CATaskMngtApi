@@ -17,7 +17,8 @@ public interface CustmrActivityMapRepo extends JpaRepository<CustmrActivityMap, 
 	List<CustmrActivityMap> findAllBydelStatus(int del);
 	
 	CustmrActivityMap findByActvIdAndDelStatus(int actId, int del);
-	
+	@Query(value="select * from   m_cust_acti_map   WHERE mapping_id IN (:mappingIdList)",nativeQuery=true)
+	List<CustmrActivityMap> getMappingForyearlyTaskGen(List<String> mappingIdList);
 	
 	@Transactional
 	@Modifying
