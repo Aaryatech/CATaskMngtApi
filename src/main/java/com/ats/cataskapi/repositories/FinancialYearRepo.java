@@ -22,6 +22,11 @@ public interface FinancialYearRepo  extends JpaRepository<FinancialYear, Integer
 			"FROM dm_fin_year\n" + 
 			"WHERE  dm_fin_year.is_current=1",nativeQuery=true)
 	FinancialYear getCurrYear();
+	
+	@Query(value="SELECT *\n" + 
+			"FROM dm_fin_year\n" + 
+			"WHERE  dm_fin_year.is_current=9",nativeQuery=true)
+	FinancialYear getNextFinYear();
 
 	List<FinancialYear> findByDelStatus(int i);
 }

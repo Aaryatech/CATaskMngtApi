@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PerDatesAdmin {
 	public static List<DateValues> getDates(String fromDate, String toDate, int periodicityId) {
-//System.err.println("In PerDatesAdmin");
+//System.err.println("In PerDatesAdmin" +fromDate +"toDate " +toDate);
 		List<String> arryadate = new ArrayList<>();
 
 		SimpleDateFormat yydate = new SimpleDateFormat("yyyy-MM-dd");
