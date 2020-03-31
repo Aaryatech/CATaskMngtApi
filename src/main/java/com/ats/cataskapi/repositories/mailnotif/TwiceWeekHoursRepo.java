@@ -213,6 +213,66 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 	
 
 	
+	//Sachin 26032020
+	@Query(value="SELECT a.emp_email, a.emp_id,a.emp_nickname,a.emp_type,a.unique_id,COALESCE(b.today,0)as day1,COALESCE(c.today1,0)as day2, COALESCE(d.today2,0) as day3 , 'NA' as day4, 'NA' AS dayname4,  \n" + 
+			"			 \n" + 
+			"			   dayname((select CURDATE() - INTERVAL 1 DAY FROM DUAL))   as dayname1,  dayname((select CURDATE() - INTERVAL 2 DAY FROM DUAL))   as dayname2 , dayname((select CURDATE() - INTERVAL 3 DAY FROM DUAL))   as dayname3     , \n" + 
+			"			 \n" + 
+			"			(ADDTIME(COALESCE(b.today,0),ADDTIME(COALESCE(c.today1,0),COALESCE(d.today2,0)))) as tot_hrs, \n" + 
+			"			 \n" + 
+			"			TIME_FORMAT(SEC_TO_TIME(TIME_TO_SEC((ADDTIME(COALESCE(b.today,0),ADDTIME(COALESCE(c.today1,0),COALESCE(d.today2,0)))))/3), '%H:%i') as avg_tot_hrs \n" + 
+			"			 \n" + 
+			"			FROM ( \n" + 
+			"			SELECT UUID() as unique_id, m_emp.emp_id,m_emp.emp_name as emp_nickname,m_emp.emp_type,m_emp.emp_email  FROM m_emp WHERE m_emp.del_status=1 and m_emp.is_active=1 and m_emp.emp_type=:empType ) a  \n" + 
+			"			LEFT JOIN  \n" + 
+			"			(  \n" + 
+			"			 \n" + 
+			"			SELECT \n" + 
+			"			d.emp_id, \n" + 
+			"			         \n" + 
+			"			        CONCAT(FLOOR(SUM(d.work_hours)/60), \n" + 
+			"			        ':', \n" + 
+			"			        LPAD(MOD(SUM(d.work_hours), \n" + 
+			"			        60), \n" + 
+			"			        2, \n" + 
+			"			        '0')) as today  \n" + 
+			"			        FROM t_daily_work_log d \n" + 
+			"			        WHERE  d.work_date=:prevDate1  group by d.work_date,d.emp_id  \n" + 
+			"			         \n" + 
+			"			) b on a.emp_id=b.emp_id \n" + 
+			"			 \n" + 
+			"			LEFT JOIN  \n" + 
+			"			(  \n" + 
+			"			SELECT \n" + 
+			"			d.emp_id, \n" + 
+			"			         \n" + 
+			"			        CONCAT(FLOOR(SUM(d.work_hours)/60), \n" + 
+			"			        ':', \n" + 
+			"			        LPAD(MOD(SUM(d.work_hours), \n" + 
+			"			        60), \n" + 
+			"			        2, \n" + 
+			"			        '0')) as today1  \n" + 
+			"			        FROM t_daily_work_log d \n" + 
+			"			        WHERE  d.work_date=:prevDate2 group by d.work_date,d.emp_id  \n" + 
+			"			    ) c on c.emp_id=a.emp_id \n" + 
+			"			 \n" + 
+			"			LEFT JOIN  \n" + 
+			"			(  \n" + 
+			"			SELECT \n" + 
+			"			d.emp_id, \n" + 
+			"			         \n" + 
+			"			        CONCAT(FLOOR(SUM(d.work_hours)/60), \n" + 
+			"			        ':', \n" + 
+			"			        LPAD(MOD(SUM(d.work_hours), \n" + 
+			"			        60), \n" + 
+			"			        2, \n" + 
+			"			        '0')) as today2 \n" + 
+			"			        FROM t_daily_work_log d \n" + 
+			"			        WHERE  d.work_date=:prevDate3 group by d.work_date,d.emp_id  \n" + 
+			"			    ) d on d.emp_id=a.emp_id ORDER BY a.emp_nickname desc", nativeQuery=true)
+	List<TwiceWeekHours> sendLogByPostman(@Param("empType") int empType,@Param("prevDate1") String prevDate1,@Param("prevDate2") String prevDate2,@Param("prevDate3") String prevDate3); 
+
+	
 	
 	
 }

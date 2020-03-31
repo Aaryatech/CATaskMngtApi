@@ -36,4 +36,22 @@ public class DateControl {
 	return date;
 		
 }
+public static String getDateByDateAndSubDays(String date,int noOfDays) {
+		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = Calendar.getInstance();
+		try {
+			c.setTime(sdf.parse(date));
+
+		} catch (ParseException e) {
+			System.out.println("Exception while incrementing date " + e.getMessage());
+			e.printStackTrace();
+		}
+		c.add(Calendar.DATE, noOfDays); // number of days to add
+		date = sdf.format(c.getTime());
+		System.err.println("date "+date);
+	return date;
+		
+}
 }

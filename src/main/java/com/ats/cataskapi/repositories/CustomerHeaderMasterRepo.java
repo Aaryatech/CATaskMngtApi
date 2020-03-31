@@ -52,4 +52,33 @@ public interface CustomerHeaderMasterRepo extends JpaRepository<CustomerHeaderMa
 	//Sac 04-02-2020
 	@Query(value="SELECT COUNT(m_cust_header.cust_group_id) from m_cust_header WHERE m_cust_header.cust_group_id=:id",nativeQuery=true)
     int getCustCountByCustGrpId(@Param("id") int id);
+	
+	//Sac 27-03-2020
+	List<CustomerHeaderMaster> findAllByDelStatusAndCustGroupIdOrderByCustFirmNameAsc(int del,int grpId);
+
+	
+	/*
+	 * @Query(
+	 * value=" SELECT a.*, CASE WHEN a.cust_type=1 THEN grp.cust_group_name ELSE '-' end as ex_var1, "
+	 * + " emp.emp_name as ex_var2 FROM " +
+	 * " ( SELECT m_cust_header.* FROM m_cust_header WHERE del_status=1 ) a " +
+	 * " LEFT JOIN (SELECT m_cust_group.cust_group_id,m_cust_group.cust_group_name FROM m_cust_group) grp on a.cust_group_id=grp.cust_group_id "
+	 * +
+	 * " LEFT JOIN (SELECT m_emp.emp_name,m_emp.emp_id FROM m_emp WHERE del_status=1 and m_emp.emp_type=2 ) emp on a.owner_emp_id=emp.emp_id "
+	 * + " ",nativeQuery=true) List<CustomerHeaderMaster> getCustMstForExcel();
+	 */
+	
+	@Query(value=" SELECT a.*, CASE WHEN a.cust_type=1 THEN grp.cust_group_name ELSE '-' end as ex_var1, "
+			+ " emp.emp_name as ex_var2 FROM "
+			+ " ( SELECT  m_cust_header.cust_id,m_cust_header.owner_emp_id,m_cust_header.cust_type,m_cust_header.cust_group_id,m_cust_header.cust_firm_name,m_cust_header.cust_assessee_type_id,m_cust_header.cust_assessee_name, " + 
+			"	m_cust_header.cust_pan_no,m_cust_header.cust_email_id,m_cust_header.cust_phone_no,m_cust_header.cust_addr1,m_cust_header.cust_addr2,m_cust_header.cust_city,m_cust_header.cust_pin_code, " + 
+			"	m_cust_header.cust_busin_natute,m_cust_header.cust_is_dsc_avail,m_cust_header.cust_folder_id,m_cust_header.cust_file_no,m_cust_header.cust_dob,m_cust_header.cust_aadhar,m_cust_header.del_status, " + 
+			"	m_cust_header.is_active,m_cust_header.update_datetime,m_cust_header.update_username,m_cust_header.ex_int1,m_cust_header.ex_int2  FROM m_cust_header WHERE del_status=1 ) a "
+			+ " LEFT JOIN (SELECT m_cust_group.cust_group_id,m_cust_group.cust_group_name FROM m_cust_group) grp on a.cust_group_id=grp.cust_group_id "
+			+ " LEFT JOIN (SELECT m_emp.emp_name,m_emp.emp_id FROM m_emp WHERE del_status=1 and m_emp.emp_type=2 ) emp on a.owner_emp_id=emp.emp_id " + 
+			" ",nativeQuery=true)
+	List<CustomerHeaderMaster> getCustMstForExcel();
+		
+	
+			
 }

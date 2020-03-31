@@ -625,6 +625,37 @@ public class MasterApiController {
 		return custHeadList;
 
 	}
+	
+	//Sac 27-03-2020
+	
+	@RequestMapping(value = { "/getCustomerByGroupId" }, method = RequestMethod.POST)
+	public @ResponseBody List<CustomerHeaderMaster> getCustomerByGroupId(@RequestParam int custGrpId) {
+
+		List<CustomerHeaderMaster> custHeadList = new ArrayList<CustomerHeaderMaster>();
+		try {
+			custHeadList = custHeadRepo.findAllByDelStatusAndCustGroupIdOrderByCustFirmNameAsc(1, custGrpId);
+		} catch (Exception e) {
+			System.err.println("Exce in getCustomerByGroupId  " + e.getMessage());
+		}
+
+		return custHeadList;
+
+	}
+	
+	
+	@RequestMapping(value = { "/getCustListForExcel" }, method = RequestMethod.GET)
+	public @ResponseBody List<CustomerHeaderMaster> getCustListForExcel() {
+
+		List<CustomerHeaderMaster> custHeadList = new ArrayList<CustomerHeaderMaster>();
+		try {
+			custHeadList = custHeadRepo.getCustMstForExcel();
+		} catch (Exception e) {
+			System.err.println("Exce in getCustomerByGroupId  " + e.getMessage());
+		}
+
+		return custHeadList;
+
+	}
 
 	@RequestMapping(value = { "/saveNewCustomerHeader" }, method = RequestMethod.POST)
 	public @ResponseBody CustomerHeaderMaster saveNewCustomerHeader(@RequestBody CustomerHeaderMaster custHeader) {

@@ -41,7 +41,7 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 
 	@Transactional
 	@Modifying
-	@Query(value = "UPDATE t_tasks SET t_tasks.is_active=1,,update_username=:userId,update_datetime=:curDateTime  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
+	@Query(value = "UPDATE t_tasks SET t_tasks.is_active=1,update_username=:userId,update_datetime=:curDateTime  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
 	int activateTask(@Param("taskId") int taskId,@Param("userId") int userId, @Param("curDateTime") String curDateTime);
 
 	@Query(value = "select * from t_tasks where serv_id=:servId  and task_status not in (0,8,9)", nativeQuery = true)

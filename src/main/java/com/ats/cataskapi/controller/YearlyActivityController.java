@@ -75,7 +75,7 @@ public class YearlyActivityController {
 					+ "        2,\n" + "        '0')) as actv_man_budg_hr,\n"
 					+ "        CONCAT(FLOOR( m_cust_acti_map.actv_emp_budg_hr/60),\n" + "        ':',\n"
 					+ "        LPAD(MOD( m_cust_acti_map.actv_emp_budg_hr,\n" + "        60),\n" + "        2,\n"
-					+ "        '0')) as actv_emp_budg_hr ,m_cust_header.cust_firm_name, m_activities.acti_name,dm_periodicity.periodicity_name, m_services.serv_name FROM m_cust_acti_map,m_cust_header,m_activities,dm_periodicity,m_services WHERE m_cust_acti_map.cust_id=m_cust_header.cust_id AND m_cust_acti_map.actv_id=m_activities.acti_id AND m_cust_acti_map.periodicity_id=dm_periodicity.periodicity_id AND m_activities.serv_id=m_services.serv_id and m_cust_acti_map.mapping_id!=0";
+					+ "        '0')) as actv_emp_budg_hr ,m_cust_header.cust_firm_name, m_activities.acti_name,dm_periodicity.periodicity_name, m_services.serv_name FROM m_cust_acti_map,m_cust_header,m_activities,dm_periodicity,m_services WHERE m_cust_acti_map.cust_id=m_cust_header.cust_id AND m_cust_acti_map.actv_id=m_activities.acti_id AND m_cust_acti_map.periodicity_id=dm_periodicity.periodicity_id AND m_activities.serv_id=m_services.serv_id and m_cust_acti_map.mapping_id!=0 and m_activities.del_status=1 and m_services.del_status=1  ORDER BY m_cust_header.cust_firm_name asc ";
 			;
 			list = jdbcTemp.query(query, new BeanPropertyRowMapper(MappingData.class));
 			System.err.println("End time  " + DateConvertor.getCurTime());
@@ -109,10 +109,12 @@ public class YearlyActivityController {
 			} catch (Exception e) {
 				taskId = 0;
 			}
+			System.err.println("Task Id  Received Max" +taskId);
+			strMappingList.remove("0");
 			List<CustmrActivityMap> mapList = camap.getMappingForyearlyTaskGen(strMappingList);
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-			String myString = "INSERT INTO t_tasks_temp (task_id, task_code, mapping_id, task_subline, task_fy_id, task_text, task_emp_ids, task_start_date, task_end_date, task_statutory_due_date, task_completion_date, billing_amt, task_status, mngr_bud_hr, emp_bud_hr, del_status, is_active, update_datetime, update_username, ex_int1, ex_int2, ex_var1, ex_var2, cust_id, periodicity_id, actv_id, serv_id) VALUES";
+			String myString = "INSERT INTO t_tasks_temp1 (task_id, task_code, mapping_id, task_subline, task_fy_id, task_text, task_emp_ids, task_start_date, task_end_date, task_statutory_due_date, task_completion_date, billing_amt, task_status, mngr_bud_hr, emp_bud_hr, del_status, is_active, update_datetime, update_username, ex_int1, ex_int2, ex_var1, ex_var2, cust_id, periodicity_id, actv_id, serv_id) VALUES";
 			querySb.append(myString);
 			int userId = 0;
 			FinancialYear fy = new FinancialYear();
@@ -214,6 +216,7 @@ public class YearlyActivityController {
 							break;
 						}
 					}
+					
 					querySb.append("('"+taskId+"','na','" + mapList.get(a).getMappingId() + "','na',    '"
 							+ fin.getFinYearId() + "', '" + String.valueOf(taskText) + "', '0', '" + startDate + "', '"
 							+ statDueDate + "', '" + statDueDate + "' , NULL, " + "'"
@@ -234,7 +237,7 @@ public class YearlyActivityController {
 			jdbcTemp.batchUpdate(finalInsertQuery);
 			System.err.println("end insert " + DateConvertor.getCurDateTimeYmD());
 			System.err.println("start insert2 " + DateConvertor.getCurDateTimeYmD());
-			jdbcTemp.batchUpdate("insert into t_tasks_temp1 select * from t_tasks_temp");
+			jdbcTemp.batchUpdate("insert into t_tasks_temp select * from t_tasks_temp1");
 			System.err.println("end insert2 " + DateConvertor.getCurDateTimeYmD());
 		} catch (Exception e) {
 			e.printStackTrace();
