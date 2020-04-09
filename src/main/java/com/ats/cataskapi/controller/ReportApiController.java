@@ -18,10 +18,12 @@ import com.ats.cataskapi.model.report.CompletedTaskReport;
 import com.ats.cataskapi.model.report.EmpAndMangPerfRepDetail;
 import com.ats.cataskapi.model.report.EmpAndMngPerformanceRep;
 import com.ats.cataskapi.model.report.InactiveTaskReport;
+import com.ats.cataskapi.model.report.TaskLogEmpInfo;
 import com.ats.cataskapi.report.repo.CompletedTaskReportRepo;
 import com.ats.cataskapi.report.repo.EmpAndMangPerfRepDetailRepo;
 import com.ats.cataskapi.report.repo.EmpAndMngPerformanceRepRepo;
 import com.ats.cataskapi.report.repo.InactiveTaskReportRepo;
+import com.ats.cataskapi.report.repo.TaskLogEmpInfoRepo;
 import com.ats.cataskapi.repositories.CapacityDetailByEmpRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 import com.ats.cataskapi.service.CommonFunctionService;
@@ -145,6 +147,24 @@ public class ReportApiController {
 		return logList;
 
 	}
+	
+	@RequestMapping(value = { "/getEmpAndMngPerformanceReportDetailSingleEmp" }, method = RequestMethod.POST)
+	public @ResponseBody List<EmpAndMangPerfRepDetail> getEmpAndMngPerformanceReportDetailSingleEmp(
+			@RequestParam String fromDate, @RequestParam String toDate, @RequestParam int status,
+			@RequestParam int empId) {
+		List<EmpAndMangPerfRepDetail> logList = new ArrayList<EmpAndMangPerfRepDetail>();
+
+		try {
+
+			logList = empAndMangPerfRepDetailRepo.getAllTaskDetailSingleEmp(fromDate, toDate, status, empId);
+			/// System.err.println("dates"+logList.toString());
+
+		} catch (Exception e) {
+			System.out.println("Excep in getEmpAndMngPerformanceReport : " + e.getMessage());
+		}
+		return logList;
+
+	}
 
 	@Autowired
 	EmployeeMasterRepo empRepo;
@@ -168,5 +188,24 @@ public class ReportApiController {
 		return empList;
 
 	}
+	
+	//Sachin 06-04-2020
+	
+	@Autowired	TaskLogEmpInfoRepo taskLogEmpInfoRepo;
 
+	@RequestMapping(value = { "/getTaskLogEmpInfoListByTaskId" }, method = RequestMethod.POST)
+	public @ResponseBody List<TaskLogEmpInfo> getTaskLogEmpInfoListByTaskId(@RequestParam int taskId) {
+
+		List<TaskLogEmpInfo> taskLogList = new ArrayList<TaskLogEmpInfo>();
+
+		try {
+			taskLogList = taskLogEmpInfoRepo.getTaskLogEmpInfoListByTaskId(taskId);		
+					} catch (Exception e) {
+			System.err.println("Exce in getTaskLogEmpInfoListByTaskId  " + e.getMessage());
+		}
+
+		return taskLogList;
+
+	}
+	
 }

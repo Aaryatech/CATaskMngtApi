@@ -31,5 +31,10 @@ public interface ServiceMasterRepo extends JpaRepository<ServiceMaster, Integer>
 	int updateIsActiveStatus(@Param("servId") int servId,@Param("isActiveStatus") int isActiveStatus);
 	
 	//UPDATE m_services SET del_status=0 WHERE serv_id IN (:servIdList) 
+	//Sachin 31-03-2020
+	@Query(value="	SELECT * from m_services WHERE m_services.serv_id IN (SELECT m_activities.serv_id FROM m_activities WHERE m_activities.periodicity_id=:periodcityId) and m_services.del_status=1 and m_services.ex_int1=1 " + 
+			"",nativeQuery=true)
+	List<ServiceMaster> getServListByPeriodId(@Param("periodcityId") int periodcityId);
+	
 
 }

@@ -89,6 +89,26 @@ public interface CustomerDetailsRepo extends JpaRepository<CustomerDetails, Inte
 	List<CustomerDetails> getAllCustomerDetailsActiveInactive();
 	
 	
+	@Query(value="SELECT 0 as cust_group_name,   \n" + 
+			"			   		 m_cust_header.cust_firm_name,   \n" + 
+			"			          m_cust_header.cust_id,   \n" + 
+			"			          m_cust_header.cust_assessee_name,   \n" + 
+			"			          m_cust_header.cust_pan_no,   \n" + 
+			"			          m_cust_header.cust_email_id,   \n" + 
+			"			          m_cust_header.cust_phone_no,   \n" + 
+			"			          m_cust_header.is_active,   \n" + 
+			"			          m_emp.emp_name   \n" + 
+			"			      FROM   \n" + 
+			"			          m_cust_header,   \n" + 
+			"			          m_emp   \n" + 
+			"			      WHERE   \n" + 
+			"			          m_cust_header.del_status=1 and m_cust_header.is_active=1     \n" + 
+			"			          AND    m_cust_header.owner_emp_id=m_emp.emp_id   and m_cust_header.cust_id in (SELECT  distinct m_cust_acti_map.cust_id from m_cust_acti_map WHERE m_cust_acti_map.periodicity_id=:periodId )	\n" + 
+			"			      ORDER BY   \n" + 
+			"			          m_cust_header.cust_firm_name asc",nativeQuery=true)
+	List<CustomerDetails> getCustByPeriodIdInMappingTbl(@Param("periodId") int periodId );
+	
+	
 	/*SELECT 0 as cust_group_name,\n" + 
 	" CASE WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name \n" + 
 	"	 \n" + 

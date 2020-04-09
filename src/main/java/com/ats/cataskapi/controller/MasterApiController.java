@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ats.cataskapi.custdetailrepo.CustomerDetailsRepo;
 import com.ats.cataskapi.model.ActivityMaster;
 import com.ats.cataskapi.model.ActivityPeriodDetails;
+import com.ats.cataskapi.model.AssesseeTypeMaster;
 import com.ats.cataskapi.model.CustmrActivityMap;
 import com.ats.cataskapi.model.CustomerDetailMaster;
 import com.ats.cataskapi.model.CustomerDetails;
@@ -34,6 +35,7 @@ import com.ats.cataskapi.model.TaskPeriodicityMaster;
 import com.ats.cataskapi.model.TotalWorkHrs;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.ActivityPeriodDetailsRepo;
+import com.ats.cataskapi.repositories.AssesseeTypeMasterRepo;
 import com.ats.cataskapi.repositories.CustmrActivityMapRepo;
 import com.ats.cataskapi.repositories.CustomerDetailMasterRepo;
 import com.ats.cataskapi.repositories.CustomerGroupMasterRepo;
@@ -78,6 +80,21 @@ public class MasterApiController {
 		List<ServiceMaster> servicsList = new ArrayList<ServiceMaster>();
 		try {
 			servicsList = srvMstrRepo.findByDelStatusOrderByServIdDesc(1);
+		} catch (Exception e) {
+			System.err.println("Exce in getAllServices " + e.getMessage());
+		}
+		return servicsList;
+	}
+	//Sachin 31-03-2020 
+	@RequestMapping(value = { "/getServicesByPeriodId" }, method = RequestMethod.POST)
+	public @ResponseBody List<ServiceMaster> getServicesByPeriodId(@RequestParam int periodcityId ) {
+		List<ServiceMaster> servicsList = new ArrayList<ServiceMaster>();
+		try {
+			if(periodcityId!=0) {
+			servicsList = srvMstrRepo.getServListByPeriodId(periodcityId);
+			}else {
+				servicsList = srvMstrRepo.findByDelStatusAndExInt1OrderByServIdDesc(1, 1);
+			}
 		} catch (Exception e) {
 			System.err.println("Exce in getAllServices " + e.getMessage());
 		}
@@ -730,7 +747,24 @@ public class MasterApiController {
 		return custHeadList;
 
 	}
+//Sachin 1-04-2020 for getting cust in Assign task page by using periodicity id
+	@RequestMapping(value = { "/getCustByPeriodcityId" }, method = RequestMethod.POST)
+	public @ResponseBody List<CustomerDetails> getCustByPeriodcityId(@RequestParam int periodId) {
 
+		List<CustomerDetails> custHeadList = new ArrayList<CustomerDetails>();
+		try {
+			if(periodId!=0) {
+			custHeadList = custDetlRepo.getCustByPeriodIdInMappingTbl(periodId);
+			}else {
+				custHeadList = custDetlRepo.getAllCustomerDetails();
+			}
+		} catch (Exception e) {
+			System.err.println("Exce in getCustByPeriodcityId  " + e.getMessage());
+		}
+
+		return custHeadList;
+	}
+	
 	@RequestMapping(value = { "/getAllCustomerInfoActiveInactive" }, method = RequestMethod.GET)
 	public @ResponseBody List<CustomerDetails> getAllCustomerInfoActiveInactive() {
 
@@ -1054,7 +1088,18 @@ public class MasterApiController {
 		StatusMaster stat = null;
 
 		try {
-			stat = statusMstrRepo.saveAndFlush(status);
+			if(status.getStatusMstId()<1) {
+				int recCount=statusMstrRepo.getStatusForDuplicate(status.getStatusText().trim());
+				if(recCount<1) {
+					stat = statusMstrRepo.saveAndFlush(status);
+				}
+			}else {
+				int recCount=statusMstrRepo.getStatusForDuplicateForEdit(status.getStatusText().trim(),status.getStatusMstId());
+				if(recCount<1) {
+					stat = statusMstrRepo.saveAndFlush(status);
+				}
+			}
+			//stat = statusMstrRepo.saveAndFlush(status);
 
 		} catch (Exception e) {
 			System.err.println("Exce in saving saveStatus " + e.getMessage());
@@ -1300,5 +1345,23 @@ public class MasterApiController {
 			info.setMsg("excep");
 		}
 		return info;
+	}
+	
+	//Sachin 2-04-2020 to show DB Assessee Type in customer master page
+	@Autowired AssesseeTypeMasterRepo asseTypeRepo;
+	
+	@RequestMapping(value = { "/getAssesseeTypeList" }, method = RequestMethod.GET)
+	public @ResponseBody List<AssesseeTypeMaster> getAssesseeTypeList() {
+		List<AssesseeTypeMaster> assesseeList = new ArrayList<AssesseeTypeMaster>();
+		try {
+			
+			assesseeList = asseTypeRepo.findByDelStatus(1);
+			
+		} catch (Exception e) {
+			
+			System.err.println("Exce in getAssesseeTypeList " + e.getMessage());
+		}
+		
+		return assesseeList;
 	}
 }

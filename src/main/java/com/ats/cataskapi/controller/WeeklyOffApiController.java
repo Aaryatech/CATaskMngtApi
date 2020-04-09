@@ -1416,8 +1416,11 @@ public class WeeklyOffApiController {
 		try {
 
 			List<Integer> clntIds = new ArrayList<>();
-
-			if (clientId == 0) {
+			if (groupId == 0 && clientId == 0) {
+//All group option Sachin 8-04-2020 get cust id of all cust who belongs to group 
+				clntIds = bugetedAmtAndRevenueRepo.getclientForAllGroup();
+				
+			} else if (clientId == 0) {
 				clntIds = bugetedAmtAndRevenueRepo.getclientByGroupId(groupId);
 			} else {
 				clntIds.add(clientId);
@@ -1430,7 +1433,6 @@ public class WeeklyOffApiController {
 
 			List<BugetedAmtAndRevenue> bugetedAmtAndRevenueList = bugetedAmtAndRevenueRepo
 					.calculateBugetedAmtAndBugetedRevenueSumofRev(empIds, fromDate, toDate, clntIds);
- 
 
 			for (int a = 0; a < empIds.size(); a++) {
 
@@ -1601,12 +1603,9 @@ public class WeeklyOffApiController {
 						.setActualHrs(bugetedAmtAndRevenue1.getActualHrs() + bugetedAmtAndRevenue.getActualHrs());
 				bugetedAmtAndRevenue1
 						.setBugetedHrs(bugetedAmtAndRevenue1.getBugetedHrs() + bugetedAmtAndRevenue.getBugetedHrs());
- 
+
 			}
 
-			
-			
-			
 		} catch (Exception e) {
 
 			e.printStackTrace();

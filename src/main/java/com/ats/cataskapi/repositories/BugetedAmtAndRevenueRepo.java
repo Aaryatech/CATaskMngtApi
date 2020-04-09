@@ -220,6 +220,10 @@ public interface BugetedAmtAndRevenueRepo extends JpaRepository<BugetedAmtAndRev
 	@Query(value="select cust_id as id  from m_cust_header where del_status=1 and is_active=1 and cust_group_id =:groupId",nativeQuery=true)
 	List<Integer> getclientByGroupId(@Param("groupId") int groupId);
 
+	//Sachin 8-04-2020
+	@Query(value="select cust_id as id  from m_cust_header where del_status=1 and is_active=1 and cust_group_id!=0 and cust_type=1",nativeQuery=true)
+	List<Integer> getclientForAllGroup();
+
 	
 	@Query(value="select\n" + 
 			"        e.emp_id, case                           \n" + 

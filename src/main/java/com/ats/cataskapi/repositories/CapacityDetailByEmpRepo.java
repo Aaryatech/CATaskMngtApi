@@ -57,9 +57,9 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 			"        m_emp e      \n" + 
 			"    where\n" + 
 			"        e.del_status=1          \n" + 
-			"        and e.emp_id in (:empId)", nativeQuery = true)
+			"        and e.emp_id in (:empId) and e.emp_type!=2", nativeQuery = true)
 	List<CapacityDetailByEmp> getEmployeeCapacityDetail(@Param("fromDate") String fromDate,
-			@Param("toDate") String toDate, @Param("empId") ArrayList<String> empId);
+			@Param("toDate") String toDate, @Param("empId") ArrayList<String> empId); //added on 03-04-2020 and e.emp_type!=2
 
 	@Query(value = "select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and FIND_IN_SET(:userId,task_emp_ids) and is_active=1", nativeQuery = true)
 	String getEmployeeListByManagerIdAndUserId(@Param("empId")int empId, @Param("userId") int userId);

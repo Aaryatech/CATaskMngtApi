@@ -37,6 +37,12 @@ public interface StatusMasterRepo extends JpaRepository<StatusMaster, Integer> {
 	@Query(value="SELECT MAX(status_value) FROM dm_status_mst",nativeQuery=true) 
 	public int getMaxStateValue();
 	 
+	@Query(value="SELECT count(status_text) FROM dm_status_mst where status_text=:statusText and del_status=1 ",nativeQuery=true) 
+	public int getStatusForDuplicate(@Param("statusText") String statusText);
+	 
+	@Query(value="SELECT count(status_text) FROM dm_status_mst where status_text=:statusText and status_mst_id!=:statusMstId and del_status=1",nativeQuery=true) 
+	public int getStatusForDuplicateForEdit(@Param("statusText") String statusText,@Param("statusMstId") int statusMstId);
+	 
 	 
 	
 	/*SELECT	m_status.status_id,

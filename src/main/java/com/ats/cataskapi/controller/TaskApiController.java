@@ -540,19 +540,24 @@ public class TaskApiController {
 			@RequestParam int custId, @RequestParam int periodicityId) {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
 
-		System.out.println("prm are" + servId + custId);
+		System.out.println("prm are" + servId  + custId +"periodicityId " +periodicityId);
 		try {
 
 			if (servId != 0 && custId != 0) {
+				System.err.println("A");
 				servicsList = getTaskListRepo.getAllTaskListSpec(stat, servId, custId, periodicityId);
 			} else if (servId != 0 && custId == 0) {
+				System.err.println("B");
 				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat, servId, periodicityId);
 			} else if (servId == 0 && custId != 0) {
+				System.err.println("C");
 				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat, custId, periodicityId);
-			} else if ((servId == -1 && custId == -1)) {
-				servicsList = getTaskListRepo.getAllTaskListAll(stat);
+			} else if ((servId == 0 && custId == 0) && periodicityId!=0) {
+				System.err.println("D");
+				servicsList = getTaskListRepo.getAllTaskListAll(stat,periodicityId);
 			} else {
-				servicsList = getTaskListRepo.getAllTaskListAll(stat);
+				System.err.println("E");
+				servicsList = getTaskListRepo.getAllTaskListAll1(stat);
 			}
 
 		} catch (Exception e) {
@@ -766,9 +771,11 @@ public class TaskApiController {
 
 			String endDate = null;
 			int res = 0;
-			System.err.println("in if**" + workDate);
+			//System.err.println("in if**" + workDate);
 
-			System.err.println("in if length**" + workDate.length());
+			//System.err.println("in if length**" + workDate.length());
+			System.err.println("empIdList " +empIdList);
+			
 			try {
 				try {
 					if (workDate.equals("") || workDate == null || workDate.length() == 0) {
@@ -878,7 +885,7 @@ public class TaskApiController {
 				info.setMsg("success");
 
 				Communication comcat = new Communication();
-				comcat.setCommunText("Task Updated");
+				comcat.setCommunText("Task Edited");
 				comcat.setDelStatus(1);
 				comcat.setEmpId(updateUserName);
 				comcat.setExInt1(1);

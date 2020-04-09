@@ -188,9 +188,15 @@ public class DashboardRestController {
 		List<ClientGroupList> list = new ArrayList<>();
 
 		try {
-
+if(groupId!=0) {
 			 
 			list = clientGroupRepo.getClinetListByGroupId(groupId);
+}else {
+	//Its all group call from mcust header where cust_type=1 and cust_group_id!=0;
+	//Sachin 08-04-2020
+	list = clientGroupRepo.getClinetListAllGroup();
+
+}
 
 		} catch (Exception e) {
 

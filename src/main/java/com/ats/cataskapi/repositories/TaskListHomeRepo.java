@@ -32,7 +32,8 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"    m_services.serv_name,\n" + 
 			"    m_activities.acti_name,\n" + 
 			"    dm_periodicity.periodicity_name,\n" + 
-			"    m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+			//"    m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+			" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
 			"dm_fin_year.fin_year_name,\n" + 
 			"(\n" + 
 			"    SELECT\n" + 
@@ -73,7 +74,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"  dm_fin_year.fin_year_id = t_tasks.task_fy_id AND "+
 			"  dm_status_mst.status_value = t_tasks.task_status AND "+
 			"  t_tasks.task_status NOT IN(:statusIds)"+
-			"  ORDER BY t_tasks.task_end_date DESC", nativeQuery=true)
+			"  ORDER BY t_tasks.task_end_date ", nativeQuery=true)
 	List<TaskListHome> getTaskList(@Param("empId") int empId,@Param("statusIds") List<String> statusIds);
 	
 
@@ -140,7 +141,9 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_group.cust_group_name,\n" + 
+			//"        m_cust_group.cust_group_name,\n" + 
+			" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"         (SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name) \n" + 
@@ -173,7 +176,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        t_tasks.cust_id=m_cust_header.cust_id AND\n" + 
 			"        m_cust_header.cust_group_id=m_cust_group.cust_group_id AND\n" + 
 			"        dm_status_mst.status_value = t_tasks.task_status AND\n"+
-			"        dm_fin_year.fin_year_id=t_tasks.task_fy_id AND t_tasks.task_status NOT IN(:statusIds) ORDER BY t_tasks.task_end_date DESC", nativeQuery=true)
+			"        dm_fin_year.fin_year_id=t_tasks.task_fy_id AND t_tasks.task_status NOT IN(:statusIds) ORDER BY t_tasks.task_end_date", nativeQuery=true)
 
 	List<TaskListHome> getTaskList3(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate, 
 			@Param("service") int service, @Param("activity") int activity, @Param("statusIds") List<String> statusIds);
@@ -200,7 +203,9 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+		//	"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+		" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)                     \n" + 
@@ -237,7 +242,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        AND      t_tasks.task_status=dm_status_mst.status_value                  \n" + 
 			"        AND         t_tasks.cust_id=m_cust_header.cust_id                                      \n" + 
 			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id              \n" + 
-			"        AND    t_tasks.task_status NOT IN(:statusIds) ORDER BY t_tasks.task_end_date DESC", nativeQuery=true)
+			"        AND    t_tasks.task_status NOT IN(:statusIds) ORDER BY t_tasks.task_end_date ", nativeQuery=true)
 	List<TaskListHome> getTaskList1(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
 			@Param("service") int service, @Param("activity") int activity, @Param("custId") int custId, @Param("statusIds") List<String> statusIds,
 			@Param("stats") int stats);
@@ -261,17 +266,19 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        CASE              \n" + 
-			"            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name                      \n" + 
-			"            ELSE COALESCE(( SELECT\n" + 
-			"                m_cust_group.cust_group_name                                            \n" + 
-			"            FROM\n" + 
-			"                m_cust_group                                           \n" + 
-			"            WHERE\n" + 
-			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id                             \n" + 
-			"                AND m_cust_group.del_status=1 ),\n" + 
-			"            0)          \n" + 
-			"        END AS cust_group_name,\n" + 
+			/*
+			 * "        CASE              \n" +
+			 * "            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name                      \n"
+			 * + "            ELSE COALESCE(( SELECT\n" +
+			 * "                m_cust_group.cust_group_name                                            \n"
+			 * + "            FROM\n" +
+			 * "                m_cust_group                                           \n" +
+			 * "            WHERE\n" +
+			 * "                m_cust_group.cust_group_id=m_cust_header.cust_group_id                             \n"
+			 * + "                AND m_cust_group.del_status=1 ),\n" +
+			 * "            0)          \n" + "        END AS cust_group_name,\n" +
+			 */
+				" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
 			"        dm_fin_year.fin_year_name, '' as employees   ,COALESCE(\n" + 
 			"    (\n" + 
 			"    SELECT\n" + 
@@ -304,7 +311,7 @@ public interface TaskListHomeRepo extends JpaRepository<TaskListHome, Integer> {
 			"        AND         m_activities.periodicity_id=dm_periodicity.periodicity_id                        \n" + 
 			"        AND         t_tasks.cust_id=m_cust_header.cust_id                        \n" + 
 			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id         \n" + 
-			"        AND  	 	 dm_status_mst.status_value=t_tasks.task_status ORDER BY t_tasks.task_end_date DESC",nativeQuery=true)
+			"        AND  	 	 dm_status_mst.status_value=t_tasks.task_status ORDER BY t_tasks.task_end_date ",nativeQuery=true)
 TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int taskId);
 
 	
@@ -329,17 +336,20 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        CASE              \n" + 
-			"            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name                      \n" + 
-			"            ELSE COALESCE(( SELECT\n" + 
-			"                m_cust_group.cust_group_name                                            \n" + 
-			"            FROM\n" + 
-			"                m_cust_group                                           \n" + 
-			"            WHERE\n" + 
-			"                m_cust_group.cust_group_id=m_cust_header.cust_group_id                             \n" + 
-			"                AND m_cust_group.del_status=1 ),\n" + 
-			"            0)          \n" + 
-			"        END AS cust_group_name,\n" + 
+			/*
+			 * "        CASE              \n" +
+			 * "            WHEN m_cust_header.cust_group_id=0 THEN m_cust_header.cust_firm_name                      \n"
+			 * + "            ELSE COALESCE(( SELECT\n" +
+			 * "                m_cust_group.cust_group_name                                            \n"
+			 * + "            FROM\n" +
+			 * "                m_cust_group                                           \n" +
+			 * "            WHERE\n" +
+			 * "                m_cust_group.cust_group_id=m_cust_header.cust_group_id                             \n"
+			 * + "                AND m_cust_group.del_status=1 ),\n" +
+			 * "            0)          \n" + "        END AS cust_group_name,\n" +
+			 */
+				" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)            \n" + 
@@ -373,7 +383,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND   		 dm_status_mst.status_value=t_tasks.task_status      \n" + 
 			"        AND   		 t_tasks.task_status=0\n" + 
 			"        AND 		 DATEDIFF(curdate(), t_tasks.task_statutory_due_date)>30 \n" + 
-			"        AND 		 curdate()>=t_tasks.task_statutory_due_date",nativeQuery=true)
+			"        AND 		 curdate()>=t_tasks.task_statutory_due_date ORDER BY t_tasks.task_end_date ",nativeQuery=true)
 	List<TaskListHome> getUnallotedFilterdTaskList(@Param("service") int service, @Param("activity") int activity, @Param("custId") int custId);
 
 	@Query(value="SELECT\n" + 
@@ -397,7 +407,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+			//"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+			" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)            \n" + 
@@ -428,7 +440,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND   		dm_status_mst.status_value=t_tasks.task_status      \n" + 
 			"        AND   		t_tasks.task_status=0\n" + 
 			"        AND 		DATEDIFF(curdate(), t_tasks.task_statutory_due_date)>30 \n" + 
-			"        AND 		curdate()>=t_tasks.task_statutory_due_date",nativeQuery=true)
+			"        AND 		curdate()>=t_tasks.task_statutory_due_date ORDER BY t_tasks.task_end_date ",nativeQuery=true)
 	List<TaskListHome> getAllotedTaskList();
 
 	@Query(value="SELECT\n" + 
@@ -451,7 +463,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+		//	"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+		" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)                     \n" + 
@@ -481,7 +495,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND     dm_status_mst.status_value=t_tasks.task_status               \n" + 
 			"        AND     dm_status_mst.status_value=0        \n" + 
 			"        AND   DATEDIFF(curdate(), t_tasks.task_statutory_due_date)<5         \n" + 
-			"        AND   curdate()>=t_tasks.task_statutory_due_date",nativeQuery=true)
+			"        AND   curdate()>=t_tasks.task_statutory_due_date ORDER BY t_tasks.task_end_date ",nativeQuery=true)
 	List<TaskListHome> getCriticalTaskTaskList();
 
 	@Query(value="SELECT\n" + 
@@ -504,7 +518,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+		//	"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+		" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)                     \n" + 
@@ -537,7 +553,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND    	 	dm_status_mst.status_value=t_tasks.task_status               \n" + 
 			"        AND     	dm_status_mst.status_value=0         \n" + 
 			"        AND   		DATEDIFF(curdate(), t_tasks.task_statutory_due_date)<5         \n" + 
-			"        AND   		curdate()>=t_tasks.task_statutory_due_date", nativeQuery=true)
+			"        AND   		curdate()>=t_tasks.task_statutory_due_date ORDER BY t_tasks.task_end_date", nativeQuery=true)
 	List<TaskListHome> getCriticalFilterdTaskList(@Param("service") int service, @Param("activity") int activity, @Param("custId") int custId);
 
 	@Query(value="SELECT\n" + 
@@ -560,7 +576,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+		//	"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+		" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)                     \n" + 
@@ -589,7 +607,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id                  \n" + 
 			"        AND    	 	dm_status_mst.status_value=t_tasks.task_status               \n" + 
 			"        AND     	dm_status_mst.status_value=0             \n" + 
-			"        AND   		curdate()<t_tasks.task_statutory_due_date",nativeQuery=true)
+			"        AND   		curdate()<t_tasks.task_statutory_due_date ORDER BY t_tasks.task_end_date",nativeQuery=true)
 	List<TaskListHome> getOverdueTaskTaskList();
 	
 	@Query(value="SELECT\n" + 
@@ -612,7 +630,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+		//	"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+		" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)                     \n" + 
@@ -644,7 +664,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id                  \n" + 
 			"        AND    	 	dm_status_mst.status_value=t_tasks.task_status               \n" + 
 			"        AND     	dm_status_mst.status_value=0             \n" + 
-			"        AND   		curdate()<t_tasks.task_statutory_due_date",nativeQuery=true)
+			"        AND   		curdate()<t_tasks.task_statutory_due_date ORDER BY t_tasks.task_end_date ",nativeQuery=true)
 	List<TaskListHome> getFiltredOverdueTaskTaskList(@Param("service") int service, @Param("activity") int activity, @Param("custId") int custId);
 
 
@@ -669,7 +689,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+			//"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+			" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"         (SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)            \n" + 
@@ -705,7 +727,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND   	 	t_tasks.task_status=dm_status_mst.status_value         \n" + 
 			"        AND         t_tasks.cust_id=m_cust_header.cust_id                             \n" + 
 			"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id     \n" + 
-			"        AND  		t_tasks.task_status=:stat AND t_tasks.map_id=:mapId  ", nativeQuery=true)
+			"        AND  		t_tasks.task_status=:stat AND t_tasks.map_id=:mapId ORDER BY t_tasks.task_end_date ", nativeQuery=true)
 	List<TaskListHome> getManualTaskList(@Param("stat") int stat,@Param("empId") int empId,@Param("mapId") int mapId);
 
 //*********************************Dash Board Count Task***************************************************
@@ -731,7 +753,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+			//"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+			" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (     SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
@@ -767,7 +791,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND t_tasks.cust_id = m_cust_header.cust_id \n" + 
 			"        AND dm_fin_year.fin_year_id = t_tasks.task_fy_id \n" + 
 			"        AND dm_status_mst.status_value = t_tasks.task_status \n" + 
-			"        AND t_tasks.task_status =:stat AND  task_end_date < :endDate ", nativeQuery=true)
+			"        AND t_tasks.task_status =:stat AND  task_end_date < :endDate ORDER BY t_tasks.task_end_date ", nativeQuery=true)
 	
 	List<TaskListHome> getManualTaskListDashOverDue(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate,@Param("userId") int userId);
 	
@@ -793,7 +817,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+			//"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+			" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (     SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
@@ -829,7 +855,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND t_tasks.cust_id = m_cust_header.cust_id \n" + 
 			"        AND dm_fin_year.fin_year_id = t_tasks.task_fy_id \n" + 
 			"        AND dm_status_mst.status_value = t_tasks.task_status \n" + 
-			"        AND t_tasks.task_status =:stat AND  t_tasks.task_end_date=:endDate ", nativeQuery=true)
+			"        AND t_tasks.task_status =:stat AND  t_tasks.task_end_date=:endDate ORDER BY t_tasks.task_end_date ", nativeQuery=true)
 	
 	List<TaskListHome> getManualTaskListDashDueToday(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate,@Param("userId") int userId);
 
@@ -855,7 +881,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+			//"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+			" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (     SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
@@ -892,7 +920,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND dm_fin_year.fin_year_id = t_tasks.task_fy_id \n" + 
 			"        AND dm_status_mst.status_value = t_tasks.task_status \n" + 
 			"        AND t_tasks.task_status =:stat AND   WEEKOFYEAR(t_tasks.task_end_date)=WEEKOFYEAR(:endDate)  \n" + 
-			"            and YEAR(:endDate) = YEAR(t_tasks.task_end_date)", nativeQuery=true)
+			"            and YEAR(:endDate) = YEAR(t_tasks.task_end_date) ORDER BY t_tasks.task_end_date ", nativeQuery=true)
 	
 	List<TaskListHome> getManualTaskListDashDueWeek(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate,@Param("userId") int userId);
 
@@ -919,7 +947,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        m_services.serv_name,\n" + 
 			"        m_activities.acti_name,\n" + 
 			"        dm_periodicity.periodicity_name,\n" + 
-			"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+			//"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+			" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 			"        dm_fin_year.fin_year_name,\n" + 
 			"        (     SELECT\n" + 
 			"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
@@ -956,7 +986,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 			"        AND dm_fin_year.fin_year_id = t_tasks.task_fy_id \n" + 
 			"        AND dm_status_mst.status_value = t_tasks.task_status \n" + 
 			"        AND t_tasks.task_status =:stat AND  MONTH(t_tasks.task_end_date)=MONTH(:endDate)\n" + 
-			"            and YEAR(:endDate) = YEAR(t_tasks.task_end_date)", nativeQuery=true)
+			"            and YEAR(:endDate) = YEAR(t_tasks.task_end_date)  ORDER BY t_tasks.task_end_date ", nativeQuery=true)
 	
 	List<TaskListHome> getManualTaskListDashDueMonth(@Param("stat") int stat,@Param("empId") int empId,@Param("endDate") String  endDate,@Param("userId") int userId);
 
@@ -983,7 +1013,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 		"        m_services.serv_name,\n" + 
 		"        m_activities.acti_name,\n" + 
 		"        dm_periodicity.periodicity_name,\n" + 
-		"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+		//"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+		" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 		"        dm_fin_year.fin_year_name,\n" + 
 		"        (SELECT\n" + 
 		"            GROUP_CONCAT(DISTINCT c.emp_name)                     \n" + 
@@ -1019,7 +1051,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 		"        AND      t_tasks.task_status=dm_status_mst.status_value                  \n" + 
 		"        AND         t_tasks.cust_id=m_cust_header.cust_id                                      \n" + 
 		"        AND         dm_fin_year.fin_year_id=t_tasks.task_fy_id              \n" + 
-		"        AND    t_tasks.task_status NOT IN(:statusIds) ORDER BY t_tasks.task_end_date DESC",nativeQuery=true)
+		"        AND    t_tasks.task_status NOT IN(:statusIds) ORDER BY t_tasks.task_end_date ",nativeQuery=true)
 	List<TaskListHome> getTaskList2(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
 			@Param("service") int service, @Param("activity") int activity, @Param("custId") int custId, @Param("statusIds") List<String> statusIds);
 
@@ -1043,7 +1075,9 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 		"        m_services.serv_name,\n" + 
 		"        m_activities.acti_name,\n" + 
 		"        dm_periodicity.periodicity_name,\n" + 
-		"        m_cust_header.cust_firm_name AS cust_group_name,\n" + 
+		//"        m_cust_header.cust_firm_name AS cust_group_name,\n" +
+		" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 		"        dm_fin_year.fin_year_name,\n" + 
 		"        (     SELECT\n" + 
 		"            GROUP_CONCAT(DISTINCT c.emp_name)     \n" + 
@@ -1084,7 +1118,7 @@ TaskListHome getTaskById(@Param("empType") int empType, @Param("taskId") int tas
 		"        AND dm_fin_year.fin_year_id = t_tasks.task_fy_id \n" + 
 		"        AND dm_status_mst.status_value = t_tasks.task_status \n" + 
 		"        AND t_tasks.task_status =:stats\n" + 
-		"        AND t_tasks.task_status NOT IN(:statusIds) ORDER BY t_tasks.task_end_date DESC",nativeQuery=true)
+		"        AND t_tasks.task_status NOT IN(:statusIds) ORDER BY t_tasks.task_end_date ",nativeQuery=true)
 List<TaskListHome> getTaskListByStatus4(@Param("empId") int empId, @Param("fromDate") String fromDate, @Param("toDate") String toDate,
 		@Param("stats") int stats,@Param("statusIds") List<String> statusIds);
 
@@ -1108,7 +1142,9 @@ List<TaskListHome> getTaskListByStatus4(@Param("empId") int empId, @Param("fromD
 		"                m_services.serv_name,   \n" + 
 		"                m_activities.acti_name,   \n" + 
 		"                dm_periodicity.periodicity_name,   \n" + 
-		"                m_cust_header.cust_firm_name AS cust_group_name,   \n" + 
+		//"                m_cust_header.cust_firm_name AS cust_group_name,   \n" +
+		" CONCAT(m_cust_header.cust_firm_name,'-', COALESCE ( (SELECT  m_cust_group.cust_group_name FROM m_cust_group WHERE m_cust_group.cust_group_id=m_cust_header.cust_group_id ),'NA')) AS cust_group_name, "+
+
 		"                dm_fin_year.fin_year_name,   \n" + 
 		"                (     SELECT   \n" + 
 		"                    GROUP_CONCAT(DISTINCT c.emp_name)        \n" + 
@@ -1148,7 +1184,7 @@ List<TaskListHome> getTaskListByStatus4(@Param("empId") int empId, @Param("fromD
 		"                AND t_tasks.cust_id = m_cust_header.cust_id    \n" + 
 		"                AND dm_fin_year.fin_year_id = t_tasks.task_fy_id    \n" + 
 		"                AND dm_status_mst.status_value = t_tasks.task_status    \n" + 
-		"                AND t_tasks.task_status NOT IN(:statusIds) ORDER BY t_tasks.task_end_date DESC",nativeQuery=true)
+		"                AND t_tasks.task_status NOT IN(:statusIds) ORDER BY t_tasks.task_end_date",nativeQuery=true)
 List<TaskListHome> getTaskListByStatus6(@Param("empId") int empId,@Param("fromDate") String fromDate,@Param("toDate") String toDate, @Param("statusIds") List<String> statusIds);
 
 

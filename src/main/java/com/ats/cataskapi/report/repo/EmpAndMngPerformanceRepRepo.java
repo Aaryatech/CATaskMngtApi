@@ -182,7 +182,101 @@ public interface EmpAndMngPerformanceRepRepo extends JpaRepository<EmpAndMngPerf
 			"        and e.emp_id in ( " + 
 			"          :empIdList " + 
 			"        )",nativeQuery=true)
+		List<EmpAndMngPerformanceRep> getAllTask1(@Param("fromDate") String fromDate, @Param("toDate") String toDate,@Param("empIdList") List<String> empIdList);
+	
+	//today 06-04-2020
+@Query(value="select\n" + 
+			"        e.emp_id,\n" + 
+			"        e.emp_name,\n" + 
+			"        e.emp_type,\n" + 
+			"        0 as bugeted_cap,\n" + 
+			"        0 as budgeted_cap,\n" + 
+			"      coalesce((select\n" + 
+			"            CONCAT(FLOOR(sum(wl.work_hours)/60),\n" + 
+			"            '.',\n" + 
+			"            LPAD( MOD( sum(wl.work_hours),\n" + 
+			"            60),\n" + 
+			"            2,\n" + 
+			"            '0'))                   \n" + 
+			"        from\n" + 
+			"            t_daily_work_log wl                   \n" + 
+			"        where\n" + 
+			"           wl.emp_id=e.emp_id and wl.task_id IN (select\n" + 
+			"           task_id                \n" + 
+			"        from\n" + 
+			"            t_tasks                       \n" + 
+			"        where\n" + 
+			"            FIND_IN_SET(e.emp_id,task_emp_ids)                 \n" + 
+			"            and del_status=1 \n" + 
+			"            and task_completion_date between :fromDate and :toDate  )),\n" + 
+			"        0) as  ex_var1,\n" + 
+			"        '2019-09-09' as till_date ,\n" + 
+			"        case             \n" + 
+			"            when e.emp_type=3             then             coalesce((select\n" + 
+			"                CONCAT(FLOOR(sum(mngr_bud_hr)/60),\n" + 
+			"                '.',\n" + 
+			"                LPAD(MOD( sum(mngr_bud_hr),\n" + 
+			"                60),\n" + 
+			"                2,\n" + 
+			"                '0'))                       \n" + 
+			"            from\n" + 
+			"                t_tasks                       \n" + 
+			"            where\n" + 
+			"                FIND_IN_SET(e.emp_id,task_emp_ids)                   \n" + 
+			"                and del_status=1 \n" + 
+			"                and task_completion_date between :fromDate and :toDate AND t_tasks.task_status=9),             0)                         \n" + 
+			"            when e.emp_type=5 then  coalesce((select\n" + 
+			"                CONCAT(FLOOR(sum(emp_bud_hr)/60),\n" + 
+			"                '.',\n" + 
+			"                LPAD(MOD( sum(emp_bud_hr),\n" + 
+			"                60),\n" + 
+			"                2,\n" + 
+			"                '0'))                       \n" + 
+			"            from\n" + 
+			"                t_tasks                       \n" + 
+			"            where\n" + 
+			"                FIND_IN_SET(e.emp_id,task_emp_ids)                 \n" + 
+			"                and del_status=1 \n" + 
+			"                and task_completion_date between :fromDate and :toDate AND t_tasks.task_status=9 ),             0)             \n" + 
+			"            else             0         \n" + 
+			"        end as all_work ,\n" + 
+			"          coalesce((select\n" + 
+			"            CONCAT(FLOOR(sum(wl.work_hours)/60),\n" + 
+			"            '.',\n" + 
+			"            LPAD( MOD( sum(wl.work_hours),\n" + 
+			"            60),\n" + 
+			"            2,\n" + 
+			"            '0'))                   \n" + 
+			"        from\n" + 
+			"            t_daily_work_log wl                   \n" + 
+			"        where\n" + 
+			"            wl.work_date between :fromDate  and :toDate              \n" + 
+			"            and wl.emp_id=e.emp_id and wl.task_id IN (select\n" + 
+			"           task_id                \n" + 
+			"        from\n" + 
+			"            t_tasks                       \n" + 
+			"        where\n" + 
+			"            FIND_IN_SET(e.emp_id,task_emp_ids)                 \n" + 
+			"            and del_status=1 \n" + 
+			"            and task_completion_date between :fromDate and :toDate AND task_status=9 )), " + 
+			"        0) as act_work ,\n" + 
+			"        coalesce((select\n" + 
+			"            count(*)                   \n" + 
+			"        from\n" + 
+			"            t_tasks                        " + 
+			"        where\n" + 
+			"            FIND_IN_SET(e.emp_id,task_emp_ids)                  " + 
+			"            and del_status=1 \n" + 
+			"            and task_completion_date between :fromDate and :toDate AND task_status=9 ),         0) as task_count      " + 
+			"    from\n" + 
+			"        m_emp e           " + 
+			"    where\n" + 
+			"        e.del_status=1                   \n" + 
+			"        and e.emp_id in ( " + 
+			"          :empIdList " + 
+			"        )",nativeQuery=true)
 		List<EmpAndMngPerformanceRep> getAllTask(@Param("fromDate") String fromDate, @Param("toDate") String toDate,@Param("empIdList") List<String> empIdList);
+	
 	
 	
 	
