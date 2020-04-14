@@ -13,18 +13,17 @@ import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.task.model.Task;
 
 public interface TaskRepo extends JpaRepository<Task, Integer> {
-
+//#1
 	@Transactional
 	@Modifying
-	@Query(value = "UPDATE t_tasks SET task_emp_ids=:empIdList,update_username=:userId,update_datetime=:curDateTime,task_status=1,task_end_date=:endDate WHERE task_id IN(:taskIdList)", nativeQuery = true)
+	@Query(value = "UPDATE t_tasks SET task_emp_ids=CONCAT(task_emp_ids,:empIdList),update_username=:userId,update_datetime=:curDateTime,task_status=1,task_end_date=:endDate WHERE task_id IN(:taskIdList)", nativeQuery = true)
 	int assignTask(@Param("taskIdList") List<Integer> taskIdList, @Param("empIdList") String empIdList,
 			@Param("userId") String userId, @Param("curDateTime") String curDateTime, @Param("endDate") String endDate);
 
-	
-	
+	//#2
 	@Transactional
 	@Modifying
-	@Query(value = "UPDATE t_tasks SET task_emp_ids=:empIdList,update_username=:userId,update_datetime=:curDateTime,task_status=1  WHERE task_id IN(:taskIdList)", nativeQuery = true)
+	@Query(value = "UPDATE t_tasks SET task_emp_ids=CONCAT(task_emp_ids,:empIdList),update_username=:userId,update_datetime=:curDateTime,task_status=1  WHERE task_id IN(:taskIdList)", nativeQuery = true)
 	int assignTask1(@Param("taskIdList") List<Integer> taskIdList, @Param("empIdList") String empIdList,
 			@Param("userId") String userId, @Param("curDateTime") String curDateTime);
 	
@@ -72,7 +71,9 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 	@Query(value = "UPDATE t_tasks SET t_tasks.task_emp_ids=:empId,t_tasks.mngr_bud_hr=:mngHr1,t_tasks.emp_bud_hr=:empHr1,t_tasks.task_statutory_due_date=:dueDate,t_tasks.update_username =:updateUserName,t_tasks.update_datetime =:updateDateTime,t_tasks.billing_amt=:bilAmt  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
 	int updateEditTaskForNull(int taskId, String empHr1, String mngHr1, String dueDate, String empId,
 			int updateUserName, String updateDateTime,String bilAmt); //OK
-
+	
+	
+	
 	@Transactional
 	@Modifying
 	@Query(value = "UPDATE t_tasks SET  t_tasks.task_emp_ids=:items1, t_tasks.update_username=:userId, t_tasks.update_datetime=:curDateTime, t_tasks.emp_bud_hr=:empBudgetHr,t_tasks.mngr_bud_hr=:mgBudgetHr,t_tasks.task_end_date=:startDate1,t_tasks.cust_id=:customer,t_tasks.serv_id=:service,t_tasks.periodicity_id=:periodicityId,t_tasks.actv_id=:activity,t_tasks.task_statutory_due_date=:statDate1 ,t_tasks.billing_amt=:billAmt   WHERE task_id=:taskId", nativeQuery = true)
@@ -132,8 +133,18 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE t_tasks SET task_status=1 WHERE task_id=:taskId",nativeQuery=true)
-	int reOpenTaskByTaskId(@Param("taskId")int taskId);
+	@Query(value="UPDATE t_tasks SET task_status=0,task_emp_ids=:ownerEmpId WHERE task_id=:taskId",nativeQuery=true)
+	int reOpenTaskByTaskId(@Param("taskId")int taskId,@Param("ownerEmpId")String ownerEmpId);
+	
+	@Query(value="SELECT m_cust_header.owner_emp_id FROM m_cust_header "
+			+ "WHERE m_cust_header.cust_id in "
+			+ "(SELECT t_tasks.cust_id FROM t_tasks WHERE t_tasks.task_id=:taskId)",nativeQuery=true)
+	int getOwnerEmpIdByTaskId(@Param("taskId")int taskId);
+	
+	@Query(value="SELECT m_cust_header.owner_emp_id FROM m_cust_header "
+			+ "WHERE m_cust_header.cust_id=:custId ",nativeQuery=true)
+	int getOwnerEmpIdByCustId(@Param("custId")int custId);
+	
 	//Sachin 04-02-2020
 			@Query(value="SELECT COUNT(t_tasks.task_id) from t_tasks WHERE t_tasks.serv_id=:id",nativeQuery=true)
 	        int getTaskCountByServId(@Param("id") int id);
@@ -152,4 +163,19 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 			
 			@Query(value="SELECT COUNT(m_emp.emp_role_id) from m_emp WHERE m_emp.emp_role_id=:id",nativeQuery=true)
 	        int getRoleCountByRoleId(@Param("id") int id);
+			
+			
+			//Sachin 11-4-2020
+			@Transactional
+			@Modifying
+			@Query(value = "UPDATE t_tasks SET  t_tasks.mngr_bud_hr=:mngHr1,t_tasks.emp_bud_hr=:empHr1,t_tasks.task_statutory_due_date=:dueDate,t_tasks.update_username =:updateUserName,t_tasks.update_datetime =:updateDateTime,t_tasks.billing_amt=:bilAmt  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
+			int updateEditTaskForNullAsPage(int taskId, String empHr1, String mngHr1, String dueDate,
+					int updateUserName, String updateDateTime,String bilAmt); //OK
+
+			@Transactional
+			@Modifying
+			@Query(value = "UPDATE t_tasks SET  t_tasks.mngr_bud_hr=:mngHr1,t_tasks.emp_bud_hr=:empHr1,t_tasks.task_statutory_due_date=:dueDate,t_tasks.task_end_date=:endDate,t_tasks.update_username =:updateUserName,t_tasks.update_datetime =:updateDateTime,t_tasks.billing_amt=:bilAmt  WHERE t_tasks.task_id=:taskId", nativeQuery = true)
+			int updateEditTaskAsPage(int taskId, String empHr1, String mngHr1, String endDate, String dueDate,
+					int updateUserName, String updateDateTime,String bilAmt); //Ok
+			
 }

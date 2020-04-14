@@ -313,7 +313,7 @@ public class TaskApiController {
 			servc = srvMstrRepo.findByServIdAndDelStatus(actv.getServId(), 1);
 
 //			for (int i = 0; i < listDate.size(); i++) {
-
+			int ownEmpId=taskRepo.getOwnerEmpIdByCustId(custserv.getCustId());
 			Task task = new Task();
 
 			// Date date1 = listDate.get(i).getDate();
@@ -352,7 +352,7 @@ public class TaskApiController {
 			task.setMngrBudHr(String.valueOf(custserv.getActvManBudgHr()));
 			task.setServId(custserv.getExInt1());
 			task.setTaskCode("NA");
-			task.setTaskEmpIds(custserv.getExVar1());
+			task.setTaskEmpIds(ownEmpId+","+custserv.getExVar1());
 			task.setTaskFyId(fin.getFinYearId());
 			task.setTaskEndDate(endDate);
 			task.setTaskStatus(-1);
@@ -368,7 +368,7 @@ public class TaskApiController {
 				inf.setMessage("success");
 
 				Communication comcat = new Communication();
-				comcat.setCommunText("Manual Task Created");
+				comcat.setCommunText("Manual Task Created- Comment:  "+custserv.getExVar2());
 				comcat.setDelStatus(1);
 				comcat.setEmpId(custserv.getUpdateUsername());
 				comcat.setExInt1(1);
@@ -705,7 +705,8 @@ public class TaskApiController {
 			@RequestParam int updateUserName, @RequestParam String updateDateTime) {
 		Info info = new Info();
 		try {
-			int res = taskRepo.reOpenTaskByTaskId(taskId);
+			int ownEmpId=taskRepo.getOwnerEmpIdByTaskId(taskId);
+			int res = taskRepo.reOpenTaskByTaskId(taskId,""+ownEmpId+",");
 			if (res > 0) {
 				Communication comcat = new Communication();
 				comcat.setCommunText("Task Reopened");
@@ -820,7 +821,8 @@ public class TaskApiController {
 			@RequestParam String empBudgetHr, @RequestParam String mgBudgetHr, @RequestParam String startDate,
 			@RequestParam int customer, @RequestParam int service, @RequestParam int periodicityId,
 			@RequestParam int activity, @RequestParam String curDateTime, @RequestParam int userId,
-			@RequestParam String statDate, @RequestParam String billAmt) {
+			@RequestParam String statDate, @RequestParam String billAmt,
+			@RequestParam String taskComment) {
 
 		Info info = new Info();
 		try {
@@ -830,10 +832,26 @@ public class TaskApiController {
 
 			int res = taskRepo.editTask(taskId, items1, empBudgetHr, mgBudgetHr, startDate1, curDateTime, customer,
 					service, periodicityId, activity, userId, statDate1, billAmt);
-
+			//taskComment
 			if (res > 0) {
 				info.setError(false);
 				info.setMsg("success");
+				
+				Communication comcat = new Communication();
+				comcat.setCommunText("Manual Task Updated - Comment:  "+taskComment);
+				comcat.setDelStatus(1);
+				comcat.setEmpId(userId);
+				comcat.setExInt1(1);
+				comcat.setExInt2(1);
+				comcat.setExVar1("NA");
+				comcat.setExVar2("NA");
+				comcat.setTypeId(2);
+				comcat.setRemark("NA");
+				comcat.setTaskId(taskId);
+				comcat.setUpdateDatetime(curDateTime);
+				comcat.setUpdateUser(userId);
+				Communication save = communicationRepo.saveAndFlush(comcat);
+
 
 			} else {
 				info.setError(true);
@@ -877,6 +895,58 @@ public class TaskApiController {
 						updateDateTime, bilAmt);
 			} else {
 				res = taskRepo.updateEditTask(taskId, empHr, mngHr, workDate, dueDate, empId, updateUserName,
+						updateDateTime, bilAmt);
+			}
+
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+				Communication comcat = new Communication();
+				comcat.setCommunText("Task Edited");
+				comcat.setDelStatus(1);
+				comcat.setEmpId(updateUserName);
+				comcat.setExInt1(1);
+				comcat.setExInt2(1);
+				comcat.setExVar1("NA");
+				comcat.setExVar2("NA");
+				comcat.setTypeId(2);
+				comcat.setRemark("NA");
+				comcat.setTaskId(taskId);
+				comcat.setUpdateDatetime(updateDateTime);
+				comcat.setUpdateUser(updateUserName);
+				Communication save = communicationRepo.saveAndFlush(comcat);
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in updateTaskByTaskId  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+
+		return info;
+	}
+
+	//Sachin 11-04-2020 Update Task on Assign Task Page 
+	@RequestMapping(value = { "/editTaskOnAssignPage" }, method = RequestMethod.POST)
+	public @ResponseBody Info editTaskOnAssignPage(@RequestParam int taskId, @RequestParam String empHr,
+			@RequestParam String mngHr, @RequestParam String dueDate, @RequestParam String workDate,
+			   int updateUserName, String updateDateTime, @RequestParam String bilAmt) {
+
+		Info info = new Info();
+		try {
+			int res = 0;
+			if (workDate.equals("null")) {
+				res = taskRepo.updateEditTaskForNullAsPage(taskId, empHr, mngHr, dueDate,  updateUserName,
+						updateDateTime, bilAmt);
+			} else {
+				res = taskRepo.updateEditTaskAsPage(taskId, empHr, mngHr, workDate, dueDate, updateUserName,
 						updateDateTime, bilAmt);
 			}
 

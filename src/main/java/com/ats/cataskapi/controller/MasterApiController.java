@@ -650,7 +650,7 @@ public class MasterApiController {
 
 		List<CustomerHeaderMaster> custHeadList = new ArrayList<CustomerHeaderMaster>();
 		try {
-			custHeadList = custHeadRepo.findAllByDelStatusAndCustGroupIdOrderByCustFirmNameAsc(1, custGrpId);
+			custHeadList = custHeadRepo.findAllByDelStatusAndCustGroupIdAndCustTypeOrderByCustFirmNameAsc(1, custGrpId,1);
 		} catch (Exception e) {
 			System.err.println("Exce in getCustomerByGroupId  " + e.getMessage());
 		}

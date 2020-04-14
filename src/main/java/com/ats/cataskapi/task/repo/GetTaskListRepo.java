@@ -14,7 +14,7 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			"    t_tasks.billing_amt AS task_subline,\n" + 
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -56,7 +56,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+		//	"    t_tasks.task_subline,\n" +
+		"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -100,7 +102,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -145,7 +149,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -190,7 +196,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -236,7 +244,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -274,14 +284,16 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
 			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1   AND t_tasks.is_active = 1 AND  FIND_IN_SET (:empId,t_tasks.task_emp_ids) AND t_tasks.mapping_id=:mapId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
 	List<GetTaskList> getAllManualTaskList(@Param("stat") int stat,@Param("empId") int empId,@Param("mapId") int mapId);
-	
+	//Sac
 	
 
 	@Query(value=" SELECT\n" + 
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -324,7 +336,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -367,7 +381,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -410,7 +426,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -453,7 +471,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -500,7 +520,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -544,7 +566,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -589,7 +613,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
 			"    t_tasks.mapping_id,\n" + 
-			"    t_tasks.task_subline,\n" + 
+			//"    t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"    t_tasks.task_fy_id,\n" + 
 			"    t_tasks.task_text,\n" + 
 			"    t_tasks.task_start_date,\n" + 
@@ -632,7 +658,9 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			"        t_tasks.task_id,\n" + 
 			"        t_tasks.task_code,\n" + 
 			"        t_tasks.mapping_id,\n" + 
-			"        t_tasks.task_subline,\n" + 
+			//"        t_tasks.task_subline,\n" +
+			"    t_tasks.billing_amt AS task_subline,\n" + 
+
 			"        t_tasks.task_fy_id,\n" + 
 			"        t_tasks.task_text,\n" + 
 			"        t_tasks.task_start_date,\n" + 

@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,14 @@ import com.ats.cataskapi.common.PerDatesAdmin;
 import com.ats.cataskapi.common.PeriodicityDates;
 import com.ats.cataskapi.model.ActivityMaster;
 import com.ats.cataskapi.model.CustmrActivityMap;
+import com.ats.cataskapi.model.CustomerHeaderMaster;
 import com.ats.cataskapi.model.FinancialYear;
 import com.ats.cataskapi.model.GetWeeklyOff;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
 import com.ats.cataskapi.repositories.ActivityMasterRepo;
 import com.ats.cataskapi.repositories.CustmrActivityMapRepo;
+import com.ats.cataskapi.repositories.CustomerHeaderMasterRepo;
 import com.ats.cataskapi.repositories.FinancialYearRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
 import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
@@ -96,7 +99,8 @@ public class YearlyActivityController {
 
 	@Autowired
 	ActivityMasterRepo actvtMstrRepo;
-
+	@Autowired
+	CustomerHeaderMasterRepo custHeadRepo;
 	@RequestMapping(value = { "/genSaveYearlyTasks" }, method = RequestMethod.POST)
 	public @ResponseBody String genSaveYearlyTasks(@RequestParam List<String> strMappingList) {
 		System.err.println("Datetime Start " + DateConvertor.getCurDateTimeYmD());
@@ -114,7 +118,7 @@ public class YearlyActivityController {
 			List<CustmrActivityMap> mapList = camap.getMappingForyearlyTaskGen(strMappingList);
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-			String myString = "INSERT INTO t_tasks_temp1 (task_id, task_code, mapping_id, task_subline, task_fy_id, task_text, task_emp_ids, task_start_date, task_end_date, task_statutory_due_date, task_completion_date, billing_amt, task_status, mngr_bud_hr, emp_bud_hr, del_status, is_active, update_datetime, update_username, ex_int1, ex_int2, ex_var1, ex_var2, cust_id, periodicity_id, actv_id, serv_id) VALUES";
+			String myString = "INSERT INTO t_tasks_temp (task_id, task_code, mapping_id, task_subline, task_fy_id, task_text, task_emp_ids, task_start_date, task_end_date, task_statutory_due_date, task_completion_date, billing_amt, task_status, mngr_bud_hr, emp_bud_hr, del_status, is_active, update_datetime, update_username, ex_int1, ex_int2, ex_var1, ex_var2, cust_id, periodicity_id, actv_id, serv_id) VALUES";
 			querySb.append(myString);
 			int userId = 0;
 			FinancialYear fy = new FinancialYear();
@@ -140,9 +144,27 @@ public class YearlyActivityController {
 
 			List<FinancialYear> finYearList = financialYearRepo.findByDelStatus(1);
 
+			List<CustomerHeaderMaster> custHeadList = new ArrayList<CustomerHeaderMaster>();
+			try {
+				custHeadList = custHeadRepo.getCustMstForYearlyActGen(strMappingList);
+			} catch (Exception e) {
+				System.err.println("Exce in getAllCustomerHeaders  " + e.getMessage());
+			}
 			// First For Loop
 			for (int a = 0; a < mapList.size(); a++) {
+//New Sachin 10-04-2020
+int ownEmpId=0;
 
+for(int w=0;w<custHeadList.size();w++) {
+	
+	Integer result=Integer.compare(mapList.get(a).getCustId(), custHeadList.get(w).getCustId());
+	
+	if(result.equals(0)) {
+		ownEmpId=custHeadList.get(w).getOwnerEmpId();
+		break;
+	}
+}
+//New Sachin 10-04-2020 end //
 				DateFormat dateFrmt = new SimpleDateFormat("yyyy-MM-dd");
 
 				/*
@@ -218,7 +240,7 @@ public class YearlyActivityController {
 					}
 					
 					querySb.append("('"+taskId+"','na','" + mapList.get(a).getMappingId() + "','na',    '"
-							+ fin.getFinYearId() + "', '" + String.valueOf(taskText) + "', '0', '" + startDate + "', '"
+							+ fin.getFinYearId() + "', '" + String.valueOf(taskText) + "', '"+ownEmpId+"', '" + startDate + "', '"
 							+ statDueDate + "', '" + statDueDate + "' , NULL, " + "'"
 							+ mapList.get(a).getActvBillingAmt() + "','0','" + mapList.get(a).getActvManBudgHr() + "','"
 							+ mapList.get(a).getActvEmpBudgHr() + "','1','1','" + DateConvertor.getCurDateTimeYmD()
@@ -237,7 +259,7 @@ public class YearlyActivityController {
 			jdbcTemp.batchUpdate(finalInsertQuery);
 			System.err.println("end insert " + DateConvertor.getCurDateTimeYmD());
 			System.err.println("start insert2 " + DateConvertor.getCurDateTimeYmD());
-			jdbcTemp.batchUpdate("insert into t_tasks_temp select * from t_tasks_temp1");
+			jdbcTemp.batchUpdate("insert into t_tasks select * from t_tasks_temp");
 			System.err.println("end insert2 " + DateConvertor.getCurDateTimeYmD());
 		} catch (Exception e) {
 			e.printStackTrace();

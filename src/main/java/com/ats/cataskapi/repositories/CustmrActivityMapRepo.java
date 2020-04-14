@@ -31,7 +31,7 @@ public interface CustmrActivityMapRepo extends JpaRepository<CustmrActivityMap, 
 			+ "actv_billing_amt=:bilAmt ,update_username=:userId WHERE mapping_id=:mapId" + 
 			"",nativeQuery=true)
 	int updateCAM(@Param("mapId") int mapId,@Param("dueDays") int dueDays,@Param("bilAmt") int bilAmt,@Param("emphr") int emphr,@Param("mngHr") int mngHr,@Param("userId") int userId);
-	@Query(value=" select max(t_tasks_temp.task_id) from t_tasks_temp	" + 
+	@Query(value=" select max(t_tasks.task_id) from t_tasks 	" + 
 			"",nativeQuery=true)
 	int getMaxOfTTaskTemp();
 	

@@ -54,7 +54,7 @@ public interface CustomerHeaderMasterRepo extends JpaRepository<CustomerHeaderMa
     int getCustCountByCustGrpId(@Param("id") int id);
 	
 	//Sac 27-03-2020
-	List<CustomerHeaderMaster> findAllByDelStatusAndCustGroupIdOrderByCustFirmNameAsc(int del,int grpId);
+	List<CustomerHeaderMaster> findAllByDelStatusAndCustGroupIdAndCustTypeOrderByCustFirmNameAsc(int del,int grpId,int custType);
 
 	
 	/*
@@ -79,6 +79,8 @@ public interface CustomerHeaderMasterRepo extends JpaRepository<CustomerHeaderMa
 			" ",nativeQuery=true)
 	List<CustomerHeaderMaster> getCustMstForExcel();
 		
-	
-			
+	//Sachin 10-04-2020
+	@Query(value=" select * from m_cust_header where m_cust_header.cust_id IN (select m_cust_acti_map.cust_id from m_cust_acti_map where m_cust_acti_map.mapping_id IN (:strMappingList) ) " + 
+			" ",nativeQuery=true)
+	List<CustomerHeaderMaster> getCustMstForYearlyActGen(@Param("strMappingList") List<String> strMappingList);	
 }
