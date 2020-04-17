@@ -1,5 +1,6 @@
 package com.ats.cataskapi.controller;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -121,10 +122,24 @@ public class LeaveHolidayApiCon {
 		try {
 			int recordCount = 0;
 			Holiday holiDay = holidayRepo.getOne(holidayId);
-
+			Date curDate=new Date();
+			Date holFdate=null;
+			DateFormat df=new SimpleDateFormat("yyyy-MM-dd");
+			holFdate=df.parse(holiDay.getHolidayFromdt());
+			
+			System.err.println("curDate "+curDate +" holFdate " +holFdate);
+			
+			
 			recordCount = leaveApplyRepository.getCountofLeaveFdTd(holiDay.getHolidayFromdt(),
 					holiDay.getHolidayTodt());
 			int delete = 0;
+			if(curDate.before(holFdate)) {
+				//allow to delete
+				recordCount=0;
+							}else {
+								recordCount=1;	
+							}
+			
 			if (recordCount < 1)
 				delete = holidayRepo.deleteHoliday(holidayId);
 
@@ -193,7 +208,23 @@ public class LeaveHolidayApiCon {
 
 		try {
 
-			int delete = leaveApplyRepository.deleteLeaveApply(leaveId);
+			LeaveApply leave=leaveApplyRepository.findByLeaveIdAndDelStatus(leaveId,1);
+			
+			Date curDate=new Date();
+			Date leaveFrDate=null;
+			DateFormat df=new SimpleDateFormat("yyyy-MM-dd");
+			leaveFrDate=df.parse(leave.getLeaveFromdt());
+			
+			//System.err.println("curDate "+curDate +" leaveFrDate " +leaveFrDate);
+			int delete=0;
+			if(leaveFrDate.before(curDate)) {
+//Dont allow 
+				//System.err.println("Dont allow del leave");
+			}else {
+				delete = leaveApplyRepository.deleteLeaveApply(leaveId);
+			}
+					
+			//int delete = leaveApplyRepository.deleteLeaveApply(leaveId);
 
 			if (delete > 0) {
 				info.setError(false);

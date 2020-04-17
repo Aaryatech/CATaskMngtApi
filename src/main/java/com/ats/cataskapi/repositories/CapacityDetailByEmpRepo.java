@@ -14,6 +14,11 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 	@Query(value = "select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and is_active=1", nativeQuery = true)
 	String getEmployeeList(@Param("empId") int empId);
 
+	
+	@Query(value = "select GROUP_CONCAT(m_emp.emp_id)  from m_emp where m_emp.emp_type in (3,5) and del_status=1 and is_active=1", nativeQuery = true)
+	String getMngAndEmpEmployeeList();//Sachin 17-04-2020
+
+	
 	@Query(value = "select e.emp_id, e.emp_name, 0 as bugeted_cap,\n" + 
 			"        case \n" + 
 			"            when e.emp_type=3             then             coalesce((select\n" + 
@@ -50,7 +55,7 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 			"        from\n" + 
 			"            t_daily_work_log wl          \n" + 
 			"        where\n" + 
-			"            wl.work_date between :fromDate and :toDate              \n" + 
+			"            wl.work_date between :fromDate and :toDate and wl.del_status=1            \n" + 
 			"            and wl.emp_id=e.emp_id),\n" + 
 			"        0) as act_work      \n" + 
 			"    from\n" + 
