@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.cataskapi.common.DateConvertor;
 import com.ats.cataskapi.model.CapacityDetailByEmp;
 import com.ats.cataskapi.model.EmployeeMaster;
 import com.ats.cataskapi.model.report.CompletedTaskReport;
@@ -19,6 +20,8 @@ import com.ats.cataskapi.model.report.EmpAndMangPerfRepDetail;
 import com.ats.cataskapi.model.report.EmpAndMngPerformanceRep;
 import com.ats.cataskapi.model.report.InactiveTaskReport;
 import com.ats.cataskapi.model.report.TaskLogEmpInfo;
+import com.ats.cataskapi.model.reportv2.ComplTaskVarienceRep;
+import com.ats.cataskapi.report.repo.ComplTaskVarienceRepRepo;
 import com.ats.cataskapi.report.repo.CompletedTaskReportRepo;
 import com.ats.cataskapi.report.repo.EmpAndMangPerfRepDetailRepo;
 import com.ats.cataskapi.report.repo.EmpAndMngPerformanceRepRepo;
@@ -30,6 +33,36 @@ import com.ats.cataskapi.service.CommonFunctionService;
 
 @RestController
 public class ReportApiController {
+
+	//Sachin 18-04-2020
+	@Autowired
+	ComplTaskVarienceRepRepo complTaskVarienceRepRepo;
+
+	@RequestMapping(value = { "/getComplTaskVarienceReport" }, method = RequestMethod.POST)
+	public @ResponseBody List<ComplTaskVarienceRep> getComplTaskVarienceReport(@RequestParam String fromDate,
+			@RequestParam String toDate, @RequestParam String empIds,@RequestParam int reportType) {
+		List<ComplTaskVarienceRep> taskReportList = new ArrayList<ComplTaskVarienceRep>();
+		
+		String fromDate1 = DateConvertor.convertToYMD(fromDate);
+		String toDate1 = DateConvertor.convertToYMD(toDate);
+
+		try {
+			if(reportType==1) {
+				System.err.println("A");
+				taskReportList = complTaskVarienceRepRepo.getComplTaskVarienceReportDateDiff(fromDate1, toDate1, empIds);
+			}else if(reportType==5) {
+				System.err.println("B");
+			taskReportList = complTaskVarienceRepRepo.getComplTaskVarienceReportHourDiffEmp(fromDate1, toDate1, empIds);
+			}else {
+				System.err.println("C");
+				taskReportList = complTaskVarienceRepRepo.getComplTaskVarienceReportHourDiffMng(fromDate1, toDate1, empIds);
+			}
+		} catch (Exception e) {
+			System.out.println("Excep in getComplTaskVarienceReport : " + e.getMessage());
+		}
+		return taskReportList;
+	}
+	
 
 	@Autowired
 	CompletedTaskReportRepo completedTaskReportRepo;

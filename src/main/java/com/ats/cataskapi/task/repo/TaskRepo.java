@@ -133,8 +133,8 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
 
 	@Transactional
 	@Modifying
-	@Query(value="UPDATE t_tasks SET task_status=0,task_emp_ids=:ownerEmpId WHERE task_id=:taskId",nativeQuery=true)
-	int reOpenTaskByTaskId(@Param("taskId")int taskId,@Param("ownerEmpId")String ownerEmpId);
+	@Query(value="UPDATE t_tasks SET task_status=1 WHERE task_id=:taskId",nativeQuery=true)
+	int reOpenTaskByTaskId(@Param("taskId")int taskId);
 	
 	@Query(value="SELECT m_cust_header.owner_emp_id FROM m_cust_header "
 			+ "WHERE m_cust_header.cust_id in "

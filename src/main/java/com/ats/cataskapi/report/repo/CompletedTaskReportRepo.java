@@ -64,7 +64,7 @@ public interface CompletedTaskReportRepo extends JpaRepository<CompletedTaskRepo
 	
 	//New 17-04-2020
 	
-	@Query(value="SELECT b.*,x.work_hours,coalesce((c.admin),'-')as admin,coalesce((c.partner),'-') as partner ,coalesce((c.manager),'-') as manager,coalesce((c.team_leader),'-') as team_leader,coalesce((c.employee),'-') as  employee from (SELECT\n" + 
+	@Query(value="SELECT b.*,coalesce((x.work_hours),0) as work_hours ,coalesce((c.admin),'-')as admin,coalesce((c.partner),'-') as partner ,coalesce((c.manager),'-') as manager,coalesce((c.team_leader),'-') as team_leader,coalesce((c.employee),'-') as  employee from (SELECT\n" + 
 			"    t_tasks.task_id,t_tasks.task_text,t_tasks.ex_var1,\n" + 
 			"    m_services.serv_name,\n" + 
 			"    m_activities.acti_name,\n" + 
