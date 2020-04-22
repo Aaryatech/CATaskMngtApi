@@ -452,7 +452,7 @@ return mailToAddress;
 			try {
 				List<TwiceWeekHours> workLogList = new ArrayList<>();
 				workLogList = twiceWeekHoursRepo.sendLogByPostman(empTypeIds.get(j),prevDate1,prevDate2,prevDate3);
-
+//System.err.println("--workLogList " +workLogList.toString());
 				String date1 = prevDate1;//DateControl.getDateByDateAndSubDays(pre)
 				String date2 =prevDate2; //DateControl.getDate(-2);
 				String date3 =prevDate3;// DateControl.getDate(-3);
@@ -663,8 +663,8 @@ return mailToAddress;
 					email.append("</table></body></html><br>");
 
 					mimeMessage.setContent("" + email, "text/html");
-
-					Transport.send(mimeMessage);
+//System.err.println("email  \n "+email.toString());
+				Transport.send(mimeMessage);
 
 				} catch (Exception e) {
 					e.printStackTrace();

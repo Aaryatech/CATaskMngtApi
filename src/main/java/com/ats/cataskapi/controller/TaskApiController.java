@@ -705,8 +705,8 @@ public class TaskApiController {
 			@RequestParam int updateUserName, @RequestParam String updateDateTime) {
 		Info info = new Info();
 		try {
-			int ownEmpId=taskRepo.getOwnerEmpIdByTaskId(taskId);
-			int res = taskRepo.reOpenTaskByTaskId(taskId,""+ownEmpId+",");
+			//int ownEmpId=taskRepo.getOwnerEmpIdByTaskId(taskId);
+			int res = taskRepo.reOpenTaskByTaskId(taskId);
 			if (res > 0) {
 				Communication comcat = new Communication();
 				comcat.setCommunText("Task Reopened");

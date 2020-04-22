@@ -216,7 +216,8 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 	//Sachin 26032020
 	@Query(value="SELECT a.emp_email, a.emp_id,a.emp_nickname,a.emp_type,a.unique_id,COALESCE(b.today,0)as day1,COALESCE(c.today1,0)as day2, COALESCE(d.today2,0) as day3 , 'NA' as day4, 'NA' AS dayname4,  \n" + 
 			"			 \n" + 
-			"			   dayname((select CURDATE() - INTERVAL 1 DAY FROM DUAL))   as dayname1,  dayname((select CURDATE() - INTERVAL 2 DAY FROM DUAL))   as dayname2 , dayname((select CURDATE() - INTERVAL 3 DAY FROM DUAL))   as dayname3     , \n" + 
+			"			   dayname(:prevDate1)   as dayname1, "
+			+ " dayname(:prevDate2)   as dayname2 , dayname(:prevDate3)   as dayname3     , \n" + 
 			"			 \n" + 
 			"			(ADDTIME(COALESCE(b.today,0),ADDTIME(COALESCE(c.today1,0),COALESCE(d.today2,0)))) as tot_hrs, \n" + 
 			"			 \n" + 
