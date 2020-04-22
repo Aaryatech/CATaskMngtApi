@@ -11,15 +11,15 @@ import com.ats.cataskapi.model.CapacityDetailByEmp;
 
 public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByEmp, Integer> {
 
-	@Query(value = "select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and is_active=1", nativeQuery = true)
+	@Query(value = " select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and is_active=1 and del_status=1 ", nativeQuery = true)
 	String getEmployeeList(@Param("empId") int empId);
 
 	
-	@Query(value = "select GROUP_CONCAT(m_emp.emp_id)  from m_emp where m_emp.emp_type in (3,5) and del_status=1 and is_active=1", nativeQuery = true)
+	@Query(value = " select GROUP_CONCAT(m_emp.emp_id)  from m_emp where m_emp.emp_type in (3,5) and del_status=1 and is_active=1 ", nativeQuery = true)
 	String getMngAndEmpEmployeeList();//Sachin 17-04-2020
 
 	
-	@Query(value = "select e.emp_id, e.emp_name, 0 as bugeted_cap,\n" + 
+	@Query(value = " select e.emp_id, e.emp_name, 0 as bugeted_cap,\n" + 
 			"        case \n" + 
 			"            when e.emp_type=3             then             coalesce((select\n" + 
 			"                CONCAT(FLOOR(sum(mngr_bud_hr)/60),\n" + 
@@ -66,7 +66,7 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 	List<CapacityDetailByEmp> getEmployeeCapacityDetail(@Param("fromDate") String fromDate,
 			@Param("toDate") String toDate, @Param("empId") ArrayList<String> empId); //added on 03-04-2020 and e.emp_type!=2
 
-	@Query(value = "select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and FIND_IN_SET(:userId,task_emp_ids) and is_active=1", nativeQuery = true)
+	@Query(value = " select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and FIND_IN_SET(:userId,task_emp_ids) and is_active=1", nativeQuery = true)
 	String getEmployeeListByManagerIdAndUserId(@Param("empId")int empId, @Param("userId") int userId);
 	
 	 

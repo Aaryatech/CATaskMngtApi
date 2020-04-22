@@ -49,9 +49,10 @@ public class ReportContV2 {
 	
 	@Autowired WorkLogDetailReportRepo workLogDetailReportRepo;
 	
-	@RequestMapping(value = { "/getTaskLogEmpInfoListByTaskId" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "/getTaskLogDetailByTaskEmpId" }, method = RequestMethod.POST)
 	public @ResponseBody List<WorkLogDetailReport> getTaskLogEmpInfoListByTaskId(@RequestParam int taskId ,
 			@RequestParam int  empId) {
+		System.err.println("Hi");
 		List<WorkLogDetailReport> logList = new ArrayList<WorkLogDetailReport>();
 		try {
 			logList=workLogDetailReportRepo.getDetailWorkLogByEmpTaskId(taskId, empId);
