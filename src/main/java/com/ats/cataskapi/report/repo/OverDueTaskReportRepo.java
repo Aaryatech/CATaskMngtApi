@@ -151,7 +151,7 @@ public interface OverDueTaskReportRepo extends JpaRepository<OverDueTaskReport, 
 			"            m_activities.acti_name,\n" + 
 			"            dm_periodicity.periodicity_name,\n" + 
 			"            t_tasks.task_statutory_due_date,\n" + 
-			"            t_tasks.task_completion_date ,\n" + 
+		//	"            t_tasks.task_completion_date ,\n" + 
 			"            t_tasks.task_end_date AS task_work_date,\n" + 
 			"         0 as emp_bud_hr,\n" + 
 			"	      0 as mngr_bud_hr,\n" + 
@@ -168,7 +168,8 @@ public interface OverDueTaskReportRepo extends JpaRepository<OverDueTaskReport, 
 			"         \n" + 
 			"         \n" + 
 			"            m_cust_header.cust_firm_name,m_emp.emp_name as own_partner,\n" + 
-			"         dm_status_mst.status_text\n" + 
+			"         dm_status_mst.status_text,"
+			+ "t_daily_work_log.work_date as  task_completion_date  \n" + 
 			"        FROM\n" + 
 			"            m_services,\n" + 
 			"            m_activities,\n" + 
@@ -183,10 +184,11 @@ public interface OverDueTaskReportRepo extends JpaRepository<OverDueTaskReport, 
 			"            AND dm_periodicity.periodicity_id = t_tasks.periodicity_id \n" + 
 			"            AND t_tasks.del_status = 1 \n" + 
 			"            AND t_tasks.is_active = 1  \n" + 
-			"            AND   t_tasks.cust_id = m_cust_header.cust_id      \n" + 
+			"            AND   t_tasks.cust_id = m_cust_header.cust_id  "
+			+ "   \n" + 
 			"            AND  t_daily_work_log.work_date between :fromDate and :toDate \n" + 
 			"         and t_daily_work_log.task_id=t_tasks.task_id\n" + 
-			"         and t_daily_work_log.emp_id=1\n" + 
+			"         and t_daily_work_log.emp_id=:empIds \n" + 
 			"         and dm_status_mst.status_value=t_tasks.task_status \n" + 
 			"            AND FIND_IN_SET(:empIds,t_tasks.task_emp_ids)  \n" + 
 			"         and m_emp.emp_id=m_cust_header.owner_emp_id\n" + 

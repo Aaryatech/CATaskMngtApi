@@ -104,6 +104,30 @@ public class DateConvertor {
 		//return curCal;
 
 	}
+	
+	public static String add60DaystoCurDate() {
+		String leaveDateRange = null;
+		String fromDate = null;
+		String toDate = null;
+		Calendar c = Calendar.getInstance(); // this takes current date
+
+		// System.out.println(c.getTime());
+		//c.set(Calendar.DAY_OF_MONTH, 1);
+		Date toDate1 = c.getTime();
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		toDate = sdf.format(toDate1);
+
+		//c.set(Calendar.DAY_OF_MONTH, 60);
+		c.add(Calendar.DAY_OF_MONTH, 60);
+
+		Date fromDate1 = c.getTime();
+		fromDate = sdf.format(fromDate1);
+System.err.println("fromDate "+fromDate);
+		leaveDateRange = fromDate.concat(" to ").concat(toDate);
+		return fromDate;
+	}
 
 	}
 

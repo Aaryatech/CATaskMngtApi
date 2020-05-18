@@ -50,8 +50,8 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
-			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1 AND dm_periodicity.periodicity_id=:periodicityId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllTaskListAll(@Param("stat") int stat, @Param("periodicityId") int periodicityId);
+			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1 AND dm_periodicity.periodicity_id=:periodicityId and t_tasks.task_statutory_due_date< :uptoDueDate  ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllTaskListAll(@Param("stat") int stat, @Param("periodicityId") int periodicityId,@Param("uptoDueDate") String uptoDueDate);
 	@Query(value=" SELECT\n" + 
 			"    t_tasks.task_id,\n" + 
 			"    t_tasks.task_code,\n" + 
@@ -94,8 +94,8 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND "
-			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1     ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllTaskListAll1(@Param("stat") int stat );
+			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1 and t_tasks.task_statutory_due_date< :uptoDueDate     ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllTaskListAll1(@Param("stat") int stat,@Param("uptoDueDate") String uptoDueDate );
 	
 	
 	@Query(value=" SELECT\n" + 
@@ -140,8 +140,8 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND dm_periodicity.periodicity_id=:periodicityId AND "
-			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1  AND  t_tasks.serv_id=:servId AND t_tasks.cust_id=:custId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllTaskListSpec(@Param("stat") int stat,@Param("servId") int servId,@Param("custId") int custId, @Param("periodicityId") int periodicityId);
+			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1  AND  t_tasks.serv_id=:servId AND t_tasks.cust_id=:custId and t_tasks.task_statutory_due_date<:uptoDueDate  ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllTaskListSpec(@Param("stat") int stat,@Param("servId") int servId,@Param("custId") int custId, @Param("periodicityId") int periodicityId,@Param("uptoDueDate") String uptoDueDate);
 	
 	
 	
@@ -187,8 +187,8 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND dm_periodicity.periodicity_id=:periodicityId and  "
-			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1   AND t_tasks.cust_id=:custId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllTaskListSpecCust(@Param("stat") int stat,@Param("custId") int custId, @Param("periodicityId") int periodicityId);
+			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1   AND t_tasks.cust_id=:custId  and t_tasks.task_statutory_due_date< :uptoDueDate ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllTaskListSpecCust(@Param("stat") int stat,@Param("custId") int custId, @Param("periodicityId") int periodicityId,@Param("uptoDueDate") String uptoDueDate);
 	
 	
 	
@@ -234,8 +234,8 @@ public interface GetTaskListRepo extends JpaRepository<GetTaskList, Integer>{
 			+ "m_services.serv_id = t_tasks.serv_id AND "
 			+ "m_activities.acti_id = t_tasks.actv_id AND "
 			+ "dm_periodicity.periodicity_id = t_tasks.periodicity_id AND dm_periodicity.periodicity_id =:periodicityId AND "
-			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1   AND t_tasks.serv_id=:servId   ORDER BY t_tasks.task_id DESC",nativeQuery=true)
-	List<GetTaskList> getAllTaskListSpecServ(@Param("stat") int stat,@Param("servId") int servId,@Param("periodicityId") int periodicityId);
+			+ "t_tasks.task_status =:stat AND t_tasks.del_status = 1  AND t_tasks.is_active = 1   AND t_tasks.serv_id=:servId and t_tasks.task_statutory_due_date< :uptoDueDate  ORDER BY t_tasks.task_id DESC",nativeQuery=true)
+	List<GetTaskList> getAllTaskListSpecServ(@Param("stat") int stat,@Param("servId") int servId,@Param("periodicityId") int periodicityId,@Param("uptoDueDate") String uptoDueDate);
 	
 	
 	

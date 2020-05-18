@@ -110,7 +110,10 @@ public class YearlyActivityController {
 			int taskId = 0;
 			try {
 				taskId = camap.getMaxOfTTaskTemp();
+				System.err.println("Task Id max "+taskId);
 			} catch (Exception e) {
+				System.err.println("exce in getting task id " +e.getMessage());
+				e.printStackTrace();
 				taskId = 0;
 			}
 			System.err.println("Task Id  Received Max" +taskId);
@@ -153,14 +156,14 @@ public class YearlyActivityController {
 			// First For Loop
 			for (int a = 0; a < mapList.size(); a++) {
 //New Sachin 10-04-2020
-int ownEmpId=0;
+String ownEmpId="0";
 
 for(int w=0;w<custHeadList.size();w++) {
 	
 	Integer result=Integer.compare(mapList.get(a).getCustId(), custHeadList.get(w).getCustId());
 	
 	if(result.equals(0)) {
-		ownEmpId=custHeadList.get(w).getOwnerEmpId();
+		ownEmpId=""+custHeadList.get(w).getOwnerEmpId()+",";
 		break;
 	}
 }
@@ -176,7 +179,7 @@ for(int w=0;w<custHeadList.size();w++) {
 				List<DateValues> listDate = PerDatesAdmin.getDates(fy.getFinStartDate(), fy.getFinEndDate(),
 						mapList.get(a).getPeriodicityId());
 
-				System.err.println("getMappingId() " + mapList.get(a).getMappingId());
+				//System.err.println("getMappingId() " + mapList.get(a).getMappingId());
 
 				actv = new ActivityMaster();// actvtMstrRepo.findByActiIdAndDelStatus(mapList.get(a).getActvId(), 1);
 
@@ -245,7 +248,7 @@ for(int w=0;w<custHeadList.size();w++) {
 							+ mapList.get(a).getActvBillingAmt() + "','0','" + mapList.get(a).getActvManBudgHr() + "','"
 							+ mapList.get(a).getActvEmpBudgHr() + "','1','1','" + DateConvertor.getCurDateTimeYmD()
 							+ "','" + userId + "', '0','0','na','na', '" + mapList.get(a).getCustId() + "'," + "'"
-							+ mapList.get(a).getPeriodicityId() + "','" + mapList.get(a).getActvId() + "','0' ),");
+							+ mapList.get(a).getPeriodicityId() + "','" + mapList.get(a).getActvId() + "','"+actv.getServId()+"' ),");
 
 					// '', '', '', '', '', '', '', NULL, '', NULL, NULL, '', '', '', '', '',
 					// CURRENT_TIMESTAMP, '', '', '', '', '', '', '', '', ''

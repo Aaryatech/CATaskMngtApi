@@ -80,7 +80,7 @@ public interface TwiceWeekHoursRepo extends JpaRepository<TwiceWeekHours, Intege
 			"           c.del_status=1 and c.is_active=1 and c.emp_type IN (:empType))",nativeQuery=true)
 	List<String> getEmailIds(@Param("empType") String empType);
     
-	@Query(value="SELECT a.emp_email\n" + 
+	@Query(value="SELECT a.emp_email, " + 
 			"    a.emp_id,\n" + 
 			"    a.emp_nickname,a.unique_id, a.emp_type,\n" + 
 			"    COALESCE(b.today,\n" + 
