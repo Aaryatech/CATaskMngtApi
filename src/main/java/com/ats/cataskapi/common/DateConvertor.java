@@ -120,7 +120,7 @@ public class DateConvertor {
 		toDate = sdf.format(toDate1);
 
 		//c.set(Calendar.DAY_OF_MONTH, 60);
-		c.add(Calendar.DAY_OF_MONTH, 60);
+		c.add(Calendar.DAY_OF_MONTH, 120);
 
 		Date fromDate1 = c.getTime();
 		fromDate = sdf.format(fromDate1);

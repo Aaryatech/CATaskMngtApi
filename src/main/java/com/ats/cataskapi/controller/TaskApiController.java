@@ -404,10 +404,12 @@ public class TaskApiController {
 		Info info = new Info();
 		try {
 			int res = 0;
+			if(statusVal>0) {
 			if (statusVal == 9) {
 				res = taskRepo.updateStatusComplete(taskId, statusVal, userId, curDateTime, compltnDate);
 			} else {
 				res = taskRepo.updateStatus(taskId, statusVal, userId, curDateTime);
+			}
 			}
 			if (res > 0) {
 				info.setError(false);
@@ -539,25 +541,27 @@ public class TaskApiController {
 	public @ResponseBody List<GetTaskList> getAllTaskList(@RequestParam int stat, @RequestParam int servId,
 			@RequestParam int custId, @RequestParam int periodicityId) {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
-
+System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 		System.out.println("prm are" + servId  + custId +"periodicityId " +periodicityId);
+		String uptoDueDate=DateConvertor.add60DaystoCurDate();
+		
 		try {
 
 			if (servId != 0 && custId != 0) {
 				System.err.println("A");
-				servicsList = getTaskListRepo.getAllTaskListSpec(stat, servId, custId, periodicityId);
+				servicsList = getTaskListRepo.getAllTaskListSpec(stat, servId, custId, periodicityId,uptoDueDate);
 			} else if (servId != 0 && custId == 0) {
 				System.err.println("B");
-				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat, servId, periodicityId);
+				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat, servId, periodicityId,uptoDueDate);
 			} else if (servId == 0 && custId != 0) {
 				System.err.println("C");
-				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat, custId, periodicityId);
+				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat, custId, periodicityId,uptoDueDate);
 			} else if ((servId == 0 && custId == 0) && periodicityId!=0) {
 				System.err.println("D");
-				servicsList = getTaskListRepo.getAllTaskListAll(stat,periodicityId);
+				servicsList = getTaskListRepo.getAllTaskListAll(stat,periodicityId,uptoDueDate);
 			} else {
 				System.err.println("E");
-				servicsList = getTaskListRepo.getAllTaskListAll1(stat);
+				servicsList = getTaskListRepo.getAllTaskListAll1(stat,uptoDueDate);
 			}
 
 		} catch (Exception e) {

@@ -158,15 +158,20 @@ public interface OverDueTaskReportRepo extends JpaRepository<OverDueTaskReport, 
 			"\n" + 
 			"        \n" + 
 			"         \n" + 
-			"           COALESCE( (CONCAT(         FLOOR(             SUM(t_daily_work_log.work_hours) / 60         ),\n" + 
-			"                '.',\n" + 
-			"                LPAD(  MOD(             SUM(t_daily_work_log.work_hours),\n" + 
-			"                60),\n" + 
-			"                2,\n" + 
-			"                '0')                  )),\n" + 
-			"                0) AS work_hours,\n" + 
-			"         \n" + 
-			"         \n" + 
+			/*
+			 * "           COALESCE( (CONCAT(         FLOOR(             SUM(t_daily_work_log.work_hours) / 60         ),\n"
+			 * + "                '.',\n" +
+			 * "                LPAD(  MOD(             SUM(t_daily_work_log.work_hours),\n"
+			 * + "                60),\n" + "                2,\n" +
+			 * "                '0')                  )),\n" +
+			 * "                0) AS work_hours,\n" +
+			 */
+"  COALESCE( (FLOOR(SUM(t_daily_work_log.work_hours)/60          )\n" + 
+"              + " + 
+"               round(  MOD(             SUM(t_daily_work_log.work_hours),  \n" + 
+"               60)*0.0166  ,   " + 
+"               2)                ),   " + 
+"               0) AS work_hours,    "+
 			"            m_cust_header.cust_firm_name,m_emp.emp_name as own_partner,\n" + 
 			"         dm_status_mst.status_text,"
 			+ "t_daily_work_log.work_date as  task_completion_date  \n" + 
@@ -191,7 +196,7 @@ public interface OverDueTaskReportRepo extends JpaRepository<OverDueTaskReport, 
 			"         and t_daily_work_log.emp_id=:empIds \n" + 
 			"         and dm_status_mst.status_value=t_tasks.task_status \n" + 
 			"            AND FIND_IN_SET(:empIds,t_tasks.task_emp_ids)  \n" + 
-			"         and m_emp.emp_id=m_cust_header.owner_emp_id\n" + 
+			"         and m_emp.emp_id=m_cust_header.owner_emp_id and t_daily_work_log.del_status=1 \n" + 
 			"        GROUP by t_daily_work_log.work_log_id ) b   \n" + 
 			"  \n" + 
 			"    LEFT JOIN\n" + 
