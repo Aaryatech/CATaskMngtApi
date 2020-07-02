@@ -47,6 +47,31 @@ public class DailyWorkLogApiController {
 		return log;
 		
 	}
+	
+	
+	
+	@RequestMapping(value = {"/addNewWorkLogNew"}, method=RequestMethod.POST)
+	public @ResponseBody Info addNewWorkLogNew(@RequestBody DailyWorkLog workLog){
+		DailyWorkLog log = new DailyWorkLog();
+		Info info=new Info();
+		try {
+			log = workLogRepo.saveAndFlush(workLog);
+			
+			if(log==null) {
+				info.setError(true);
+				info.setMsg("Failed to Add thr Record .. Try Again");
+
+			}else {
+				info.setError(false);
+				info.setMsg("Added Successfully");
+
+			}
+		}catch (Exception e) {
+			System.out.println("Excep in addNewWorkLog : "+e.getMessage());
+		}
+		return info;
+		
+	}
 	@RequestMapping(value = {"/addEmpWorkLogList"}, method=RequestMethod.POST)
 	public @ResponseBody List<DailyWorkLog> addNewWorkLog(@RequestBody List<DailyWorkLog> workLogList){
 		List<DailyWorkLog> log = new ArrayList<DailyWorkLog>();
