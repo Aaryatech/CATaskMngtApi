@@ -48,7 +48,7 @@ public interface BugetedMinAndWorkedMinByEmpIdsRepo extends JpaRepository<Bugete
 			"                task_end_date between :fromDate and :toDate             \n" + 
 			"                and FIND_IN_SET(e.emp_id,task_emp_ids)              \n" + 
 			"                and is_active=1              \n" + 
-			"                and del_status=1 ),\n" + 
+			"                and del_status=1  and task_status!=8),\n" + 
 			"            0)             \n" + 
 			"            when e.emp_type=5             then          coalesce((select\n" + 
 			"                sum(emp_bud_hr)         \n" + 
@@ -58,7 +58,7 @@ public interface BugetedMinAndWorkedMinByEmpIdsRepo extends JpaRepository<Bugete
 			"                task_end_date between :fromDate and :toDate             \n" + 
 			"                and FIND_IN_SET(e.emp_id,task_emp_ids)              \n" + 
 			"                and is_active=1              \n" + 
-			"                and del_status=1 ),\n" + 
+			"                and del_status=1 and task_status!=8 ),\n" + 
 			"            0)\n" + 
 			"            else\n" + 
 			"            0\n" + 

@@ -31,7 +31,7 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 			"                task_end_date between :fromDate and :toDate              \n" + 
 			"                and FIND_IN_SET(e.emp_id,task_emp_ids)              \n" + 
 			"                and is_active=1              \n" + 
-			"                and del_status=1 ),\n" + 
+			"                and del_status=1 and task_status!=8),\n" + 
 			"            0)             \n" + 
 			"            when e.emp_type=5             then             coalesce((select\n" + 
 			"                CONCAT(FLOOR(sum(emp_bud_hr)/60),\n" + 
@@ -43,7 +43,7 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 			"                task_end_date between :fromDate and :toDate              \n" + 
 			"                and FIND_IN_SET(e.emp_id,task_emp_ids)              \n" + 
 			"                and is_active=1              \n" + 
-			"                and del_status=1 ),\n" + 
+			"                and del_status=1 and task_status!=8),\n" + 
 			"            0)\n" + 
 			"            else \n" + 
 			"            0\n" + 
@@ -78,7 +78,7 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 			"    where\n" + 
 			"        FIND_IN_SET(:empId,task_emp_ids) \n" + 
 			"        and FIND_IN_SET(:userId,task_emp_ids) \n" + 
-			"        and is_active=1 and task_end_date between :fromDate and :toDate ", nativeQuery = true)
+			"        and is_active=1 and task_end_date between :fromDate and :toDate and task_status!=8 ", nativeQuery = true)
 	String getEmployeeListByManagerIdAndUserIdBetweenDate(@Param("empId")int empId, @Param("userId") int userId,
 			@Param("fromDate")String fromDate,@Param("toDate") String toDate);
 
