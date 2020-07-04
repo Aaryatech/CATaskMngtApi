@@ -13,7 +13,11 @@ public interface CapacityDetailByEmpRepo extends JpaRepository<CapacityDetailByE
 
 	@Query(value = " select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and is_active=1 and del_status=1 ", nativeQuery = true)
 	String getEmployeeList(@Param("empId") int empId);
-
+	
+	
+	@Query(value = " select GROUP_CONCAT(DISTINCT task_emp_ids)  from t_tasks where FIND_IN_SET(:empId,task_emp_ids) and is_active=1 and del_status=1 and  task_status!=8", nativeQuery = true)
+	String getEmployeeListforDash(@Param("empId") int empId);
+	
 	
 	@Query(value = " select GROUP_CONCAT(m_emp.emp_id)  from m_emp where m_emp.emp_type in (3,5) and del_status=1 and is_active=1 ", nativeQuery = true)
 	String getMngAndEmpEmployeeList();//Sachin 17-04-2020

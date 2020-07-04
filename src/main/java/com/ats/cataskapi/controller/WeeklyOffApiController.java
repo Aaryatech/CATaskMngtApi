@@ -1029,7 +1029,9 @@ public class WeeklyOffApiController {
 
 			} else {
 
-				String empIds = capacityDetailByEmpRepo.getEmployeeList(empId);
+				
+				//method changed by matching status
+				String empIds = capacityDetailByEmpRepo.getEmployeeListforDash(empId);
 				ids = empIds.split(",");
 
 			}
