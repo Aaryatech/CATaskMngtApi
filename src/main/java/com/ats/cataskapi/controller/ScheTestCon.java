@@ -452,7 +452,7 @@ return mailToAddress;
 			try {
 				List<TwiceWeekHours> workLogList = new ArrayList<>();
 				workLogList = twiceWeekHoursRepo.sendLogByPostman(empTypeIds.get(j),prevDate1,prevDate2,prevDate3);
-//System.err.println("--workLogList " +workLogList.toString());
+System.err.println("--workLogList11 " +workLogList.toString());
 				String date1 = prevDate1;//DateControl.getDateByDateAndSubDays(pre)
 				String date2 =prevDate2; //DateControl.getDate(-2);
 				String date3 =prevDate3;// DateControl.getDate(-3);
@@ -504,6 +504,7 @@ return mailToAddress;
 					}
 
 				}
+				System.err.println("--workLogList12 " +workLogList.toString());
 
 				final String emailSMTPserver = "smtp.gmail.com";
 				final String emailSMTPPort = "587";
