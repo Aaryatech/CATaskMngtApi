@@ -989,6 +989,42 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 
 		return info;
 	}
+	
+	
+
+	@RequestMapping(value = { "/updateMultipleManualTaskByTaskId" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateMultipleManualTaskByTaskId(@RequestParam List<Integer> taskIds,
+			@RequestParam int userId, @RequestParam String curDateTime) {
+
+		Info info = new Info();
+		int res = 0;
+		try {
+
+		 
+				// task approval by Manager
+				res = taskRepo.updateStatusMult(taskIds, userId, curDateTime);
+
+		 
+			if (res > 0) {
+				info.setError(false);
+				info.setMsg("success");
+
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+		} catch (Exception e) {
+
+			System.err.println("Exce in updateTaskByTaskId  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+
+		return info;
+	}
+
 
 	/********************************
 	 * System Generated Status
