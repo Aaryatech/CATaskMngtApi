@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ats.cataskapi.common.DateConvertor;
 import com.ats.cataskapi.model.reportv2.ComplTaskVarienceRep;
 import com.ats.cataskapi.model.reportv2.OverDueTaskReport;
+import com.ats.cataskapi.model.reportv2.VarianceReportByManger;
 import com.ats.cataskapi.model.reportv2.WorkLogDetailReport;
 import com.ats.cataskapi.report.repo.OverDueTaskReportRepo;
+import com.ats.cataskapi.report.repo.VarianceReportByMangerRepo;
 import com.ats.cataskapi.report.repo.WorkLogDetailReportRepo;
 
 @RestController
@@ -61,5 +63,28 @@ public class ReportContV2 {
 		}
 		
 		return logList;
+	}
+	
+	@Autowired
+	VarianceReportByMangerRepo varianceReportByMangerRepo;
+	
+
+	@RequestMapping(value = { "/getVarianceReportByManagerReport" }, method = RequestMethod.POST)
+	public @ResponseBody List<VarianceReportByManger>  getVarianceReportByManagerReport(@RequestParam int custId,
+			@RequestParam int servId, @RequestParam int actId,@RequestParam int empId) {
+		List<VarianceReportByManger> taskReportList = new ArrayList<VarianceReportByManger>();
+		
+	 
+
+		try {
+			if(custId==0) {
+ 				taskReportList = varianceReportByMangerRepo.getAllCustVarianceByManager(servId, actId, empId);
+			}else   {
+ 			taskReportList = varianceReportByMangerRepo.getVarianceByManager(servId, actId, empId,custId);
+			}
+		} catch (Exception e) {
+			System.out.println("Excep in getComplTaskVarienceReport : " + e.getMessage());
+		}
+		return taskReportList;
 	}
 }
