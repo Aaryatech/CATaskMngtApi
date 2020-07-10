@@ -43,7 +43,7 @@ import com.ats.cataskapi.report.repo.WorkLofForReportRepo;
 import com.ats.cataskapi.report.repo.WorkLogDetailReportRepo;
 import com.ats.cataskapi.repositories.EmployeeListWithAvailableHoursRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
- 
+
 @RestController
 public class ReportContV2 {
 
@@ -137,67 +137,66 @@ public class ReportContV2 {
 				totalDates.add(start);
 				start = start.plusDays(1);
 			}
-			list.setDateList(totalDates);
-
+ 
 			// Main data setting
 
 			for (int i = 0; i < empList.size(); i++) {
 				int empId = empList.get(i).getEmpId();
+				/*
+				 * System.err.println("for emp::" + empId);
+				 */
+				List<String> tempLogList = new ArrayList<String>();
+				WorkLogSub subRec = new WorkLogSub();
+				subRec.setEmpId(empId);
 
 				for (int j = 0; j < totalDates.size(); j++) {
-					WorkLogSub log = new WorkLogSub();
-					log.setEmpId(empId);
-
-					String workDate = String.valueOf(totalDates.get(j));
-					log.setWorkDate(workDate);
+					/*
+					 * System.err.println("for date::" + totalDates.get(j));
+					 */
+					String tempLog = "00:00";
+					String currDate = String.valueOf(totalDates.get(j));
+					int flag = 0;
 					for (int k = 0; k < wkList.size(); k++) {
- 						
-						WorkLofForReport workLog = wkList.get(k);
-						
-						
-						System.err.println(workLog.getWorkDate()+"::::"+workDate);
-						System.err.println(workLog.getEmpId()+":::"+empId);
+						/*
+						 * System.err.println("for condition"); System.err.println(currDate + "::" +
+						 * wkList.get(k).getWorkDate()); System.err.println(empId + "::" +
+						 * wkList.get(k).getEmpId());
+						 */
 
-						if (workLog.getWorkDate().equals(workDate) && workLog.getEmpId() == empId) {
-
-							System.err.println("work log:" + empId + "--" + workDate);
-							log.setWorkHours(workLog.getWorkHr());
-							logList.add(log);
-							
-						} else {
-							// check for leave
-							System.err.println("no work log:" + empId + "--" + workDate);
-
-							List<EmployeeListWithAvailableHours> empLeave = empListForLeave
-									.getLeaveRecordByEmpIdSac(workDate, workDate, empId);
-
-							if (empLeave.size() > 0) {
-								log.setWorkHours("Leave");
-
-							} else {
-								log.setWorkHours("00:00");
-							}
-							logList.add(log);
-							
-
+						if (currDate.equals(wkList.get(k).getWorkDate()) && empId == wkList.get(k).getEmpId()
+								&& ((wkList.get(k).getWorkHr() != "0" || wkList.get(k).getWorkHr() != ""))) {
+							tempLog = wkList.get(k).getWorkHr();
+							flag = 1;
+							break;
 						}
 
-						
-
 					}
+					if (flag == 0) {
+						/*
+						 * System.err.println("no work log:" + empId + "--" + currDate);
+						 */
+						List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+								.getLeaveRecordByEmpIdSac(currDate, currDate, empId);
+
+						if (empLeave.size() > 0) {
+							tempLog = "Leave";
+
+						}
+					}
+					tempLogList.add(tempLog);
 
 				}
+				subRec.setStatus(tempLogList);
+
+				logList.add(subRec);
+				list.setLogList(logList);
 
 			}
-			list.setLogList(logList);
 
 		} catch (Exception e) {
 			System.out.println("Excep in getComplTaskVarienceReport : " + e.getMessage());
 		}
 		return list;
 	}
-	
-	
 
-	
 }

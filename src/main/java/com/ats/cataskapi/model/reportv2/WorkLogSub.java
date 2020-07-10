@@ -1,22 +1,18 @@
 package com.ats.cataskapi.model.reportv2;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
-public class WorkLogSub {
+ public class WorkLogSub {
 
-	@Id
-	private int empId;
+ 	private int empId;
 
- 
-	private String workDate;
+	private List<String> status;
 
-	private String workHours;
-
- 
 	public int getEmpId() {
 		return empId;
 	}
@@ -25,29 +21,12 @@ public class WorkLogSub {
 		this.empId = empId;
 	}
 
-	 
-
-	 
-	public String getWorkDate() {
-		return workDate;
+	public List<String> getStatus() {
+		return status;
 	}
 
-	public void setWorkDate(String workDate) {
-		this.workDate = workDate;
+	public void setStatus(List<String> status) {
+		this.status = status;
 	}
 
-	public String getWorkHours() {
-		return workHours;
-	}
-
-	public void setWorkHours(String workHours) {
-		this.workHours = workHours;
-	}
- 
-	@Override
-	public String toString() {
-		return "WorkLogSub [empId=" + empId + ", workDate=" + workDate + ", workHours=" + workHours +  "]";
-	}
- 
- 
 }
