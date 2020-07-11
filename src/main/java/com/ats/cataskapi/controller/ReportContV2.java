@@ -128,8 +128,10 @@ public class ReportContV2 {
 		List<WorkLofForReport> wkList = new ArrayList<WorkLofForReport>();
 
 		try {
+			empList = employeeMasterRepo.getAllMangAndEmp();
+			//System.err.println("emp::"+empList.size());
 			wkList = workLofForReportRepo.getworklog(startDate, endDate);
-			empList = employeeMasterRepo.findAllByDelStatusOrderByEmpIdDesc(1);
+		
 			list.setEmpList(empList);
 			LocalDate start = LocalDate.parse(startDate);
 			LocalDate end = LocalDate.parse(endDate);
@@ -138,6 +140,7 @@ public class ReportContV2 {
 				start = start.plusDays(1);
 			}
  
+		
 			// Main data setting
 
 			for (int i = 0; i < empList.size(); i++) {

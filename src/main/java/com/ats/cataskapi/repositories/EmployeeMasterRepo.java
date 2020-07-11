@@ -52,6 +52,15 @@ public interface EmployeeMasterRepo extends JpaRepository<EmployeeMaster, Intege
 	List<EmployeeMaster> getAllEmployeesWithRoleName();
 	
 	
+	@Query(value = "SELECT\n" + 
+			"    *\n" + 
+			"FROM\n" + 
+			"    m_emp\n" + 
+			"WHERE\n" + 
+			"    m_emp.del_status = 1 AND m_emp.emp_type IN(3, 5) AND m_emp.is_active = 1", nativeQuery = true)
+	List<EmployeeMaster> getAllMangAndEmp();
+	
+	
 	@Query(value = "SELECT DISTINCT\n" + 
 			"    m_emp.*\n" + 
 			"FROM\n" + 
