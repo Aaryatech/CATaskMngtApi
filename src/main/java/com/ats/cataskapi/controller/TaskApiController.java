@@ -889,7 +889,7 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 	@RequestMapping(value = { "/updateEditTsk" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam String empHr,
 			@RequestParam String mngHr, @RequestParam String dueDate, @RequestParam String workDate,
-			@RequestParam String empId, int updateUserName, String updateDateTime, @RequestParam String bilAmt) {
+			@RequestParam String empId, int updateUserName, String updateDateTime, @RequestParam String bilAmt, @RequestParam String editTaskRemark) {
 
 		Info info = new Info();
 		System.err.println("BillAmt " + bilAmt);
@@ -908,7 +908,7 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 				info.setMsg("success");
 
 				Communication comcat = new Communication();
-				comcat.setCommunText("Task Edited");
+				comcat.setCommunText("Task Edited "+editTaskRemark);
 				comcat.setDelStatus(1);
 				comcat.setEmpId(updateUserName);
 				comcat.setExInt1(1);
