@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ats.cataskapi.common.DateConvertor;
 import com.ats.cataskapi.model.EmployeeListWithAvailableHours;
 import com.ats.cataskapi.model.EmployeeMaster;
+import com.ats.cataskapi.model.LeaveApply;
 import com.ats.cataskapi.model.reportv2.ComplTaskVarienceRep;
 import com.ats.cataskapi.model.reportv2.OverDueTaskReport;
 import com.ats.cataskapi.model.reportv2.VarianceReportByManger;
@@ -43,6 +44,7 @@ import com.ats.cataskapi.report.repo.WorkLofForReportRepo;
 import com.ats.cataskapi.report.repo.WorkLogDetailReportRepo;
 import com.ats.cataskapi.repositories.EmployeeListWithAvailableHoursRepo;
 import com.ats.cataskapi.repositories.EmployeeMasterRepo;
+import com.ats.cataskapi.repositories.LeaveApplyRepository;
 
 @RestController
 public class ReportContV2 {
@@ -116,6 +118,8 @@ public class ReportContV2 {
 	WorkLofForReportRepo workLofForReportRepo;
 	@Autowired
 	EmployeeListWithAvailableHoursRepo empListForLeave;
+	@Autowired
+	LeaveApplyRepository leaveApplyRepository;
 
 	@RequestMapping(value = { "/getWorkDetBetDatesReport" }, method = RequestMethod.POST)
 	public @ResponseBody WorkLogReportBetDates getWorkDetBetDatesReport(@RequestParam String startDate,
@@ -129,9 +133,11 @@ public class ReportContV2 {
 
 		try {
 			empList = employeeMasterRepo.getAllMangAndEmp();
-			//System.err.println("emp::"+empList.size());
-			wkList = workLofForReportRepo.getworklog(startDate, endDate);
-		
+ 			wkList = workLofForReportRepo.getworklog(startDate, endDate);
+			List<LeaveApply> leaveList = leaveApplyRepository.getAllLeaves();
+
+			System.err.println("leaveList" + leaveList.toString());
+
 			list.setEmpList(empList);
 			LocalDate start = LocalDate.parse(startDate);
 			LocalDate end = LocalDate.parse(endDate);
@@ -139,36 +145,34 @@ public class ReportContV2 {
 				totalDates.add(start);
 				start = start.plusDays(1);
 			}
- 
-		
+
+			SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 			// Main data setting
 
 			for (int i = 0; i < empList.size(); i++) {
+ 
 				int empId = empList.get(i).getEmpId();
-				/*
-				 * System.err.println("for emp::" + empId);
-				 */
+				 
 				List<String> tempLogList = new ArrayList<String>();
 				WorkLogSub subRec = new WorkLogSub();
 				subRec.setEmpId(empId);
 
 				for (int j = 0; j < totalDates.size(); j++) {
-					/*
-					 * System.err.println("for date::" + totalDates.get(j));
-					 */
-					String tempLog = "00:00";
+
+ 
+					String tempLog = "00.00";
 					String currDate = String.valueOf(totalDates.get(j));
+
+					Date d1 = sdformat.parse(currDate);
 					int flag = 0;
 					for (int k = 0; k < wkList.size(); k++) {
-						/*
-						 * System.err.println("for condition"); System.err.println(currDate + "::" +
-						 * wkList.get(k).getWorkDate()); System.err.println(empId + "::" +
-						 * wkList.get(k).getEmpId());
-						 */
 
-						if (currDate.equals(wkList.get(k).getWorkDate()) && empId == wkList.get(k).getEmpId()
-								&& ((wkList.get(k).getWorkHr() != "0" || wkList.get(k).getWorkHr() != ""))) {
-							tempLog = wkList.get(k).getWorkHr();
+						WorkLofForReport wk = wkList.get(k);
+						 
+
+						if (currDate.equals(wk.getWorkDate()) && empId == wk.getEmpId()
+								&& ((wk.getWorkHr() != "0" || wk.getWorkHr() != ""))) {
+							tempLog = wk.getWorkHr();
 							flag = 1;
 							break;
 						}
@@ -178,13 +182,33 @@ public class ReportContV2 {
 						/*
 						 * System.err.println("no work log:" + empId + "--" + currDate);
 						 */
-						List<EmployeeListWithAvailableHours> empLeave = empListForLeave
-								.getLeaveRecordByEmpIdSac(currDate, currDate, empId);
+						/*
+						 * List<EmployeeListWithAvailableHours> empLeave = empListForLeave
+						 * .getLeaveRecordByEmpIdSac(currDate, currDate, empId);
+						 * 
+						 * if (empLeave.size() > 0) { tempLog = "Leave";
+						 * 
+						 * }
+						 */
+ 
+						for (int l = 0; l < leaveList.size(); l++) {
 
-						if (empLeave.size() > 0) {
-							tempLog = "Leave";
+							LeaveApply leeave = leaveList.get(l);
+							Date frmDate = sdformat.parse(leeave.getLeaveFromdt());
+							Date toDate = sdformat.parse(leeave.getLeaveTodt());
+							
+							
+							if (leeave.getEmpId() == empId
+									&& ((frmDate.compareTo(d1) == 0) || (toDate.compareTo(d1) == 0)
+											|| ((d1.compareTo(frmDate) > 0) && (d1.compareTo(toDate) < 0)))) {
+
+ 
+  								tempLog = "Leave";
+								break;
+							}
 
 						}
+
 					}
 					tempLogList.add(tempLog);
 

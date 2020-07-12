@@ -61,5 +61,15 @@ public interface LeaveApplyRepository extends JpaRepository<LeaveApply, Integer>
 			"            )         \n" + 
 			"        )",nativeQuery=true)
 	int getCountofLeaveFdTd(@Param("fromDate") String fromDate, @Param("toDate") String toDate);
+	
+	
+	
+	@Query(value=" SELECT\n" + 
+			"    *\n" + 
+			"FROM\n" + 
+			"    t_leave_apply,m_emp\n" + 
+			"WHERE\n" + 
+			"    t_leave_apply.del_status = 1 AND t_leave_apply.emp_id = m_emp.emp_id AND m_emp.emp_id = t_leave_apply.emp_id AND m_emp.emp_type IN(3,5) AND m_emp.del_status=1",nativeQuery=true)
+	List<LeaveApply> getAllLeaves();
 
 }

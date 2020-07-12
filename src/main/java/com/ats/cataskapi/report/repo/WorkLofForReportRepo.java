@@ -13,24 +13,24 @@ public interface WorkLofForReportRepo extends JpaRepository<WorkLofForReport, St
 	
 	
 	@Query(value="SELECT\n" + 
-			"    UUID() as uuid, emp_id, work_date, SUM(t_daily_work_log.work_hours) as work_hr_min,\n" + 
+			"    UUID() as uuid, t_daily_work_log.emp_id, t_daily_work_log.work_date, SUM(t_daily_work_log.work_hours) as work_hr_min,\n" + 
 			"    CONCAT(\n" + 
-			"        FLOOR(SUM(work_hours) / 60),\n" + 
+			"        FLOOR(SUM(t_daily_work_log.work_hours) / 60),\n" + 
 			"        '.',\n" + 
 			"        LPAD(\n" + 
-			"            MOD(SUM(work_hours),\n" + 
+			"            MOD(SUM(t_daily_work_log.work_hours),\n" + 
 			"            60),\n" + 
 			"            2,\n" + 
 			"            '0'\n" + 
 			"        )\n" + 
 			"    ) as work_hr\n" + 
 			"FROM\n" + 
-			"    t_daily_work_log\n" + 
+			"    t_daily_work_log,m_emp\n" + 
 			"WHERE\n" + 
-			"    work_date BETWEEN :fromDate AND :toDate AND del_status=1 \n" + 
+			"    t_daily_work_log.work_date BETWEEN :fromDate AND :toDate AND t_daily_work_log.del_status=1 AND m_emp.emp_type IN (3,5)  AND m_emp.emp_id=t_daily_work_log.emp_id\n" + 
 			"GROUP BY\n" + 
-			"    work_date,\n" + 
-			"    emp_id",nativeQuery=true)
+			"    t_daily_work_log.work_date,\n" + 
+			"    t_daily_work_log.emp_id",nativeQuery=true)
 		List<WorkLofForReport> getworklog( @Param("fromDate") String fromDate, @Param("toDate") String toDate);
 
 
