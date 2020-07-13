@@ -50,6 +50,9 @@ public class VarianceReportByManger {
 	private String varianceDays;
 
 	private Date completionDate;
+	
+	
+	private String tskStatus;
 
 	public int getTaskId() {
 		return taskId;
@@ -213,6 +216,16 @@ public class VarianceReportByManger {
 	public void setCompletionDate(Date completionDate) {
 		this.completionDate = completionDate;
 	}
+	
+	
+
+	public String getTskStatus() {
+		return tskStatus;
+	}
+
+	public void setTskStatus(String tskStatus) {
+		this.tskStatus = tskStatus;
+	}
 
 	@Override
 	public String toString() {
@@ -222,7 +235,9 @@ public class VarianceReportByManger {
 				+ ", empBudHr=" + empBudHr + ", mngrBudHr=" + mngrBudHr + ", custFirmName=" + custFirmName
 				+ ", workHours=" + workHours + ", admin=" + admin + ", partner=" + partner + ", manager=" + manager
 				+ ", teamLeader=" + teamLeader + ", employee=" + employee + ", exVar1=" + exVar1 + ", varianceDays="
-				+ varianceDays + ", completionDate=" + completionDate + "]";
+				+ varianceDays + ", completionDate=" + completionDate + ", tskStatus=" + tskStatus + "]";
 	}
+
+	 
 
 }

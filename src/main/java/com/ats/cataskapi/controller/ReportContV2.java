@@ -100,7 +100,7 @@ public class ReportContV2 {
 		List<VarianceReportByManger> taskReportList = new ArrayList<VarianceReportByManger>();
 
 		try {
-			if (custId == 0) {
+			if (custId == -1) {
 				taskReportList = varianceReportByMangerRepo.getAllCustVarianceByManager(servId, actId, empId);
 			} else {
 				taskReportList = varianceReportByMangerRepo.getVarianceByManager(servId, actId, empId, custId);
