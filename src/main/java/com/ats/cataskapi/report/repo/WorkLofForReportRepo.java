@@ -14,17 +14,11 @@ public interface WorkLofForReportRepo extends JpaRepository<WorkLofForReport, St
 	
 	@Query(value="SELECT\n" + 
 			"    UUID() as uuid, t_daily_work_log.emp_id, t_daily_work_log.work_date, SUM(t_daily_work_log.work_hours) as work_hr_min,\n" + 
-			"    CONCAT(\n" + 
-			"        FLOOR(SUM(t_daily_work_log.work_hours) / 60),\n" + 
-			"        '.',\n" + 
-			"        LPAD(\n" + 
-			"            MOD(SUM(t_daily_work_log.work_hours),\n" + 
-			"            60),\n" + 
-			"            2,\n" + 
-			"            '0'\n" + 
-			"        )\n" + 
-			"    ) as work_hr\n" + 
-			"FROM\n" + 
+			"            COALESCE( (FLOOR(SUM(t_daily_work_log.work_hours)/60          )               +                round(  MOD(             SUM(t_daily_work_log.work_hours),\n" + 
+			"            60)*0.0166  ,\n" + 
+			"            2)                ),\n" + 
+			"            0) AS work_hr \n" + 
+ 			"FROM\n" + 
 			"    t_daily_work_log,m_emp\n" + 
 			"WHERE\n" + 
 			"    t_daily_work_log.work_date BETWEEN :fromDate AND :toDate AND t_daily_work_log.del_status=1 AND m_emp.emp_type IN (3,5)  AND m_emp.emp_id=t_daily_work_log.emp_id\n" + 
