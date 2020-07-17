@@ -98,7 +98,8 @@ public interface VarianceReportByMangerRepo  extends JpaRepository<VarianceRepor
 			"        m_cust_header,\n" + 
 			"        t_daily_work_log\n" + 
 			"    WHERE\n" + 
-			"       dm_status_mst.status_mst_id=t_tasks.task_status AND  m_services.serv_id = t_tasks.serv_id AND m_activities.acti_id = t_tasks.actv_id AND dm_periodicity.periodicity_id = t_tasks.periodicity_id AND  t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_tasks.cust_id = m_cust_header.cust_id AND t_daily_work_log.task_id = t_tasks.task_id AND FIND_IN_SET(:empId, t_tasks.task_emp_ids)  AND t_tasks.actv_id =:actId AND t_tasks.cust_id =:custId AND t_tasks.serv_id =:servId \n" + 
+			"                t_tasks.task_status IN(5,9,12,10)\n" + 
+			" AND dm_status_mst.status_value=t_tasks.task_status AND  m_services.serv_id = t_tasks.serv_id AND m_activities.acti_id = t_tasks.actv_id AND dm_periodicity.periodicity_id = t_tasks.periodicity_id AND  t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_tasks.cust_id = m_cust_header.cust_id AND t_daily_work_log.task_id = t_tasks.task_id AND FIND_IN_SET(:empId, t_tasks.task_emp_ids)  AND t_tasks.actv_id =:actId AND t_tasks.cust_id =:custId AND t_tasks.serv_id =:servId \n" + 
 			"    GROUP BY\n" + 
 			"        t_tasks.task_id\n" + 
 			") b\n" + 
@@ -171,7 +172,7 @@ public interface VarianceReportByMangerRepo  extends JpaRepository<VarianceRepor
 			"        t_tasks,\n" + 
 			"        t_daily_work_log\n" + 
 			"    WHERE\n" + 
-			"         t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_tasks.actv_id =:actId AND t_tasks.serv_id =:servId AND t_tasks.cust_id =:custId \n" + 
+			"     t_tasks.task_status IN(5,9,12,10)  AND   t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_tasks.actv_id =:actId AND t_tasks.serv_id =:servId AND t_tasks.cust_id =:custId \n" + 
 			"    GROUP BY\n" + 
 			"        t_tasks.task_id,\n" + 
 			"        t_daily_work_log.emp_id\n" + 
@@ -274,7 +275,7 @@ public interface VarianceReportByMangerRepo  extends JpaRepository<VarianceRepor
 			"        m_cust_header,\n" + 
 			"        t_daily_work_log\n" + 
 			"    WHERE\n" + 
-			"       dm_status_mst.status_mst_id=t_tasks.task_status AND   m_services.serv_id = t_tasks.serv_id AND m_activities.acti_id = t_tasks.actv_id AND dm_periodicity.periodicity_id = t_tasks.periodicity_id AND  t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_tasks.cust_id = m_cust_header.cust_id AND t_daily_work_log.task_id = t_tasks.task_id AND FIND_IN_SET(:empId, t_tasks.task_emp_ids)  AND t_tasks.actv_id =:actId AND  t_tasks.serv_id =:servId \n" + 
+			"       t_tasks.task_status IN(5,9,12,10)  AND  dm_status_mst.status_value=t_tasks.task_status AND   m_services.serv_id = t_tasks.serv_id AND m_activities.acti_id = t_tasks.actv_id AND dm_periodicity.periodicity_id = t_tasks.periodicity_id AND  t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_tasks.cust_id = m_cust_header.cust_id AND t_daily_work_log.task_id = t_tasks.task_id AND FIND_IN_SET(:empId, t_tasks.task_emp_ids)  AND t_tasks.actv_id =:actId AND  t_tasks.serv_id =:servId \n" + 
 			"    GROUP BY\n" + 
 			"        t_tasks.task_id\n" + 
 			") b\n" + 
@@ -347,7 +348,7 @@ public interface VarianceReportByMangerRepo  extends JpaRepository<VarianceRepor
 			"        t_tasks,\n" + 
 			"        t_daily_work_log\n" + 
 			"    WHERE\n" + 
-			"         t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_tasks.actv_id =:actId AND t_tasks.serv_id =:servId  \n" + 
+			"        t_tasks.task_status IN(5,9,12,10)  AND   t_tasks.del_status = 1 AND t_tasks.is_active = 1 AND t_tasks.actv_id =:actId AND t_tasks.serv_id =:servId  \n" + 
 			"    GROUP BY\n" + 
 			"        t_tasks.task_id,\n" + 
 			"        t_daily_work_log.emp_id\n" + 
