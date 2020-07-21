@@ -28,6 +28,7 @@ import com.ats.cataskapi.model.FirmType;
 import com.ats.cataskapi.model.GetActivityPeriodicity;
 import com.ats.cataskapi.model.Info;
 import com.ats.cataskapi.model.ServiceMaster;
+import com.ats.cataskapi.model.SetttingKeyValue;
 import com.ats.cataskapi.model.ShowCustActiMapped;
 import com.ats.cataskapi.model.StatusMaster;
 import com.ats.cataskapi.model.TaskListHome;
@@ -45,6 +46,7 @@ import com.ats.cataskapi.repositories.EmployeeMasterRepo;
 import com.ats.cataskapi.repositories.FirmTypeRepo;
 import com.ats.cataskapi.repositories.GetActivityPeriodicityRepo;
 import com.ats.cataskapi.repositories.ServiceMasterRepo;
+import com.ats.cataskapi.repositories.SetttingKeyValueRepo;
 import com.ats.cataskapi.repositories.ShowCustActiMappedRepo;
 import com.ats.cataskapi.repositories.StatusMasterRepo;
 import com.ats.cataskapi.repositories.TaskListHomeRepo;
@@ -85,14 +87,15 @@ public class MasterApiController {
 		}
 		return servicsList;
 	}
-	//Sachin 31-03-2020 
+
+	// Sachin 31-03-2020
 	@RequestMapping(value = { "/getServicesByPeriodId" }, method = RequestMethod.POST)
-	public @ResponseBody List<ServiceMaster> getServicesByPeriodId(@RequestParam int periodcityId ) {
+	public @ResponseBody List<ServiceMaster> getServicesByPeriodId(@RequestParam int periodcityId) {
 		List<ServiceMaster> servicsList = new ArrayList<ServiceMaster>();
 		try {
-			if(periodcityId!=0) {
-			servicsList = srvMstrRepo.getServListByPeriodId(periodcityId);
-			}else {
+			if (periodcityId != 0) {
+				servicsList = srvMstrRepo.getServListByPeriodId(periodcityId);
+			} else {
 				servicsList = srvMstrRepo.findByDelStatusAndExInt1OrderByServIdDesc(1, 1);
 			}
 		} catch (Exception e) {
@@ -361,14 +364,14 @@ public class MasterApiController {
 		return empList;
 
 	}
-	
-	//Sachin 13-02-2020
+
+	// Sachin 13-02-2020
 	@RequestMapping(value = { "/getEmpForChangePass" }, method = RequestMethod.POST)
 	public @ResponseBody EmployeeMaster getEmp(@RequestParam String email) {
 
 		EmployeeMaster emp = new EmployeeMaster();
 		try {
-			emp= empRepo.findByEmpEmailAndDelStatus(email, 1);
+			emp = empRepo.findByEmpEmailAndDelStatus(email, 1);
 		} catch (Exception e) {
 			emp = new EmployeeMaster();
 			System.err.println("Exce in getEmpForChangePass MasterApi  " + e.getMessage());
@@ -432,9 +435,6 @@ public class MasterApiController {
 		return emp;
 
 	}
-	
-	 
-
 
 	@RequestMapping(value = { "/checkEmployeeEmail" }, method = RequestMethod.POST)
 	public @ResponseBody Info checkEmployeeEmail(@RequestParam String email, @RequestParam int eid) {
@@ -494,7 +494,7 @@ public class MasterApiController {
 			int taskCount = 0;
 			taskCount = taskRepo.getTaskCountByEmpId(empId);
 			if (taskCount < 1)
-			 res = empRepo.deleteEmployee(empId, userId);
+				res = empRepo.deleteEmployee(empId, userId);
 
 			if (res > 0) {
 				info.setError(false);
@@ -596,19 +596,22 @@ public class MasterApiController {
 		return cust;
 
 	}
-@Autowired CustomerHeaderMasterRepo custMstRepo;
+
+	@Autowired
+	CustomerHeaderMasterRepo custMstRepo;
+
 	@RequestMapping(value = { "/deleteCustomerGroup" }, method = RequestMethod.POST)
 	public @ResponseBody Info deleteCustomerGroup(@RequestParam int custGrpId, @RequestParam int userId) {
 
 		Info info = new Info();
 		try {
-			
+
 			int res = 0;
 
 			int taskCount = 0;
-			taskCount=custHeadRepo.getCustCountByCustGrpId(custGrpId);
-			if(taskCount<1)
-			 res = cstmrGrpRepo.deleteCustGroup(custGrpId, userId);
+			taskCount = custHeadRepo.getCustCountByCustGrpId(custGrpId);
+			if (taskCount < 1)
+				res = cstmrGrpRepo.deleteCustGroup(custGrpId, userId);
 			if (res > 0) {
 				info.setError(false);
 				info.setMsg("success");
@@ -645,15 +648,16 @@ public class MasterApiController {
 		return custHeadList;
 
 	}
-	
-	//Sac 27-03-2020
-	
+
+	// Sac 27-03-2020
+
 	@RequestMapping(value = { "/getCustomerByGroupId" }, method = RequestMethod.POST)
 	public @ResponseBody List<CustomerHeaderMaster> getCustomerByGroupId(@RequestParam int custGrpId) {
 
 		List<CustomerHeaderMaster> custHeadList = new ArrayList<CustomerHeaderMaster>();
 		try {
-			custHeadList = custHeadRepo.findAllByDelStatusAndCustGroupIdAndCustTypeOrderByCustFirmNameAsc(1, custGrpId,1);
+			custHeadList = custHeadRepo.findAllByDelStatusAndCustGroupIdAndCustTypeOrderByCustFirmNameAsc(1, custGrpId,
+					1);
 		} catch (Exception e) {
 			System.err.println("Exce in getCustomerByGroupId  " + e.getMessage());
 		}
@@ -661,8 +665,7 @@ public class MasterApiController {
 		return custHeadList;
 
 	}
-	
-	
+
 	@RequestMapping(value = { "/getCustListForExcel" }, method = RequestMethod.GET)
 	public @ResponseBody List<CustomerHeaderMaster> getCustListForExcel() {
 
@@ -750,15 +753,16 @@ public class MasterApiController {
 		return custHeadList;
 
 	}
+
 //Sachin 1-04-2020 for getting cust in Assign task page by using periodicity id
 	@RequestMapping(value = { "/getCustByPeriodcityId" }, method = RequestMethod.POST)
 	public @ResponseBody List<CustomerDetails> getCustByPeriodcityId(@RequestParam int periodId) {
 
 		List<CustomerDetails> custHeadList = new ArrayList<CustomerDetails>();
 		try {
-			if(periodId!=0) {
-			custHeadList = custDetlRepo.getCustByPeriodIdInMappingTbl(periodId);
-			}else {
+			if (periodId != 0) {
+				custHeadList = custDetlRepo.getCustByPeriodIdInMappingTbl(periodId);
+			} else {
 				custHeadList = custDetlRepo.getAllCustomerDetails();
 			}
 		} catch (Exception e) {
@@ -767,7 +771,7 @@ public class MasterApiController {
 
 		return custHeadList;
 	}
-	
+
 	@RequestMapping(value = { "/getAllCustomerInfoActiveInactive" }, method = RequestMethod.GET)
 	public @ResponseBody List<CustomerDetails> getAllCustomerInfoActiveInactive() {
 
@@ -1091,18 +1095,19 @@ public class MasterApiController {
 		StatusMaster stat = null;
 
 		try {
-			if(status.getStatusMstId()<1) {
-				int recCount=statusMstrRepo.getStatusForDuplicate(status.getStatusText().trim());
-				if(recCount<1) {
+			if (status.getStatusMstId() < 1) {
+				int recCount = statusMstrRepo.getStatusForDuplicate(status.getStatusText().trim());
+				if (recCount < 1) {
 					stat = statusMstrRepo.saveAndFlush(status);
 				}
-			}else {
-				int recCount=statusMstrRepo.getStatusForDuplicateForEdit(status.getStatusText().trim(),status.getStatusMstId());
-				if(recCount<1) {
+			} else {
+				int recCount = statusMstrRepo.getStatusForDuplicateForEdit(status.getStatusText().trim(),
+						status.getStatusMstId());
+				if (recCount < 1) {
 					stat = statusMstrRepo.saveAndFlush(status);
 				}
 			}
-			//stat = statusMstrRepo.saveAndFlush(status);
+			// stat = statusMstrRepo.saveAndFlush(status);
 
 		} catch (Exception e) {
 			System.err.println("Exce in saving saveStatus " + e.getMessage());
@@ -1151,12 +1156,12 @@ public class MasterApiController {
 		Info info = new Info();
 		try {
 			int res = 0;
-			StatusMaster statMst=statusMstrRepo.getOne(statusId);
+			StatusMaster statMst = statusMstrRepo.getOne(statusId);
 			int taskCount = 0;
-			taskCount=taskRepo.getTaskCountByStatus(statMst.getStatusValue());
-			if(taskCount<1)
-			
-			 res = statusMstrRepo.deleteStatusById(statusId, userId);
+			taskCount = taskRepo.getTaskCountByStatus(statMst.getStatusValue());
+			if (taskCount < 1)
+
+				res = statusMstrRepo.deleteStatusById(statusId, userId);
 
 			if (res > 0) {
 				info.setError(false);
@@ -1349,22 +1354,86 @@ public class MasterApiController {
 		}
 		return info;
 	}
-	
-	//Sachin 2-04-2020 to show DB Assessee Type in customer master page
-	@Autowired AssesseeTypeMasterRepo asseTypeRepo;
-	
+
+	// Sachin 2-04-2020 to show DB Assessee Type in customer master page
+	@Autowired
+	AssesseeTypeMasterRepo asseTypeRepo;
+
 	@RequestMapping(value = { "/getAssesseeTypeList" }, method = RequestMethod.GET)
 	public @ResponseBody List<AssesseeTypeMaster> getAssesseeTypeList() {
 		List<AssesseeTypeMaster> assesseeList = new ArrayList<AssesseeTypeMaster>();
 		try {
-			
+
 			assesseeList = asseTypeRepo.findByDelStatus(1);
-			
+
 		} catch (Exception e) {
-			
+
 			System.err.println("Exce in getAssesseeTypeList " + e.getMessage());
 		}
-		
+
 		return assesseeList;
 	}
+
+	@Autowired
+	SetttingKeyValueRepo setttingKeyValueRepo;
+
+	@RequestMapping(value = { "/updateSettingForStatDate" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateSettingForStatDate(@RequestParam int settingType, @RequestParam String limitDate,
+			@RequestParam int noDays) {
+
+		Info info = new Info();
+		try {
+
+			int res = 0;
+
+			int n = setttingKeyValueRepo.updateDaysLimit(settingType, "ChangeStatLimit");
+
+			if (n > 0) {
+
+				if (settingType == 1) {
+					res = setttingKeyValueRepo.updateDaysLimit(noDays, "StatutoryDaysSet");
+				} else {
+					res = setttingKeyValueRepo.updateDateLimit(limitDate, "StatutoryDateSet");
+
+				}
+
+				if (res > 0) {
+					info.setError(false);
+					info.setMsg("success");
+
+				} else {
+					info.setError(true);
+					info.setMsg("failed");
+
+				}
+			} else {
+				info.setError(true);
+				info.setMsg("failed");
+
+			}
+
+		} catch (Exception e) {
+
+			System.err.println("Exce in updateSettingForStatDate  " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMsg("excep");
+		}
+
+		return info;
+
+	}
+
+	@RequestMapping(value = { "/getSettingByKey" }, method = RequestMethod.POST)
+	public @ResponseBody SetttingKeyValue getSettingById(@RequestParam String key) {
+		SetttingKeyValue setting = new SetttingKeyValue();
+		try {
+			setting = setttingKeyValueRepo.findBySettingKeyAndDelStatus(key, 1);
+
+		} catch (Exception e) {
+			System.err.println("Exce in getTaskPerodicityId" + e.getMessage());
+		}
+		return setting;
+	}
+
 }

@@ -2,7 +2,6 @@ package com.ats.cataskapi.controller;
 
 import java.text.DateFormat;
 
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,6 +11,7 @@ import java.util.List;
 import javax.mail.AuthenticationFailedException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.h2.H2ConsoleProperties.Settings;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -70,22 +70,20 @@ public class TaskApiController {
 	@Autowired
 	DailyWorkLogRepo wLogRepo;
 
-	
-	
-	
 	@RequestMapping(value = { "/checkDelete" }, method = RequestMethod.GET)
-	public @ResponseBody int getTaskCountByColName(@RequestParam int tableId,@RequestParam  int idValue) {
+	public @ResponseBody int getTaskCountByColName(@RequestParam int tableId, @RequestParam int idValue) {
 
-		int x=0;
-		
+		int x = 0;
+
 		try {
-			
-		}catch (Exception e) {
-			x=0;
+
+		} catch (Exception e) {
+			x = 0;
 		}
-		
+
 		return x;
 	}
+
 	@RequestMapping(value = { "/sendMail" }, method = RequestMethod.GET)
 	public @ResponseBody String sendMail() throws AuthenticationFailedException {
 		EmailUtility.sendEmailNotif("Test Email KPPM server", "dummy email body", "handgesachin1@gmail.com");
@@ -314,7 +312,7 @@ public class TaskApiController {
 			servc = srvMstrRepo.findByServIdAndDelStatus(actv.getServId(), 1);
 
 //			for (int i = 0; i < listDate.size(); i++) {
-			int ownEmpId=taskRepo.getOwnerEmpIdByCustId(custserv.getCustId());
+			int ownEmpId = taskRepo.getOwnerEmpIdByCustId(custserv.getCustId());
 			Task task = new Task();
 
 			// Date date1 = listDate.get(i).getDate();
@@ -353,7 +351,7 @@ public class TaskApiController {
 			task.setMngrBudHr(String.valueOf(custserv.getActvManBudgHr()));
 			task.setServId(custserv.getExInt1());
 			task.setTaskCode("NA");
-			task.setTaskEmpIds(ownEmpId+","+custserv.getExVar1());
+			task.setTaskEmpIds(ownEmpId + "," + custserv.getExVar1());
 			task.setTaskFyId(fin.getFinYearId());
 			task.setTaskEndDate(endDate);
 			task.setTaskStatus(-1);
@@ -369,7 +367,7 @@ public class TaskApiController {
 				inf.setMessage("success");
 
 				Communication comcat = new Communication();
-				comcat.setCommunText("Manual Task Created- Comment:  "+custserv.getExVar2());
+				comcat.setCommunText("Manual Task Created- Comment:  " + custserv.getExVar2());
 				comcat.setDelStatus(1);
 				comcat.setEmpId(custserv.getUpdateUsername());
 				comcat.setExInt1(1);
@@ -405,12 +403,12 @@ public class TaskApiController {
 		Info info = new Info();
 		try {
 			int res = 0;
-			if(statusVal>0) {
-			if (statusVal == 9) {
-				res = taskRepo.updateStatusComplete(taskId, statusVal, userId, curDateTime, compltnDate);
-			} else {
-				res = taskRepo.updateStatus(taskId, statusVal, userId, curDateTime);
-			}
+			if (statusVal > 0) {
+				if (statusVal == 9) {
+					res = taskRepo.updateStatusComplete(taskId, statusVal, userId, curDateTime, compltnDate);
+				} else {
+					res = taskRepo.updateStatus(taskId, statusVal, userId, curDateTime);
+				}
 			}
 			if (res > 0) {
 				info.setError(false);
@@ -542,27 +540,45 @@ public class TaskApiController {
 	public @ResponseBody List<GetTaskList> getAllTaskList(@RequestParam int stat, @RequestParam int servId,
 			@RequestParam int custId, @RequestParam int periodicityId) {
 		List<GetTaskList> servicsList = new ArrayList<GetTaskList>();
-System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
-		System.out.println("prm are" + servId  + custId +"periodicityId " +periodicityId);
-		String uptoDueDate=DateConvertor.add60DaystoCurDate();
+//System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
+		// System.out.println("prm are" + servId + custId +"periodicityId "
+		// +periodicityId);
+
+		String uptoDueDate = new String();
+		SetttingKeyValue setting = setttingKeyValueRepo.findBySettingKeyAndDelStatus("ChangeStatLimit", 1);
+
+		if (setting.getIntValue() == 1) {
+			SetttingKeyValue setting1 = setttingKeyValueRepo.findBySettingKeyAndDelStatus("StatutoryDaysSet", 1);
+
+			uptoDueDate = DateConvertor.add60DaystoCurDate(setting1.getIntValue());
+
+		} else if (setting.getIntValue() == 2) {
+			SetttingKeyValue setting2 = setttingKeyValueRepo.findBySettingKeyAndDelStatus("StatutoryDateSet", 1);
+			uptoDueDate = setting2.getStringValue();
+		} else {
+			uptoDueDate = DateConvertor.add60DaystoCurDate(120);
+
+		}
 		
+		System.err.println("uptoDueDate"+uptoDueDate);
+
 		try {
 
 			if (servId != 0 && custId != 0) {
 				System.err.println("A");
-				servicsList = getTaskListRepo.getAllTaskListSpec(stat, servId, custId, periodicityId,uptoDueDate);
+				servicsList = getTaskListRepo.getAllTaskListSpec(stat, servId, custId, periodicityId, uptoDueDate);
 			} else if (servId != 0 && custId == 0) {
 				System.err.println("B");
-				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat, servId, periodicityId,uptoDueDate);
+				servicsList = getTaskListRepo.getAllTaskListSpecServ(stat, servId, periodicityId, uptoDueDate);
 			} else if (servId == 0 && custId != 0) {
 				System.err.println("C");
-				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat, custId, periodicityId,uptoDueDate);
-			} else if ((servId == 0 && custId == 0) && periodicityId!=0) {
+				servicsList = getTaskListRepo.getAllTaskListSpecCust(stat, custId, periodicityId, uptoDueDate);
+			} else if ((servId == 0 && custId == 0) && periodicityId != 0) {
 				System.err.println("D");
-				servicsList = getTaskListRepo.getAllTaskListAll(stat,periodicityId,uptoDueDate);
+				servicsList = getTaskListRepo.getAllTaskListAll(stat, periodicityId, uptoDueDate);
 			} else {
 				System.err.println("E");
-				servicsList = getTaskListRepo.getAllTaskListAll1(stat,uptoDueDate);
+				servicsList = getTaskListRepo.getAllTaskListAll1(stat, uptoDueDate);
 			}
 
 		} catch (Exception e) {
@@ -710,7 +726,7 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 			@RequestParam int updateUserName, @RequestParam String updateDateTime) {
 		Info info = new Info();
 		try {
-			//int ownEmpId=taskRepo.getOwnerEmpIdByTaskId(taskId);
+			// int ownEmpId=taskRepo.getOwnerEmpIdByTaskId(taskId);
 			int res = taskRepo.reOpenTaskByTaskId(taskId);
 			if (res > 0) {
 				Communication comcat = new Communication();
@@ -777,11 +793,11 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 
 			String endDate = null;
 			int res = 0;
-			//System.err.println("in if**" + workDate);
+			// System.err.println("in if**" + workDate);
 
-			//System.err.println("in if length**" + workDate.length());
-			System.err.println("empIdList " +empIdList);
-			
+			// System.err.println("in if length**" + workDate.length());
+			System.err.println("empIdList " + empIdList);
+
 			try {
 				try {
 					if (workDate.equals("") || workDate == null || workDate.length() == 0) {
@@ -826,8 +842,7 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 			@RequestParam String empBudgetHr, @RequestParam String mgBudgetHr, @RequestParam String startDate,
 			@RequestParam int customer, @RequestParam int service, @RequestParam int periodicityId,
 			@RequestParam int activity, @RequestParam String curDateTime, @RequestParam int userId,
-			@RequestParam String statDate, @RequestParam String billAmt,
-			@RequestParam String taskComment) {
+			@RequestParam String statDate, @RequestParam String billAmt, @RequestParam String taskComment) {
 
 		Info info = new Info();
 		try {
@@ -837,13 +852,13 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 
 			int res = taskRepo.editTask(taskId, items1, empBudgetHr, mgBudgetHr, startDate1, curDateTime, customer,
 					service, periodicityId, activity, userId, statDate1, billAmt);
-			//taskComment
+			// taskComment
 			if (res > 0) {
 				info.setError(false);
 				info.setMsg("success");
-				
+
 				Communication comcat = new Communication();
-				comcat.setCommunText("Manual Task Updated - Comment:  "+taskComment);
+				comcat.setCommunText("Manual Task Updated - Comment:  " + taskComment);
 				comcat.setDelStatus(1);
 				comcat.setEmpId(userId);
 				comcat.setExInt1(1);
@@ -856,7 +871,6 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 				comcat.setUpdateDatetime(curDateTime);
 				comcat.setUpdateUser(userId);
 				Communication save = communicationRepo.saveAndFlush(comcat);
-
 
 			} else {
 				info.setError(true);
@@ -889,7 +903,8 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 	@RequestMapping(value = { "/updateEditTsk" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateTaskByTaskId(@RequestParam int taskId, @RequestParam String empHr,
 			@RequestParam String mngHr, @RequestParam String dueDate, @RequestParam String workDate,
-			@RequestParam String empId, int updateUserName, String updateDateTime, @RequestParam String bilAmt, @RequestParam String editTaskRemark) {
+			@RequestParam String empId, int updateUserName, String updateDateTime, @RequestParam String bilAmt,
+			@RequestParam String editTaskRemark) {
 
 		Info info = new Info();
 		System.err.println("BillAmt " + bilAmt);
@@ -908,7 +923,7 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 				info.setMsg("success");
 
 				Communication comcat = new Communication();
-				comcat.setCommunText("Task Edited "+editTaskRemark);
+				comcat.setCommunText("Task Edited " + editTaskRemark);
 				comcat.setDelStatus(1);
 				comcat.setEmpId(updateUserName);
 				comcat.setExInt1(1);
@@ -938,17 +953,17 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 		return info;
 	}
 
-	//Sachin 11-04-2020 Update Task on Assign Task Page 
+	// Sachin 11-04-2020 Update Task on Assign Task Page
 	@RequestMapping(value = { "/editTaskOnAssignPage" }, method = RequestMethod.POST)
 	public @ResponseBody Info editTaskOnAssignPage(@RequestParam int taskId, @RequestParam String empHr,
-			@RequestParam String mngHr, @RequestParam String dueDate, @RequestParam String workDate,
-			   int updateUserName, String updateDateTime, @RequestParam String bilAmt) {
+			@RequestParam String mngHr, @RequestParam String dueDate, @RequestParam String workDate, int updateUserName,
+			String updateDateTime, @RequestParam String bilAmt) {
 
 		Info info = new Info();
 		try {
 			int res = 0;
 			if (workDate.equals("null")) {
-				res = taskRepo.updateEditTaskForNullAsPage(taskId, empHr, mngHr, dueDate,  updateUserName,
+				res = taskRepo.updateEditTaskForNullAsPage(taskId, empHr, mngHr, dueDate, updateUserName,
 						updateDateTime, bilAmt);
 			} else {
 				res = taskRepo.updateEditTaskAsPage(taskId, empHr, mngHr, workDate, dueDate, updateUserName,
@@ -989,8 +1004,6 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 
 		return info;
 	}
-	
-	
 
 	@RequestMapping(value = { "/updateMultipleManualTaskByTaskId" }, method = RequestMethod.POST)
 	public @ResponseBody Info updateMultipleManualTaskByTaskId(@RequestParam List<Integer> taskIds,
@@ -1000,11 +1013,9 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 		int res = 0;
 		try {
 
-		 
-				// task approval by Manager
-				res = taskRepo.updateStatusMult(taskIds, userId, curDateTime);
+			// task approval by Manager
+			res = taskRepo.updateStatusMult(taskIds, userId, curDateTime);
 
-		 
 			if (res > 0) {
 				info.setError(false);
 				info.setMsg("success");
@@ -1024,7 +1035,6 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 
 		return info;
 	}
-
 
 	/********************************
 	 * System Generated Status
@@ -1154,7 +1164,8 @@ System.err.println("60days after today " +DateConvertor.add60DaystoCurDate());
 				info.setMsg("success");
 
 				Info emailRes = EmailUtility.sendEmail("atsinfosoft@gmail.com", "atsinfosoft@123", res.getEmpEmail(),
-						" CA Task Management Password Recovery", res.getEmpEmail(), "Your Password "+res.getEmpPass());
+						" CA Task Management Password Recovery", res.getEmpEmail(),
+						"Your Password " + res.getEmpPass());
 
 			} else {
 				info.setError(true);
