@@ -34,35 +34,55 @@ import com.ats.cataskapi.service.CommonFunctionService;
 @RestController
 public class ReportApiController {
 
-	//Sachin 18-04-2020
+	// Sachin 18-04-2020
 	@Autowired
 	ComplTaskVarienceRepRepo complTaskVarienceRepRepo;
 
 	@RequestMapping(value = { "/getComplTaskVarienceReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<ComplTaskVarienceRep> getComplTaskVarienceReport(@RequestParam String fromDate,
-			@RequestParam String toDate, @RequestParam String empIds,@RequestParam int reportType) {
+			@RequestParam String toDate, @RequestParam String empIds, @RequestParam int reportType) {
 		List<ComplTaskVarienceRep> taskReportList = new ArrayList<ComplTaskVarienceRep>();
-		
+
 		String fromDate1 = DateConvertor.convertToYMD(fromDate);
 		String toDate1 = DateConvertor.convertToYMD(toDate);
 
 		try {
-			if(reportType==1) {
+			if (reportType == 1) {
 				System.err.println("A");
-				taskReportList = complTaskVarienceRepRepo.getComplTaskVarienceReportDateDiff(fromDate1, toDate1, empIds);
-			}else if(reportType==5) {
+				taskReportList = complTaskVarienceRepRepo.getComplTaskVarienceReportDateDiff(fromDate1, toDate1,
+						empIds);
+			} else if (reportType == 5) {
 				System.err.println("B");
-			taskReportList = complTaskVarienceRepRepo.getComplTaskVarienceReportHourDiffEmp(fromDate1, toDate1, empIds);
-			}else {
+				taskReportList = complTaskVarienceRepRepo.getComplTaskVarienceReportHourDiffEmp(fromDate1, toDate1,
+						empIds);
+			} else {
 				System.err.println("C");
-				taskReportList = complTaskVarienceRepRepo.getComplTaskVarienceReportHourDiffMng(fromDate1, toDate1, empIds);
+				taskReportList = complTaskVarienceRepRepo.getComplTaskVarienceReportHourDiffMng(fromDate1, toDate1,
+						empIds);
+			}
+
+			for (int i = 0; i < taskReportList.size(); i++) {
+
+				ComplTaskVarienceRep templist = taskReportList.get(i);
+
+				if (templist.getEmpHrVariance().contains("-")) {
+					String str = templist.getEmpHrVariance().replace("-", "");
+					templist.setEmpHrVariance("-".concat(str));
+
+				}
+
+				if (templist.getMngHrVariance().contains("-")) {
+					String str = templist.getMngHrVariance().replace("-", "");
+					templist.setMngHrVariance("-".concat(str));
+
+				}
+
 			}
 		} catch (Exception e) {
 			System.out.println("Excep in getComplTaskVarienceReport : " + e.getMessage());
 		}
 		return taskReportList;
 	}
-	
 
 	@Autowired
 	CompletedTaskReportRepo completedTaskReportRepo;
@@ -95,14 +115,13 @@ public class ReportApiController {
 		List<InactiveTaskReport> logList = new ArrayList<InactiveTaskReport>();
 
 		try {
-			
-			if(status==9) {
+
+			if (status == 9) {
 				logList = inactiveTaskReportRepo.getAllCompleteTask(fromDate1, toDate1, empIds, status);
-			}else {
+			} else {
 				logList = inactiveTaskReportRepo.getAllInactiveTask(fromDate1, toDate1, empIds, status);
 			}
-		
-			
+
 			System.err.println("dates" + logList.toString());
 
 		} catch (Exception e) {
@@ -180,7 +199,7 @@ public class ReportApiController {
 		return logList;
 
 	}
-	
+
 	@RequestMapping(value = { "/getEmpAndMngPerformanceReportDetailSingleEmp" }, method = RequestMethod.POST)
 	public @ResponseBody List<EmpAndMangPerfRepDetail> getEmpAndMngPerformanceReportDetailSingleEmp(
 			@RequestParam String fromDate, @RequestParam String toDate, @RequestParam int status,
@@ -221,10 +240,11 @@ public class ReportApiController {
 		return empList;
 
 	}
-	
-	//Sachin 06-04-2020
-	
-	@Autowired	TaskLogEmpInfoRepo taskLogEmpInfoRepo;
+
+	// Sachin 06-04-2020
+
+	@Autowired
+	TaskLogEmpInfoRepo taskLogEmpInfoRepo;
 
 	@RequestMapping(value = { "/getTaskLogEmpInfoListByTaskId" }, method = RequestMethod.POST)
 	public @ResponseBody List<TaskLogEmpInfo> getTaskLogEmpInfoListByTaskId(@RequestParam int taskId) {
@@ -232,13 +252,13 @@ public class ReportApiController {
 		List<TaskLogEmpInfo> taskLogList = new ArrayList<TaskLogEmpInfo>();
 
 		try {
-			taskLogList = taskLogEmpInfoRepo.getTaskLogEmpInfoListByTaskId(taskId);		
-					} catch (Exception e) {
+			taskLogList = taskLogEmpInfoRepo.getTaskLogEmpInfoListByTaskId(taskId);
+		} catch (Exception e) {
 			System.err.println("Exce in getTaskLogEmpInfoListByTaskId  " + e.getMessage());
 		}
 
 		return taskLogList;
 
 	}
-	
+
 }
