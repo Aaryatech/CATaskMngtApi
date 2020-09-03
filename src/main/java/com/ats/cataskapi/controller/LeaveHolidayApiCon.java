@@ -217,14 +217,43 @@ public class LeaveHolidayApiCon {
 			
 			//System.err.println("curDate "+curDate +" leaveFrDate " +leaveFrDate);
 			int delete=0;
-			if(leaveFrDate.before(curDate)) {
+			/*if(leaveFrDate.before(curDate)) {
 //Dont allow 
 				//System.err.println("Dont allow del leave");
-			}else {
+			}else {*/
 				delete = leaveApplyRepository.deleteLeaveApply(leaveId);
-			}
+		//	}
 					
 			//int delete = leaveApplyRepository.deleteLeaveApply(leaveId);
+
+			if (delete > 0) {
+				info.setError(false);
+				info.setMessage("successfull");
+			} else {
+				info.setError(true);
+				info.setMessage("error");
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return info;
+
+	}
+	
+	@RequestMapping(value = { "/updateLeaveApply" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateLeaveApply(@RequestParam("leaveId") int leaveId,@RequestParam("noOfDays") float noOfDays,@RequestParam("toDate") String toDate) {
+
+		Info info = new Info();
+
+		try {
+
+ 			 
+ 			int delete=0;
+ 				delete = leaveApplyRepository.updateLeaveApply(leaveId,noOfDays,toDate);
+	 
 
 			if (delete > 0) {
 				info.setError(false);
