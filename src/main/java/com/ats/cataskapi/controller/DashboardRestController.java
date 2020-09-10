@@ -187,8 +187,13 @@ public class DashboardRestController {
 
 		List<ClientGroupList> list = new ArrayList<>();
 
-		try {
-if(groupId!=0) {
+		try {   
+			
+			if(groupId==-1) {
+				list = clientGroupRepo.getIndividualClinet();
+
+			}
+			else if(groupId!=0) {
 			 
 			list = clientGroupRepo.getClinetListByGroupId(groupId);
 }else {
